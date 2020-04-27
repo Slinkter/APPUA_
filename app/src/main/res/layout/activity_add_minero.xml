@@ -37,6 +37,7 @@
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/mb_input"
                 android:hint="DNI"
                 app:endIconMode="custom"
                 app:startIconDrawable="@drawable/ic_dni">
@@ -44,7 +45,7 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="textEmailAddress" />
+                    android:inputType="number" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -53,26 +54,9 @@
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/mb_input"
                 android:hint="Nombre"
-                app:endIconMode="password_toggle"
                 app:startIconDrawable="@drawable/ic_account">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="textPassword" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/reg_name"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Edad"
-                app:endIconMode="custom"
-                app:startIconDrawable="@drawable/ic_age">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
@@ -83,10 +67,29 @@
 
 
             <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/reg_name"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/mb_input"
+                android:hint="Edad"
+                app:endIconMode="custom"
+                app:startIconDrawable="@drawable/ic_age">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="number" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+
+            <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/reg_dni"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/mb_input"
                 android:hint="Dirección Actual"
                 app:endIconMode="custom"
                 app:startIconDrawable="@drawable/ic_home">
@@ -94,8 +97,7 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="number"
-                    android:maxLength="8" />
+                    android:inputType="text" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -108,6 +110,7 @@
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/mb_input"
                 android:hint="Lugar de Nacimiento"
                 app:endIconMode="custom"
                 app:startIconDrawable="@drawable/ic_map">
@@ -115,8 +118,7 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="number"
-                    android:maxLength="9" />
+                    android:inputType="text" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -125,6 +127,7 @@
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/mb_input"
                 android:hint="Fecha de Nacimiento"
                 app:endIconMode="custom"
                 app:startIconDrawable="@drawable/ic_date_range">
@@ -142,6 +145,7 @@
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/mb_input"
                 android:hint="Telefono 1"
                 app:endIconMode="custom"
                 app:startIconDrawable="@drawable/ic_phone">
@@ -159,6 +163,7 @@
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/mb_input"
                 android:hint="Telefono 2"
                 app:endIconMode="custom"
                 app:startIconDrawable="@drawable/ic_phone">

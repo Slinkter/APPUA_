@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="mb_input">5dp</dimen>
+    <dimen name="cardRadiusAll">5dp</dimen>
+    <dimen name="text_size_h1">24sp</dimen>
+    <dimen name="card_elevation">8dp</dimen>
+    <dimen name="mt_card_all">15dp</dimen>
+    <dimen name="mb_card_all">15dp</dimen>
+    <dimen name="text_size_h3">14sp</dimen>
+</resources>
