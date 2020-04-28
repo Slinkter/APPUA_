@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "473184315638",
+    "firebase_url": "https://appminas-17aba.firebaseio.com",
+    "project_id": "appminas-17aba",
+    "storage_bucket": "appminas-17aba.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:473184315638:android:15563c97f9faadd54ea4d7",
+        "android_client_info": {
+          "package_name": "com.cudpast.appminas"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "473184315638-s8urk0dtlu7vi694atu34fu4ke2q7s3r.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.cudpast.appminas",
+            "certificate_hash": "23f8707e8e338799b47b5dba1e9b4cba4054cb68"
+          }
+        },
+        {
+          "client_id": "473184315638-0r0gd28grriur6us92bhfe5nn1388nak.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCXKYwdasWIJXB-lF4AYDoFrsQEWivwGI8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "473184315638-0r0gd28grriur6us92bhfe5nn1388nak.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
