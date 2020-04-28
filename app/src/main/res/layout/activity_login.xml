@@ -4,62 +4,60 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_margin="20dp"
     android:gravity="center"
     tools:context=".Activities.LoginActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
         android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="50sp"
-            android:layout_marginLeft="45dp"
-            android:layout_marginRight="45dp"
             android:gravity="center"
             android:orientation="vertical">
 
-            <TextView
-                android:layout_width="wrap_content"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/log_email_layout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="30dp"
-                android:text="Login"
-                android:textSize="25dp"
-                android:textStyle="bold" />
+                android:layout_marginBottom="@dimen/mb_input"
+                android:hint="correo"
+                app:endIconMode="custom"
+                app:errorEnabled="true"
+                app:startIconDrawable="@drawable/ic_email">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Correo" />
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/log_email"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textEmailAddress" />
 
-            <EditText
-                android:id="@+id/userMail"
-                android:layout_width="280dp"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="15dp"
-                android:gravity="center"
-                android:hint="example@mail.com"
-                android:text="" />
+            </com.google.android.material.textfield.TextInputLayout>
 
-            <TextView
-                android:layout_width="wrap_content"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/log_password_layout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textEmailAddress"
-                android:text="Contraseña" />
+                android:layout_marginBottom="@dimen/mb_input"
+                android:hint="contraseña"
+                app:endIconMode="password_toggle"
+                app:errorEnabled="true"
+                app:startIconDrawable="@drawable/ic_key">
 
-            <EditText
-                android:id="@+id/userPassword"
-                android:layout_width="280dp"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="30dp"
-                android:gravity="center"
-                android:hint="**********"
-                android:inputType="textPassword"
-                android:text="" />
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/log_password"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textPassword" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+
         </LinearLayout>
 
         <LinearLayout
@@ -81,13 +79,12 @@
 
             <Button
                 android:id="@+id/btnRegister"
+                style="?attr/materialButtonOutlinedStyle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
+                android:layout_marginLeft="10dp"
                 android:layout_weight="1"
-                android:elevation="5dp"
-                android:text="Registrarse"
-                android:textAllCaps="false" />
+                android:text="Regresar" />
         </LinearLayout>
     </LinearLayout>
 

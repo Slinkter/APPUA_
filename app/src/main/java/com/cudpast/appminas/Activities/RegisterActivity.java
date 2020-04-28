@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
+import com.cudpast.appminas.Common.Common;
 import com.cudpast.appminas.Model.User;
 import com.cudpast.appminas.R;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -22,7 +23,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 public class RegisterActivity extends AppCompatActivity {
-
 
     public static final String TAG = RegisterActivity.class.getSimpleName();
     private Button btnCreateUser, btnBackMain;
@@ -39,16 +39,15 @@ public class RegisterActivity extends AppCompatActivity {
         getSupportActionBar().hide();
         //Firebase
         mAuth = FirebaseAuth.getInstance();
-
         //xml
         btnCreateUser = findViewById(R.id.btnCreateUser);
         btnBackMain = findViewById(R.id.btnBackMain);
 
         reg_email = (TextInputEditText) findViewById(R.id.reg_email);
-        reg_password = findViewById(R.id.reg_password);
-        reg_name = findViewById(R.id.reg_name);
-        reg_dni = findViewById(R.id.reg_dni);
-        reg_phone = findViewById(R.id.reg_phone);
+        reg_password = (TextInputEditText) findViewById(R.id.reg_password);
+        reg_name = (TextInputEditText) findViewById(R.id.reg_name);
+        reg_dni = (TextInputEditText) findViewById(R.id.reg_dni);
+        reg_phone = (TextInputEditText) findViewById(R.id.reg_phone);
 
         reg_email_layout = findViewById(R.id.reg_email_layout);
         reg_password_layout = findViewById(R.id.reg_password_layout);
@@ -56,43 +55,10 @@ public class RegisterActivity extends AppCompatActivity {
         reg_dni_layout = findViewById(R.id.reg_dni_layout);
         reg_phone_layout = findViewById(R.id.reg_phone_layout);
 
-
         btnCreateUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                if (submitForm()) {
-                    mDialog = new ProgressDialog(RegisterActivity.this);
-                    mDialog.setMessage("Registrando...");
-                    mDialog.show();
-
-
-                    String email = reg_email.getText().toString();
-                    String password = reg_password.getText().toString();
-                    mAuth.createUserWithEmailAndPassword(email, password).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
-                        @Override
-                        public void onSuccess(AuthResult authResult) {
-                            String uid = authResult.getUser().getUid();
-                            String email = reg_email.getText().toString();
-                            String password = reg_password.getText().toString();
-                            String name = reg_name.getText().toString();
-                            String dni = reg_dni.getText().toString();
-                            String phone = reg_phone.getText().toString();
-                            //
-                            User user = new User(uid, email, password, name, dni, phone);
-                            saveUserDB(user);
-
-                        }
-                    }).addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            mDialog.dismiss();
-                        }
-                    });
-
-                }
-
-
+                createUser();
             }
         });
 
@@ -105,8 +71,37 @@ public class RegisterActivity extends AppCompatActivity {
 
     }
 
+    private void createUser() {
+        if (submitForm()) {
+            mDialog = new ProgressDialog(RegisterActivity.this);
+            mDialog.setMessage("Registrando ...");
+            mDialog.show();
+            String email = reg_email.getText().toString();
+            String password = reg_password.getText().toString();
+            mAuth.createUserWithEmailAndPassword(email, password).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
+                @Override
+                public void onSuccess(AuthResult authResult) {
+                    String uid = authResult.getUser().getUid();
+                    String email = reg_email.getText().toString();
+                    String password = reg_password.getText().toString();
+                    String name = reg_name.getText().toString();
+                    String dni = reg_dni.getText().toString();
+                    String phone = reg_phone.getText().toString();
+                    //
+                    User user = new User(uid, email, password, name, dni, phone);
+                    saveUserDB(user);
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    mDialog.dismiss();
+                }
+            });
+        }
+    }
+
     private void saveUserDB(final User user) {
-        DatabaseReference ref_db_user = database.getReference("db_user");
+        DatabaseReference ref_db_user = database.getReference(Common.db_user);
         ref_db_user.child(user.getUid()).setValue(user)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
@@ -123,9 +118,7 @@ public class RegisterActivity extends AppCompatActivity {
                         mDialog.dismiss();
                     }
                 });
-
     }
-
 
     private void backMain() {
         Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
@@ -134,14 +127,11 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     //Validacion
-    // reg_email, reg_password, reg_name, reg_dni, reg_phone;
-
-    //reg_email_layout, reg_password_layout, reg_name_layout, reg_dni_layout, reg_phone_layout;
     private boolean checkEmail() {
         if (reg_email.getText().toString().trim().isEmpty()) {
             reg_email_layout.setError("Ingrese su correo");
             return false;
-        }else {
+        } else {
             reg_email_layout.setError(null);
         }
         return true;
@@ -151,7 +141,7 @@ public class RegisterActivity extends AppCompatActivity {
         if (reg_password.getText().toString().trim().isEmpty()) {
             reg_password_layout.setError("Ingrese su contraseña");
             return false;
-        }else {
+        } else {
             reg_password_layout.setError(null);
         }
         return true;
@@ -161,7 +151,7 @@ public class RegisterActivity extends AppCompatActivity {
         if (reg_name.getText().toString().trim().isEmpty()) {
             reg_name_layout.setError("Ingrese su nombre");
             return false;
-        }else {
+        } else {
             reg_name_layout.setError(null);
         }
         return true;
@@ -171,7 +161,7 @@ public class RegisterActivity extends AppCompatActivity {
         if (reg_dni.getText().toString().trim().isEmpty()) {
             reg_dni_layout.setError("Ingrese su DNI");
             return false;
-        }else {
+        } else {
             reg_dni_layout.setError(null);
         }
         return true;
@@ -181,14 +171,12 @@ public class RegisterActivity extends AppCompatActivity {
         if (reg_phone.getText().toString().trim().isEmpty()) {
             reg_phone_layout.setError("Ingrese su telefono");
             return false;
-        }else {
+        } else {
             reg_phone_layout.setError(null);
         }
         return true;
     }
 
-
-    //
     private boolean submitForm() {
         if (!checkEmail()) {
             return false;
@@ -209,8 +197,6 @@ public class RegisterActivity extends AppCompatActivity {
         if (!checkPhone()) {
             return false;
         }
-
-
         return true;
     }
 
