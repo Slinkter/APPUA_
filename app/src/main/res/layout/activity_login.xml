@@ -57,6 +57,13 @@
 
             </com.google.android.material.textfield.TextInputLayout>
 
+            <CheckBox
+                android:id="@+id/checkbox_rem"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:text="Recordar" />
+
 
         </LinearLayout>
 
@@ -84,7 +91,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:layout_weight="1"
-                android:text="Regresar" />
+                android:text="Registrase" />
         </LinearLayout>
     </LinearLayout>
 
