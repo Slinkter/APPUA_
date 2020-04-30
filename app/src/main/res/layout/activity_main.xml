@@ -9,20 +9,24 @@
     android:orientation="vertical"
     tools:context=".Principal.MainActivity">
 
-
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginBottom="20dp"
         android:gravity="center"
-        android:text="Seleccionar \nUnidad Minera" />
+        android:text="Seleccionar\nUnidad Minera"
+        android:textSize="20dp"
+        android:textStyle="bold" />
 
 
     <Spinner
-        android:id="@+id/spinner"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:id="@+id/spinner_unidadMinera"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="50dp"
+        android:layout_marginBottom="20dp" />
 
 
     <Button

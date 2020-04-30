@@ -6,11 +6,11 @@ import android.os.Bundle;
 
 import com.cudpast.appminas.R;
 
-public class DeleteMineroActivity extends AppCompatActivity {
+public class ConsultaPersonalActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_delete_minero);
+        setContentView(R.layout.activity_consulta_minero);
     }
 }

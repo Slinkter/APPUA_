@@ -78,25 +78,29 @@ public class RegisterActivity extends AppCompatActivity {
             mDialog.show();
             String email = reg_email.getText().toString();
             String password = reg_password.getText().toString();
-            mAuth.createUserWithEmailAndPassword(email, password).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
-                @Override
-                public void onSuccess(AuthResult authResult) {
-                    String uid = authResult.getUser().getUid();
-                    String email = reg_email.getText().toString();
-                    String password = reg_password.getText().toString();
-                    String name = reg_name.getText().toString();
-                    String dni = reg_dni.getText().toString();
-                    String phone = reg_phone.getText().toString();
-                    //
-                    User user = new User(uid, email, password, name, dni, phone);
-                    saveUserDB(user);
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    mDialog.dismiss();
-                }
-            });
+
+            mAuth
+                    .createUserWithEmailAndPassword(email, password)
+                    .addOnSuccessListener(new OnSuccessListener<AuthResult>() {
+                        @Override
+                        public void onSuccess(AuthResult authResult) {
+                            String uid = authResult.getUser().getUid();
+                            String email = reg_email.getText().toString();
+                            String password = reg_password.getText().toString();
+                            String name = reg_name.getText().toString();
+                            String dni = reg_dni.getText().toString();
+                            String phone = reg_phone.getText().toString();
+                            //
+                            User user = new User(uid, email, password, name, dni, phone);
+                            saveUserDB(user);
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            mDialog.dismiss();
+                        }
+                    });
         }
     }
 

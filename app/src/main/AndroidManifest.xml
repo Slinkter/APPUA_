@@ -9,11 +9,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Principal.ConsultaMineroActivity"></activity>
-        <activity android:name=".Principal.InputDataMineroActivity" />
-        <activity android:name=".Principal.DeleteMineroActivity" />
+        <activity android:name=".Principal.ConsultaPersonalActivity"></activity>
+        <activity android:name=".Principal.InputDataPersonalActivity" />
+        <activity android:name=".Principal.DeletePersonalActivity" />
         <activity android:name=".Principal.AllActivity" />
-        <activity android:name=".Principal.AddMineroActivity" />
+        <activity android:name=".Principal.AddPersonalActivity" />
         <activity android:name=".Activities.EmptyActivity" />
         <activity android:name=".Activities.RegisterActivity" />
         <activity android:name=".Activities.LoginActivity" />

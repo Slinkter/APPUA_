@@ -6,13 +6,15 @@
     android:layout_height="fill_parent"
     android:layout_gravity="center"
     android:fitsSystemWindows="false"
-    tools:context=".Principal.InputDataMineroActivity">
-
+    tools:context=".Principal.InputDataPersonalActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="20sp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="20sp"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="50dp"
         android:gravity="center"
         android:orientation="vertical">
 
@@ -20,7 +22,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="20dp"
-            android:text="NUEVO MINERO"
+            android:text="NUEVO PERSONAL"
             android:textAllCaps="true"
             android:textSize="25dp"
             android:textStyle="bold" />
@@ -31,91 +33,96 @@
             android:gravity="center"
             android:orientation="vertical">
 
-
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/reg_email"
+                android:id="@+id/personal_dni_layout"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/mb_input"
                 android:hint="DNI"
                 app:endIconMode="custom"
+                app:errorEnabled="true"
                 app:startIconDrawable="@drawable/ic_dni">
 
                 <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/personal_dni"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="number" />
+                    android:inputType="number"
+                    android:maxLength="8" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/reg_password"
+                android:id="@+id/personal_name_layout"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/mb_input"
                 android:hint="Nombre"
+                app:errorEnabled="true"
                 app:startIconDrawable="@drawable/ic_account">
 
                 <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/personal_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="text" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
-
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/reg_name"
+                android:id="@+id/personal_age_layout"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/mb_input"
                 android:hint="Edad"
                 app:endIconMode="custom"
+                app:errorEnabled="true"
                 app:startIconDrawable="@drawable/ic_age">
 
                 <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/personal_age"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="number" />
+                    android:inputType="number"
+                    android:maxLength="2" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
-
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/reg_dni"
+                android:id="@+id/personal_address_layout"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/mb_input"
                 android:hint="Dirección Actual"
                 app:endIconMode="custom"
+                app:errorEnabled="true"
                 app:startIconDrawable="@drawable/ic_home">
 
                 <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/personal_address"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="text" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
-
-            ¡
-
-
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/reg_addressBorn"
+                android:id="@+id/personal_born_layout"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/mb_input"
                 android:hint="Lugar de Nacimiento"
                 app:endIconMode="custom"
-                app:startIconDrawable="@drawable/ic_map">
+                app:errorEnabled="true"
+                app:startIconDrawable="@drawable/ic_location">
 
                 <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/personal_born"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="text" />
@@ -123,34 +130,37 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/reg_dateBorn"
+                android:id="@+id/personal_date_layout"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/mb_input"
                 android:hint="Fecha de Nacimiento"
                 app:endIconMode="custom"
+                app:errorEnabled="true"
                 app:startIconDrawable="@drawable/ic_date_range">
 
                 <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/personal_date"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="number"
-                    android:maxLength="9" />
+                    android:inputType="text" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/reg_phoneone"
+                android:id="@+id/personal_phone1_layout"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/mb_input"
                 android:hint="Telefono 1"
                 app:endIconMode="custom"
+                app:errorEnabled="true"
                 app:startIconDrawable="@drawable/ic_phone">
 
                 <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/personal_phone1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="number"
@@ -159,16 +169,18 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/reg_phonetwo"
+                android:id="@+id/personal_phone2_layout"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/mb_input"
                 android:hint="Telefono 2"
                 app:endIconMode="custom"
+                app:errorEnabled="true"
                 app:startIconDrawable="@drawable/ic_phone">
 
                 <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/personal_phone2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="number"
@@ -176,19 +188,19 @@
 
             </com.google.android.material.textfield.TextInputLayout>
 
-
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="50dp"
             android:gravity="center"
             android:orientation="horizontal"
             android:weightSum="2">
 
             <Button
-                android:id="@+id/btnCreateUser"
+                android:id="@+id/btn_personal_create_user"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="10dp"
@@ -196,13 +208,19 @@
                 android:text="crear" />
 
             <Button
-                android:id="@+id/btnBackMain"
+                android:id="@+id/btn_personal_back_main"
+                style="?attr/materialButtonOutlinedStyle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:layout_weight="1"
                 android:text="Regresar" />
         </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp" />
     </LinearLayout>
 
 

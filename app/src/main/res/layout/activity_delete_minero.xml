@@ -7,7 +7,7 @@
     android:layout_height="fill_parent"
     android:layout_gravity="center"
     android:fitsSystemWindows="false"
-    tools:context=".Principal.DeleteMineroActivity">
+    tools:context=".Principal.DeletePersonalActivity">
 
 
     <LinearLayout
@@ -22,7 +22,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="20dp"
-            android:text="ELIMINAR MINERO"
+            android:text="ELIMINAR PERSONAL"
             android:textAllCaps="true"
             android:textSize="25dp"
             android:textStyle="bold" />
@@ -60,7 +60,7 @@
 
             <TextView
                 android:layout_margin="10dp"
-                android:text="nombre del minero"
+                android:text="nombre del PERSONAL"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
 

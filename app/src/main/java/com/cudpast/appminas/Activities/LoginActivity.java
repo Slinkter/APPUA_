@@ -27,6 +27,7 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -43,13 +44,11 @@ public class LoginActivity extends AppCompatActivity implements CompoundButton.O
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
     public static final String TAG = LoginActivity.class.getSimpleName();
 
-    //
-    //Check
 
+    //Check
     private CheckBox checkbox;
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
-
     public static final String PREF_NAME = "prefs";
     public static final String KEY_REMEMBER = "remeber";
     public static final String KEY_USERNAME = "username";
@@ -61,7 +60,6 @@ public class LoginActivity extends AppCompatActivity implements CompoundButton.O
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         getSupportActionBar().hide();
-
         //
         mAuth = FirebaseAuth.getInstance();
         log_email_layout = findViewById(R.id.log_email_layout);
@@ -99,8 +97,8 @@ public class LoginActivity extends AppCompatActivity implements CompoundButton.O
             checkbox.setChecked(false);
         }
         // editText text changed
-        log_email.setText(sharedPreferences.getString(KEY_USERNAME,""));
-        log_password.setText(sharedPreferences.getString(KEY_PASSWORD,""));
+        log_email.setText(sharedPreferences.getString(KEY_USERNAME, ""));
+        log_password.setText(sharedPreferences.getString(KEY_PASSWORD, ""));
         log_email.addTextChangedListener(this);
         log_password.addTextChangedListener(this);
         checkbox.setOnCheckedChangeListener(this);
@@ -144,12 +142,18 @@ public class LoginActivity extends AppCompatActivity implements CompoundButton.O
 
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (Common.currentUser != null){
+
+            updateUI(Common.currentUser );
+        }
+    }
+
     // End CheckBox
-
-
-    //
+    // Login
     private void initLogin() {
-
         if (submitForm()) {
             mDialog = new ProgressDialog(LoginActivity.this);
             mDialog.setMessage("Ingresando ...");
@@ -163,6 +167,7 @@ public class LoginActivity extends AppCompatActivity implements CompoundButton.O
                     .addOnSuccessListener(new OnSuccessListener<AuthResult>() {
                         @Override
                         public void onSuccess(AuthResult authResult) {
+
                             String user_uid = authResult.getUser().getUid();
                             DatabaseReference ref_db_user = database.getReference(Common.db_user);
                             ref_db_user
@@ -174,8 +179,11 @@ public class LoginActivity extends AppCompatActivity implements CompoundButton.O
                                             if (mUser == null) {
                                                 Log.e(TAG, "usuario no registrador");
                                                 mDialog.dismiss();
+                                                updateUI(null);
                                             } else {
-                                                Log.e(TAG, "user_uid" + mUser.getUid());
+                                                Common.currentUser = mUser;
+                                                updateUI(Common.currentUser);
+                                                Log.e(TAG, "user_uid " + mUser.getUid());
                                                 Log.e(TAG, "currentUser : " + Common.currentUser.getReg_name());
                                                 Intent intent_login = new Intent(LoginActivity.this, MainActivity.class);
                                                 startActivity(intent_login);
@@ -188,6 +196,7 @@ public class LoginActivity extends AppCompatActivity implements CompoundButton.O
                                         @Override
                                         public void onCancelled(@NonNull DatabaseError databaseError) {
                                             Log.e(TAG, "databaseError : " + databaseError.getMessage());
+                                            updateUI(null);
                                             mDialog.dismiss();
                                         }
                                     });
@@ -214,10 +223,23 @@ public class LoginActivity extends AppCompatActivity implements CompoundButton.O
         }
     }
 
+    // End Login
     private void initRegistro() {
         Intent internt_register = new Intent(LoginActivity.this, RegisterActivity.class);
         startActivity(internt_register);
         finish();
+    }
+
+    private void updateUI(User user) {
+        if (user == null) {
+            Toast.makeText(this, "Inicie session", Toast.LENGTH_SHORT).show();
+        } else {
+            if (mAuth.getCurrentUser().isEmailVerified()) {
+                Log.e(TAG, "correo verificado");
+            } else {
+                Toast.makeText(this, "correo no verificado", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 
     //Validacion
@@ -252,6 +274,7 @@ public class LoginActivity extends AppCompatActivity implements CompoundButton.O
         }
         return true;
     }
+    //End Validacion
 
 
 }
