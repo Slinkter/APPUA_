@@ -159,16 +159,6 @@ public class AddPersonalActivity extends AppCompatActivity {
         finish();
     }
 
-    /*
-    personal_dni = findViewById(R.id.personal_dni);
-    personal_name = findViewById(R.id.personal_name);
-    personal_age = findViewById(R.id.personal_age);
-    personal_address = findViewById(R.id.personal_address);
-    personal_born = findViewById(R.id.personal_born);
-    personal_date = findViewById(R.id.personal_date);
-    personal_phone1 = findViewById(R.id.personal_phone1);
-    personal_phone2 = findViewById(R.id.personal_phone2);
-    */
     //Validacion
     private boolean checkDNI() {
         if (personal_dni.getText().toString().trim().isEmpty()) {

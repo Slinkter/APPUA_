@@ -28,51 +28,67 @@
             android:gravity="center"
             android:orientation="vertical">
 
-
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/reg_email"
+                android:id="@+id/input_dni_layout"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/mb_input"
                 android:hint="DNI"
                 app:endIconMode="custom"
+                app:errorEnabled="true"
                 app:startIconDrawable="@drawable/ic_dni">
 
                 <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/input_dni"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="number" />
+                    android:inputType="number"
+                    android:maxLength="8" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
-            <TextView
+            <Button
+                android:id="@+id/btn_input_consulta"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="start"
-                android:layout_marginTop="20dp"
-                android:layout_marginBottom="10dp"
-                android:gravity="start"
-                android:text="Nombre: _____________________________ " />
+                android:layout_marginRight="10dp"
+                android:layout_weight="1"
+                android:text="Consulta" />
 
             <TextView
+                android:id="@+id/show_consulta_nombre"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="10dp"
+                android:gravity="start"
+                android:text="Nombre:  " />
+
+            <TextView
+                android:id="@+id/show_consulta_edad"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start"
                 android:layout_marginBottom="10dp"
                 android:gravity="start"
-                android:text="Edad : _____________________________ " />
+                android:text="Edad :  " />
 
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/reg_password"
+                android:id="@+id/input_temperatura_layout"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/mb_input"
                 android:hint="Temperatura en Celsius"
+                app:endIconMode="custom"
+                app:errorEnabled="true"
                 app:startIconDrawable="@drawable/ic_tempe">
 
                 <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/input_temperatura"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="number" />
@@ -81,16 +97,19 @@
 
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/reg_name"
+
+                android:id="@+id/input_saturacion_layout"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/mb_input"
                 android:hint="Saturación(SO2)"
                 app:endIconMode="custom"
+                app:errorEnabled="true"
                 app:startIconDrawable="@drawable/ic_age">
 
                 <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/input_saturacion"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="number" />
@@ -99,16 +118,18 @@
 
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/pulso"
+                android:id="@+id/input_pulso_layout"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/mb_input"
                 android:hint="Pulso"
                 app:endIconMode="custom"
+                app:errorEnabled="true"
                 app:startIconDrawable="@drawable/ic_pulso">
 
                 <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/input_pulso"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="number" />
@@ -126,12 +147,16 @@
                 android:text="SINTOMAS " />
 
             <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/input_sintomas_layout"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="1dp">
+                android:layout_marginTop="1dp"
+                app:endIconMode="custom"
+                app:errorEnabled="true">
 
                 <EditText
+                    android:id="@+id/input_sintomas"
                     android:layout_width="match_parent"
                     android:layout_height="150dp"
                     android:gravity="top"
@@ -155,7 +180,7 @@
             android:weightSum="2">
 
             <Button
-                android:id="@+id/btnCreateUser"
+                android:id="@+id/btn_input_data"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="10dp"
@@ -163,13 +188,19 @@
                 android:text="Ingresar" />
 
             <Button
-                android:id="@+id/btnBackMain"
+                android:id="@+id/btn_input_back"
+                style="?attr/materialButtonOutlinedStyle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:layout_weight="1"
                 android:text="Regresar" />
         </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp" />
     </LinearLayout>
 
 
