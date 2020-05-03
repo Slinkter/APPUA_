@@ -40,6 +40,7 @@
                 android:layout_weight="1"
                 android:background="#FFF"
                 android:foreground="?android:attr/selectableItemBackground"
+                android:onClick="btnNewMinero"
                 app:cardCornerRadius="@dimen/cardRadiusAll"
                 app:cardElevation="@dimen/card_elevation"
                 app:cardUseCompatPadding="true">
@@ -76,6 +77,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:foreground="?android:attr/selectableItemBackground"
+                android:onClick="btnDeleteMinero"
                 app:cardCornerRadius="@dimen/cardRadiusAll"
                 app:cardElevation="@dimen/card_elevation"
                 app:cardUseCompatPadding="true">
@@ -119,6 +121,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:foreground="?android:attr/selectableItemBackground"
+                android:onClick="btnInputData"
                 app:cardCornerRadius="@dimen/cardRadiusAll"
                 app:cardElevation="@dimen/card_elevation"
                 app:cardUseCompatPadding="true">
@@ -154,6 +157,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:foreground="?android:attr/selectableItemBackground"
+                android:onClick="btnQueryMinero"
                 app:cardCornerRadius="@dimen/cardRadiusAll"
                 app:cardElevation="@dimen/card_elevation"
                 app:cardUseCompatPadding="true">
@@ -191,28 +195,24 @@
             android:layout_margin="20dp"
             android:clipToPadding="false"
             android:gravity="center"
-            android:orientation="horizontal">
+            android:orientation="vertical">
 
-            <androidx.cardview.widget.CardView
-                android:layout_width="0dp"
+            <TextView
+                android:id="@+id/tv_selectedunidadminera"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:foreground="?android:attr/selectableItemBackground"
-                app:cardCornerRadius="@dimen/cardRadiusAll"
-                app:cardElevation="@dimen/card_elevation"
-                app:cardUseCompatPadding="true">
+                android:layout_margin="5dp"
+                android:gravity="center"
+                android:text="UNIDAD MINERA"
+                android:textSize="@dimen/text_size_h3"
+                android:textStyle="bold" />
 
-                <TextView
-                    android:id="@+id/tv_selectedunidadminera"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="5dp"
-                    android:gravity="center"
-                    android:text="UNIDAD MINERA"
-                    android:textSize="@dimen/text_size_h3"
-                    android:textStyle="bold" />
-
-            </androidx.cardview.widget.CardView>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="UNIDAD MINERA"
+                android:textSize="@dimen/text_size_h3" />
 
         </LinearLayout>
 
