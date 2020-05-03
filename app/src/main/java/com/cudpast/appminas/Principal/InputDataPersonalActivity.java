@@ -27,6 +27,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class InputDataPersonalActivity extends AppCompatActivity {
 
     private TextView show_consulta_nombre, show_consulta_edad;
@@ -116,16 +119,20 @@ public class InputDataPersonalActivity extends AppCompatActivity {
         datosPersonal.setSymptoms(symptoms);
         datosPersonal.setDateRegister(dateRegister);
 
+        // fecha
+        final String date_atention = getCurrentTimeStamp();
 
         ref_db_mina_personal_data
                 .child(Common.unidadMineraSelected)
                 .child(personal.getDni())
+                .child(date_atention)
                 .setValue(datosPersonal)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
                         Log.e(TAG, Common.unidadMineraSelected);
                         Log.e(TAG, "datos registrado");
+                        Log.e(TAG, "fecha de atencion : " + date_atention);
                         Toast.makeText(InputDataPersonalActivity.this, "Personal Registrador", Toast.LENGTH_SHORT).show();
                         gotoMAin();
                     }
@@ -257,6 +264,19 @@ public class InputDataPersonalActivity extends AppCompatActivity {
 
 
         return true;
+    }
+
+
+    //
+    public static String getCurrentTimeStamp() {
+        try {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String currentTimeStamp = dateFormat.format(new Date());
+            return currentTimeStamp;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
 
