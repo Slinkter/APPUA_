@@ -108,13 +108,19 @@ public class InputDataPersonalActivity extends AppCompatActivity {
         String symptoms = input_sintomas.getText().toString();
         String dateRegister = "hola";
 
+        //String tempurature, String so2, String pulse, String symptoms, String dateRegister
         DatosPersonal datosPersonal = new DatosPersonal();
+        datosPersonal.setTempurature(tempurature);
+        datosPersonal.setSo2(so2);
+        datosPersonal.setPulse(pulse);
+        datosPersonal.setSymptoms(symptoms);
+        datosPersonal.setDateRegister(dateRegister);
 
 
         ref_db_mina_personal_data
                 .child(Common.unidadMineraSelected)
                 .child(personal.getDni())
-                .setValue("user")
+                .setValue(datosPersonal)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
