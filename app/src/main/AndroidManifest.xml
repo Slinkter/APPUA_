@@ -9,14 +9,25 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Principal.ConsultaPersonalActivity"></activity>
-        <activity android:name=".Principal.InputDataPersonalActivity" />
-        <activity android:name=".Principal.DeletePersonalActivity" />
+
         <activity android:name=".Principal.AllActivity" />
+
+
         <activity
-            android:screenOrientation="fullSensor"
             android:name=".Principal.AddPersonalActivity"
             android:parentActivityName=".Principal.AllActivity" />
+        <activity
+            android:name=".Principal.InputDataPersonalActivity"
+            android:parentActivityName=".Principal.AllActivity" />
+        <activity
+            android:name=".Principal.ConsultaPersonalActivity"
+            android:parentActivityName=".Principal.AllActivity"/>
+
+        <activity
+            android:name=".Principal.DeletePersonalActivity"
+            android:parentActivityName=".Principal.AllActivity" />
+
+
         <activity android:name=".Activities.EmptyActivity" />
         <activity android:name=".Activities.RegisterActivity" />
         <activity android:name=".Activities.LoginActivity" />

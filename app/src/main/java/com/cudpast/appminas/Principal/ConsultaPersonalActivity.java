@@ -47,6 +47,8 @@ public class ConsultaPersonalActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getSupportActionBar().setTitle("Consulta Datos  ");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setContentView(R.layout.activity_consulta_minero);
         //
         consulta_dni_layout = findViewById(R.id.consulta_dni_layout);

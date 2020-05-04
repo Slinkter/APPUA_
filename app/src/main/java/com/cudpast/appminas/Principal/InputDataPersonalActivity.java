@@ -47,7 +47,8 @@ public class InputDataPersonalActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getSupportActionBar().hide();
+        getSupportActionBar().setTitle("Ingresar datos  ");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setContentView(R.layout.activity_input_data_minero);
 
         show_consulta_nombre = findViewById(R.id.show_consulta_nombre);
