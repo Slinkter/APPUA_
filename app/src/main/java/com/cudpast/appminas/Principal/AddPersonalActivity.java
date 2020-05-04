@@ -103,6 +103,14 @@ public class AddPersonalActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+      //  personal_dni_layout.setEnabled(false);
+
+    }
+
     private void createNewPersonal() {
 
         if (submitForm()) {

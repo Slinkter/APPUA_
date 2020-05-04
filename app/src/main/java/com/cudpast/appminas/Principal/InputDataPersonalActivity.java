@@ -33,7 +33,7 @@ import java.util.Date;
 public class InputDataPersonalActivity extends AppCompatActivity {
 
     private TextView show_consulta_nombre, show_consulta_edad;
-
+    private TextInputLayout show_consulta_nombre_layout, show_consulta_edad_layout;
     private TextInputLayout input_dni_layout, input_temperatura_layout, input_saturacion_layout, input_pulso_layout, input_sintomas_layout;
     private TextInputEditText input_dni, input_temperatura, input_saturacion, input_pulso;
     private EditText input_sintomas;
@@ -44,7 +44,6 @@ public class InputDataPersonalActivity extends AppCompatActivity {
 
     private Personal personal;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,6 +52,10 @@ public class InputDataPersonalActivity extends AppCompatActivity {
 
         show_consulta_nombre = findViewById(R.id.show_consulta_nombre);
         show_consulta_edad = findViewById(R.id.show_consulta_edad);
+
+        show_consulta_nombre_layout = findViewById(R.id.show_consulta_nombre_layout);
+        show_consulta_edad_layout = findViewById(R.id.show_consulta_edad_layout);
+
 
         input_dni_layout = findViewById(R.id.input_dni_layout);
         input_temperatura_layout = findViewById(R.id.input_temperatura_layout);
@@ -102,13 +105,39 @@ public class InputDataPersonalActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+
+        notEnable();
+
+
+    }
+
+    private void notEnable() {
+        input_temperatura_layout.setEnabled(false);
+        input_saturacion_layout.setEnabled(false);
+        input_pulso_layout.setEnabled(false);
+        input_sintomas_layout.setEnabled(false);
+        show_consulta_nombre_layout.setEnabled(false);
+        show_consulta_edad_layout.setEnabled(false);
+
+    }
+
+    private void checkEnable() {
+        input_temperatura_layout.setEnabled(true);
+        input_saturacion_layout.setEnabled(true);
+        input_pulso_layout.setEnabled(true);
+        input_sintomas_layout.setEnabled(true);
+    }
+
+
     private void savePersonalData() {
         DatabaseReference ref_db_mina_personal_data = database.getReference(Common.db_mina_personal_data);
-
-
         // fecha
         final String date_atention = getCurrentTimeStamp();
-
+        //
         String tempurature = input_temperatura.getText().toString();
         String so2 = input_saturacion.getText().toString();
         String pulse = input_pulso.getText().toString();
@@ -122,8 +151,6 @@ public class InputDataPersonalActivity extends AppCompatActivity {
         datosPersonal.setPulse(pulse);
         datosPersonal.setSymptoms(symptoms);
         datosPersonal.setDateRegister(dateRegister);
-
-
 
         ref_db_mina_personal_data
                 .child(Common.unidadMineraSelected)
@@ -170,15 +197,20 @@ public class InputDataPersonalActivity extends AppCompatActivity {
                     Log.e(TAG, "dni : " + personal.getDni());
                     Log.e(TAG, "direccion : " + personal.getAddress());
                     Log.e(TAG, "phone 1 : " + personal.getPhone1());
-                    show_consulta_nombre.setText("Nombre : " + personal.getName());
-                    show_consulta_edad.setText("Edad : " + personal.getAge() + " años");
+                    show_consulta_nombre.setText(personal.getName());
+                    show_consulta_edad.setText(personal.getAge() + " años");
                     show_consulta_nombre.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.color_error_null));
                     show_consulta_edad.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.color_error_null));
+                    checkEnable();
+                    input_dni_layout.setError(null);
                 } else {
                     Log.e(TAG, "el usuario no existe en  ");
-                    show_consulta_nombre.setText("el usuario no existe en " + Common.unidadMineraSelected);
+                    show_consulta_nombre.setText("");
                     show_consulta_nombre.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.color_error));
-                    show_consulta_edad.setText(" ");
+                    show_consulta_edad.setText("");
+                    notEnable();
+                    input_dni_layout.setError("El usuario no exsite en la base de datos");
+
                 }
 
             }
@@ -204,7 +236,7 @@ public class InputDataPersonalActivity extends AppCompatActivity {
 
     private boolean checkTemperatura() {
         if (input_temperatura.getText().toString().trim().isEmpty()) {
-            input_temperatura_layout.setError("Ingrese su nombre");
+            input_temperatura_layout.setError("falta ingresar temperatura del paciente");
             return false;
         } else {
             input_temperatura_layout.setError(null);
@@ -214,7 +246,7 @@ public class InputDataPersonalActivity extends AppCompatActivity {
 
     private boolean checkSaturacion() {
         if (input_saturacion.getText().toString().trim().isEmpty()) {
-            input_saturacion_layout.setError("Ingrese su edad");
+            input_saturacion_layout.setError("falta ingresar SO2 del paciente");
             return false;
         } else {
             input_saturacion_layout.setError(null);
@@ -224,7 +256,7 @@ public class InputDataPersonalActivity extends AppCompatActivity {
 
     private boolean checkPulso() {
         if (input_pulso.getText().toString().trim().isEmpty()) {
-            input_pulso_layout.setError("Ingrese su dirección");
+            input_pulso_layout.setError("falta ingresare el pulso del paciente ");
             return false;
         } else {
             input_pulso_layout.setError(null);
@@ -234,7 +266,7 @@ public class InputDataPersonalActivity extends AppCompatActivity {
 
     private boolean checkSintomas() {
         if (input_sintomas.getText().toString().trim().isEmpty()) {
-            input_sintomas_layout.setError("Ingrese su lugar de nacimiento");
+            input_sintomas_layout.setError("falta ingresar los sistomas del paciente");
             return false;
         } else {
             input_sintomas_layout.setError(null);
