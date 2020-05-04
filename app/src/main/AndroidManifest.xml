@@ -13,7 +13,10 @@
         <activity android:name=".Principal.InputDataPersonalActivity" />
         <activity android:name=".Principal.DeletePersonalActivity" />
         <activity android:name=".Principal.AllActivity" />
-        <activity android:name=".Principal.AddPersonalActivity" />
+        <activity
+            android:screenOrientation="fullSensor"
+            android:name=".Principal.AddPersonalActivity"
+            android:parentActivityName=".Principal.AllActivity" />
         <activity android:name=".Activities.EmptyActivity" />
         <activity android:name=".Activities.RegisterActivity" />
         <activity android:name=".Activities.LoginActivity" />

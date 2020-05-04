@@ -104,12 +104,16 @@ public class InputDataPersonalActivity extends AppCompatActivity {
 
     private void savePersonalData() {
         DatabaseReference ref_db_mina_personal_data = database.getReference(Common.db_mina_personal_data);
-        // DatosPersonal(String tempurature, String so2, String pulse, String symptoms, String dateRegister)
+
+
+        // fecha
+        final String date_atention = getCurrentTimeStamp();
+
         String tempurature = input_temperatura.getText().toString();
         String so2 = input_saturacion.getText().toString();
         String pulse = input_pulso.getText().toString();
         String symptoms = input_sintomas.getText().toString();
-        String dateRegister = "hola";
+        String dateRegister = date_atention;
 
         //String tempurature, String so2, String pulse, String symptoms, String dateRegister
         DatosPersonal datosPersonal = new DatosPersonal();
@@ -119,8 +123,7 @@ public class InputDataPersonalActivity extends AppCompatActivity {
         datosPersonal.setSymptoms(symptoms);
         datosPersonal.setDateRegister(dateRegister);
 
-        // fecha
-        final String date_atention = getCurrentTimeStamp();
+
 
         ref_db_mina_personal_data
                 .child(Common.unidadMineraSelected)
