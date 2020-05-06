@@ -107,11 +107,7 @@ public class InputDataPersonalActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-
-
         notEnable();
-
-
     }
 
     private void notEnable() {
@@ -121,7 +117,6 @@ public class InputDataPersonalActivity extends AppCompatActivity {
         input_sintomas_layout.setEnabled(false);
         show_consulta_nombre_layout.setEnabled(false);
         show_consulta_edad_layout.setEnabled(false);
-
     }
 
     private void checkEnable() {

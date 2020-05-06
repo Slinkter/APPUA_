@@ -142,7 +142,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/mb_input"
-                android:hint="Fecha de Nacimiento"
+                android:hint="Fecha de Nacimiento (dd/mm/yyyy)"
                 app:endIconMode="custom"
                 app:errorEnabled="true"
                 app:startIconDrawable="@drawable/ic_date_range">

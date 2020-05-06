@@ -35,10 +35,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/mb_input"
                 android:hint="DNI"
-                app:endIconMode="custom"
-                app:errorEnabled="true"
                 app:counterEnabled="true"
                 app:counterMaxLength="8"
+                app:endIconMode="custom"
+                app:errorEnabled="true"
                 app:startIconDrawable="@drawable/ic_dni">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -54,7 +54,7 @@
                 android:id="@+id/btn_input_consulta"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-               android:layout_marginBottom="10dp"
+                android:layout_marginBottom="10dp"
                 android:text="Consulta" />
 
             <com.google.android.material.textfield.TextInputLayout

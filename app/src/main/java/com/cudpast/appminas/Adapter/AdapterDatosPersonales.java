@@ -58,6 +58,9 @@ public class AdapterDatosPersonales extends RecyclerView.Adapter<AdapterDatosPer
         holder.img_sintomas.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                Toast.makeText(mContext, mData.get(position).getSymptoms(), Toast.LENGTH_SHORT).show();
+
                 try {
                     TextView msn_sintomas = (TextView) myDialog.findViewById(R.id.msn_sintomas);
                     msn_sintomas.setText(mData.get(position).getSymptoms());

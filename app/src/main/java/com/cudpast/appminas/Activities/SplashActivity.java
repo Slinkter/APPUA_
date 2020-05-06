@@ -5,30 +5,43 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 
 import com.cudpast.appminas.R;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 public class SplashActivity extends AppCompatActivity {
 
 
-    Button splash ;
+    private static final long SPLASH_SCREEN_DELAY = 2000;
+    public static final String TAG = SplashActivity.class.getSimpleName();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getSupportActionBar().hide();
+
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_splash);
+        getSupportActionBar().hide();
 
-        splash = findViewById(R.id.splash);
-        splash.setOnClickListener(new View.OnClickListener() {
+
+        TimerTask timerTask = new TimerTask() {
             @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(SplashActivity.this,LoginActivity.class);
+            public void run() {
+                Intent intent = new Intent(SplashActivity.this, LoginActivity.class);
                 startActivity(intent);
+                finish();
             }
-        });
+        };
 
+        Timer timer = new Timer();
+        timer.schedule(timerTask, SPLASH_SCREEN_DELAY);
 
 
     }

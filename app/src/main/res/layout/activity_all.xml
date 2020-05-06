@@ -54,9 +54,10 @@
                     android:onClick="btnNewMinero"
                     android:orientation="vertical">
 
-                    <Button
-                        android:layout_width="94dp"
-                        android:layout_height="94dp"
+                    <ImageView
+                        android:src="@drawable/ic_personal_add"
+                        android:layout_width="75dp"
+                        android:layout_height="75dp"
                         android:baselineAligned="false" />
 
                     <TextView
@@ -91,9 +92,10 @@
                     android:onClick="btnDeleteMinero"
                     android:orientation="vertical">
 
-                    <Button
-                        android:layout_width="94dp"
-                        android:layout_height="94dp"
+                    <ImageView
+                        android:src="@drawable/ic_personal_delete"
+                        android:layout_width="75dp"
+                        android:layout_height="75dp"
                         android:baselineAligned="false" />
 
                     <TextView
@@ -136,9 +138,10 @@
                     android:orientation="vertical"
                     android:weightSum="2">
 
-                    <Button
-                        android:layout_width="94dp"
-                        android:layout_height="94dp"
+                    <ImageView
+                        android:src="@drawable/ic_personal_input"
+                        android:layout_width="75dp"
+                        android:layout_height="75dp"
                         android:baselineAligned="false" />
 
                     <TextView
@@ -171,9 +174,10 @@
                     android:onClick="btnQueryMinero"
                     android:orientation="vertical">
 
-                    <Button
-                        android:layout_width="94dp"
-                        android:layout_height="94dp"
+                    <ImageView
+                        android:src="@drawable/ic_personal_consulta"
+                        android:layout_width="75dp"
+                        android:layout_height="75dp"
                         android:baselineAligned="false" />
 
                     <TextView

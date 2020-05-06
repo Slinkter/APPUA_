@@ -2,11 +2,13 @@ package com.cudpast.appminas.Principal;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -16,6 +18,7 @@ import android.widget.TextView;
 import com.cudpast.appminas.Adapter.AdapterDatosPersonales;
 import com.cudpast.appminas.Common.Common;
 import com.cudpast.appminas.Model.DatosPersonal;
+import com.cudpast.appminas.Model.Personal;
 import com.cudpast.appminas.R;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.android.material.textfield.TextInputEditText;
@@ -44,6 +47,10 @@ public class ConsultaPersonalActivity extends AppCompatActivity {
     private List<DatosPersonal> listtemp;
 
 
+    private Personal personal;
+
+    public static final String TAG = ConsultaPersonalActivity.class.getSimpleName();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,6 +62,7 @@ public class ConsultaPersonalActivity extends AppCompatActivity {
         consulta_dni = findViewById(R.id.consulta_dni);
         myrecycleview_date = findViewById(R.id.myrecycleview_date);
         btn_consulta_dni = findViewById(R.id.btn_consulta_dni);
+
         //
 
         btn_consulta_dni.setOnClickListener(new View.OnClickListener() {
@@ -68,8 +76,41 @@ public class ConsultaPersonalActivity extends AppCompatActivity {
     }
 
     private void consultarDatosPaciente() {
-        String dni = consulta_dni.getText().toString();
+        final String dni = consulta_dni.getText().toString();
 
+
+        DatabaseReference ref_db_mina_personal = database.getReference(Common.db_mina_personal);
+        DatabaseReference ref_mina = ref_db_mina_personal.child(Common.unidadMineraSelected);
+        ref_mina.child(dni).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                personal = dataSnapshot.getValue(Personal.class);
+                if (personal != null) {
+
+                    consulta_dni_layout.setError(null);
+                    ejecutar(dni);
+
+
+                } else {
+                    consulta_dni_layout.setError("El usuario no exsite en la base de datos");
+                    myrecycleview_date.setAdapter(null);
+                    myrecycleview_date.clearOnScrollListeners();
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.e(TAG, "error : " + databaseError.getMessage());
+                myrecycleview_date.setAdapter(null);
+            }
+        });
+
+
+    }
+
+
+    private void ejecutar(String dni) {
         myrecycleview_date.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         myrecycleview_date.setHasFixedSize(true);
         myrecycleview_date.setLayoutManager(new LinearLayoutManager(this));
@@ -93,7 +134,7 @@ public class ConsultaPersonalActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-
+                myrecycleview_date.setAdapter(null);
             }
         });
 

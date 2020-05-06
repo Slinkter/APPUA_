@@ -41,10 +41,12 @@
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/mb_input"
                     android:hint="DNI"
+                    app:counterEnabled="true"
+                    app:counterMaxLength="8"
                     app:endIconMode="custom"
-                    app:errorEnabled="true"
-                    app:startIconDrawable="@drawable/ic_dni">
+                    app:errorEnabled="true">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/consulta_dni"

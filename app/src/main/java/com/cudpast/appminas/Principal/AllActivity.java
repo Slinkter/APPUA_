@@ -40,9 +40,9 @@ public class AllActivity extends AppCompatActivity {
     }
 
     public void btnDeleteMinero(View view) {
-        Toast.makeText(this, "Eliminar ", Toast.LENGTH_SHORT).show();
-        Intent intent = new Intent(AllActivity.this, DeletePersonalActivity.class);
-        startActivity(intent);
+        Toast.makeText(this, "No disponible , proximanente ", Toast.LENGTH_SHORT).show();
+        // Intent intent = new Intent(AllActivity.this, DeletePersonalActivity.class);
+        // startActivity(intent);
     }
 
     public void btnInputData(View view) {
