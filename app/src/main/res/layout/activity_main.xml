@@ -14,6 +14,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginBottom="20dp"
+        android:fontFamily="@font/headland_one"
         android:gravity="center"
         android:text="Seleccionar\nUnidad Minera"
         android:textSize="20dp"

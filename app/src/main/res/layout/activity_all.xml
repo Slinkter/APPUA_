@@ -19,6 +19,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/headland_one"
             android:gravity="center"
             android:text="Seleccione Actividad"
             android:textSize="@dimen/text_size_h1"
@@ -55,15 +56,16 @@
                     android:orientation="vertical">
 
                     <ImageView
-                        android:src="@drawable/ic_personal_add"
                         android:layout_width="75dp"
                         android:layout_height="75dp"
-                        android:baselineAligned="false" />
+                        android:baselineAligned="false"
+                        android:src="@drawable/ic_personal_add" />
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="5dp"
+                        android:fontFamily="@font/headland_one"
                         android:gravity="center"
                         android:text="Agregar\nPersonal"
                         android:textSize="@dimen/text_size_h3"
@@ -88,15 +90,16 @@
                     android:layout_height="match_parent"
                     android:layout_marginTop="@dimen/mt_card_all"
                     android:layout_marginBottom="@dimen/mb_card_all"
+                    android:fontFamily="@font/headland_one"
                     android:gravity="center"
                     android:onClick="btnDeleteMinero"
                     android:orientation="vertical">
 
                     <ImageView
-                        android:src="@drawable/ic_personal_delete"
                         android:layout_width="75dp"
                         android:layout_height="75dp"
-                        android:baselineAligned="false" />
+                        android:baselineAligned="false"
+                        android:src="@drawable/ic_personal_delete" />
 
                     <TextView
                         android:layout_width="match_parent"
@@ -139,15 +142,16 @@
                     android:weightSum="2">
 
                     <ImageView
-                        android:src="@drawable/ic_personal_input"
                         android:layout_width="75dp"
                         android:layout_height="75dp"
-                        android:baselineAligned="false" />
+                        android:baselineAligned="false"
+                        android:src="@drawable/ic_personal_input" />
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="5dp"
+                        android:fontFamily="@font/headland_one"
                         android:gravity="center"
                         android:text="Ingresar\nDatos"
                         android:textSize="@dimen/text_size_h3"
@@ -175,15 +179,16 @@
                     android:orientation="vertical">
 
                     <ImageView
-                        android:src="@drawable/ic_personal_consulta"
                         android:layout_width="75dp"
                         android:layout_height="75dp"
-                        android:baselineAligned="false" />
+                        android:baselineAligned="false"
+                        android:src="@drawable/ic_personal_consulta" />
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="5dp"
+                        android:fontFamily="@font/headland_one"
                         android:gravity="center"
                         android:text="Consultar\nPersonal"
                         android:textSize="@dimen/text_size_h3"
@@ -206,6 +211,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
+                android:fontFamily="@font/headland_one"
                 android:gravity="center"
                 android:text="UNIDAD MINERA"
                 android:textSize="@dimen/text_size_h3"
@@ -214,6 +220,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:fontFamily="@font/headland_one"
                 android:gravity="center"
                 android:text="UNIDAD MINERA"
                 android:textSize="@dimen/text_size_h3" />
