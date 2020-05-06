@@ -57,13 +57,11 @@ public class InputDataPersonalActivity extends AppCompatActivity {
         show_consulta_nombre_layout = findViewById(R.id.show_consulta_nombre_layout);
         show_consulta_edad_layout = findViewById(R.id.show_consulta_edad_layout);
 
-
         input_dni_layout = findViewById(R.id.input_dni_layout);
         input_temperatura_layout = findViewById(R.id.input_temperatura_layout);
         input_saturacion_layout = findViewById(R.id.input_saturacion_layout);
         input_pulso_layout = findViewById(R.id.input_pulso_layout);
         input_sintomas_layout = findViewById(R.id.input_sintomas_layout);
-
 
         input_dni = findViewById(R.id.input_dni);
         input_temperatura = findViewById(R.id.input_temperatura);

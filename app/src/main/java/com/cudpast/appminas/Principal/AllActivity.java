@@ -30,7 +30,7 @@ public class AllActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         tv_selectedunidadminera.setText(Common.unidadMineraSelected);
-        Log.e("unidadMineraSelected ", Common.unidadMineraSelected);
+
     }
 
     public void btnNewMinero(View view) {

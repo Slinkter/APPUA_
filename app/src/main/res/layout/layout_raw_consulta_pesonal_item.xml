@@ -6,93 +6,12 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="2dp"
-    android:background="#f4f4f4"
+    android:background="#98999D"
     android:orientation="horizontal"
     android:padding="6dp"
     android:weightSum="10">
 
-    <LinearLayout
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="8dp"
-        android:layout_weight="5"
-        android:orientation="vertical">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Temperatura : "
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/rv_temperatura"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="1dp"
-            android:layout_marginBottom="1dp"
-            android:layout_marginStart="28dp"
-            android:text="TEMPERATURA"
-            android:textColor="#969595"
-            android:textSize="12sp" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Saturación :"
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/rv_saturacion"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="1dp"
-            android:layout_marginBottom="1dp"
-            android:layout_marginStart="28dp"
-            android:text="SATURACION"
-            android:textColor="#969595"
-            android:textSize="12sp" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Puslo: "
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/rv_pulso"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="1dp"
-            android:layout_marginBottom="1dp"
-            android:layout_marginStart="28dp"
-            android:text="PUSLO"
-            android:textColor="#969595"
-            android:textSize="12sp" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginRight="8dp"
-        android:layout_weight="5"
-        android:orientation="vertical">
-
-        <TextView
-            android:id="@+id/rv_date"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="right"
-            android:layout_marginStart="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginEnd="6dp"
-            android:layout_marginRight="16dp"
-            android:text="dd-mm-yyyy"
-            android:textColor="#969595"
-            android:textSize="12sp" />
-
-    </LinearLayout>
 
 
 </LinearLayout>
