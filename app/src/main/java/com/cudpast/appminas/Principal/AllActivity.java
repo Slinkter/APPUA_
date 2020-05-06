@@ -34,7 +34,6 @@ public class AllActivity extends AppCompatActivity {
     }
 
     public void btnNewMinero(View view) {
-        Toast.makeText(this, "Nuevo ", Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(AllActivity.this, AddPersonalActivity.class);
         startActivity(intent);
     }
@@ -46,15 +45,14 @@ public class AllActivity extends AppCompatActivity {
     }
 
     public void btnInputData(View view) {
-        Toast.makeText(this, "Dato ", Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(AllActivity.this, InputDataPersonalActivity.class);
         startActivity(intent);
     }
 
     public void btnQueryMinero(View view) {
-        Toast.makeText(this, "Consulta ", Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(AllActivity.this, ConsultaPersonalActivity.class);
         startActivity(intent);
+
     }
 
 

@@ -30,10 +30,13 @@ public class MainActivity extends AppCompatActivity {
 
         //Cargar Spinner Unidad Minera
         listaUnidadMinera = new ArrayList();
-        listaUnidadMinera.add("Unidad Minera");
+        listaUnidadMinera.add("Seleccione Unidad");
         listaUnidadMinera.add("COPE");
         listaUnidadMinera.add("Chavincha");
-        listaUnidadMinera.add("Sape");
+        listaUnidadMinera.add("Sonaje");
+        listaUnidadMinera.add("of.Lima");
+        listaUnidadMinera.add("of.Arequipa");
+        listaUnidadMinera.add("of.Huaraz");
         spinner_unidadMinera = (Spinner) findViewById(R.id.spinner_unidadMinera);
         ArrayAdapter<CharSequence> adapter_spinner_um = new ArrayAdapter(this, R.layout.spinner_adapter_unidad_minera, listaUnidadMinera);
         spinner_unidadMinera.setAdapter(adapter_spinner_um);
@@ -41,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if (position != 0) {
-                    if (listaUnidadMinera.get(position).equalsIgnoreCase("Unidad Minera")) {
+                    if (listaUnidadMinera.get(position).equalsIgnoreCase("Seleccione Minera")) {
                         btnContinuar.setVisibility(View.INVISIBLE);
                     } else {
                         Common.unidadMineraSelected = listaUnidadMinera.get(position);

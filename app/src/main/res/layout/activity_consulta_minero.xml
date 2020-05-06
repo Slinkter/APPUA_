@@ -22,13 +22,13 @@
             android:orientation="vertical">
 
             <TextView
-                android:fontFamily="@font/headland_one"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="20dp"
+                android:fontFamily="@font/headland_one"
                 android:text="Consulta Personal"
                 android:textAllCaps="true"
-                android:textSize="25dp"
+                android:textSize="@dimen/text_size_h1"
                 android:textStyle="bold" />
 
             <LinearLayout
@@ -67,6 +67,25 @@
                     android:text="Buscar"
                     app:icon="@drawable/ic_search" />
             </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginBottom="10dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:textColor="@color/colorPrimaryDark"
+                android:id="@+id/show_name_consulta_dni"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:textSize="18sp"
+                android:text="" />
+
         </LinearLayout>
 
         <LinearLayout

@@ -41,6 +41,8 @@ public class ConsultaPersonalActivity extends AppCompatActivity {
     private RecyclerView myrecycleview_date;
     private Button btn_consulta_dni;
 
+    private TextView show_name_consulta_dni;
+
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
 
     private DatabaseReference ref_datos_paciente;
@@ -65,6 +67,8 @@ public class ConsultaPersonalActivity extends AppCompatActivity {
 
         //
 
+        show_name_consulta_dni = findViewById(R.id.show_name_consulta_dni);
+
         btn_consulta_dni.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -88,8 +92,8 @@ public class ConsultaPersonalActivity extends AppCompatActivity {
                 if (personal != null) {
 
                     consulta_dni_layout.setError(null);
+                    show_name_consulta_dni.setText("Nombre : " + personal.getName());
                     ejecutar(dni);
-
 
                 } else {
                     consulta_dni_layout.setError("El usuario no exsite en la base de datos");

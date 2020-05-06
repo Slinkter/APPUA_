@@ -127,7 +127,7 @@
                     android:id="@+id/img_sintomas"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
-                    android:src="@drawable/ic_sintomas" />
+                    android:src="@drawable/ic_library_books" />
             </LinearLayout>
 
 

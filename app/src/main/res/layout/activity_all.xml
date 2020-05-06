@@ -213,7 +213,7 @@
                 android:layout_margin="5dp"
                 android:fontFamily="@font/headland_one"
                 android:gravity="center"
-                android:text="UNIDAD MINERA"
+                android:text="UNIDAD DE TRABAJO"
                 android:textSize="@dimen/text_size_h3"
                 android:textStyle="bold" />
 
@@ -222,7 +222,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/headland_one"
                 android:gravity="center"
-                android:text="UNIDAD MINERA"
+                android:text="UNIDAD DE TRABAJO"
                 android:textSize="@dimen/text_size_h3" />
 
         </LinearLayout>

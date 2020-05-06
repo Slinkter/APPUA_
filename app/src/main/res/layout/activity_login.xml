@@ -19,6 +19,13 @@
             android:gravity="center"
             android:orientation="vertical">
 
+            <ImageView
+                android:layout_margin="20dp"
+                android:src="@drawable/ic_app_mina3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/log_email_layout"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"

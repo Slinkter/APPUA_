@@ -174,7 +174,7 @@ public class InputDataPersonalActivity extends AppCompatActivity {
 
     private void gotoMAin() {
         Intent intent = new Intent(InputDataPersonalActivity.this, AllActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+
         startActivity(intent);
         finish();
     }
@@ -229,12 +229,30 @@ public class InputDataPersonalActivity extends AppCompatActivity {
     }
 
     private boolean checkTemperatura() {
-        if (input_temperatura.getText().toString().trim().isEmpty()) {
-            input_temperatura_layout.setError("falta ingresar temperatura del paciente");
-            return false;
-        } else {
-            input_temperatura_layout.setError(null);
+
+        try {
+            if (input_temperatura.getText().toString().trim().isEmpty() && input_temperatura.getText().toString() != null) {
+                input_temperatura_layout.setError("falta ingresar temperatura del paciente");
+                Log.e("number", " int   " + Integer.parseInt(input_temperatura.getText().toString()));
+                return false;
+            } else {
+                input_temperatura_layout.setError(null);
+                Log.e("number", " int   " + Integer.parseInt(input_temperatura.getText().toString()));
+                if (input_temperatura.getText().toString() != null) {
+                    int value = Integer.parseInt(input_temperatura.getText().toString());
+                    if (value <= 35 || value > 43) {
+                        input_temperatura_layout.setError("Solo rango [35 - 43]");
+                        Log.e("number", " int   " + Integer.parseInt(input_temperatura.getText().toString()));
+                        return false;
+                    }
+                }
+            }
+
+
+        } catch (Exception e) {
+            e.getMessage();
         }
+
         return true;
     }
 
