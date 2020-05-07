@@ -99,6 +99,7 @@ public class ConsultaPersonalActivity extends AppCompatActivity {
                     consulta_dni_layout.setError("El usuario no exsite en la base de datos");
                     myrecycleview_date.setAdapter(null);
                     myrecycleview_date.clearOnScrollListeners();
+                    show_name_consulta_dni.setText("");
                 }
 
             }

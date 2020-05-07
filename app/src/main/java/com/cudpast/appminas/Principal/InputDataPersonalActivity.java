@@ -47,7 +47,7 @@ public class InputDataPersonalActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getSupportActionBar().setTitle("Ingresar datos  ");
+        getSupportActionBar().setTitle("Ingresar datos");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setContentView(R.layout.activity_input_data_minero);
 
@@ -257,21 +257,35 @@ public class InputDataPersonalActivity extends AppCompatActivity {
     }
 
     private boolean checkSaturacion() {
-        if (input_saturacion.getText().toString().trim().isEmpty()) {
+        if (input_saturacion.getText().toString().trim().isEmpty() && input_saturacion.getText().toString().trim() != null) {
             input_saturacion_layout.setError("falta ingresar SO2 del paciente");
             return false;
         } else {
             input_saturacion_layout.setError(null);
+            //
+            if (input_saturacion.getText().toString().trim() != null) {
+                int value = Integer.parseInt(input_saturacion.getText().toString());
+                if (value < 85 || value > 100) {
+                    input_saturacion_layout.setError("solo rango [85-100]");
+                    return false;
+                }
+            }
         }
         return true;
     }
 
     private boolean checkPulso() {
-        if (input_pulso.getText().toString().trim().isEmpty()) {
+        if (input_pulso.getText().toString().trim().isEmpty() && input_pulso.getText().toString() != null) {
             input_pulso_layout.setError("falta ingresare el pulso del paciente ");
             return false;
         } else {
             input_pulso_layout.setError(null);
+            if (input_pulso.getText().toString().trim() != null) {
+                int value = Integer.parseInt(input_pulso.getText().toString());
+                if (value < 50 || value > 115) {
+                    input_pulso_layout.setError("Solo rango [50-115]");
+                }
+            }
         }
         return true;
     }
