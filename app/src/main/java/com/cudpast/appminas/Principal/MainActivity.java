@@ -37,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
         listaUnidadMinera.add("of.Lima");
         listaUnidadMinera.add("of.Arequipa");
         listaUnidadMinera.add("of.Huaraz");
+
         spinner_unidadMinera = (Spinner) findViewById(R.id.spinner_unidadMinera);
         ArrayAdapter<CharSequence> adapter_spinner_um = new ArrayAdapter(this, R.layout.spinner_adapter_unidad_minera, listaUnidadMinera);
         spinner_unidadMinera.setAdapter(adapter_spinner_um);

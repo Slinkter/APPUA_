@@ -21,16 +21,13 @@ public class AllActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         getSupportActionBar().hide();
         setContentView(R.layout.activity_all);
-
         tv_selectedunidadminera = findViewById(R.id.tv_selectedunidadminera);
-
     }
 
     @Override
     protected void onStart() {
         super.onStart();
         tv_selectedunidadminera.setText(Common.unidadMineraSelected);
-
     }
 
     public void btnNewMinero(View view) {
