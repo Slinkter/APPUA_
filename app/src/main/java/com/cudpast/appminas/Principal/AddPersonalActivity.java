@@ -95,6 +95,7 @@ public class AddPersonalActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(AddPersonalActivity.this, AllActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
                 finish();
             }
@@ -133,7 +134,7 @@ public class AddPersonalActivity extends AppCompatActivity {
             mDialog.show();
 
             ref_db_personal
-                    .child(Common.unidadMineraSelected)
+                    .child(Common.unidadTrabajoSelected.getNameUT())
                     .child(user.getDni())
                     .setValue(user)
                     .addOnSuccessListener(new OnSuccessListener<Void>() {

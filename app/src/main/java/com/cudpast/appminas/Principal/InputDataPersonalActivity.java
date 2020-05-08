@@ -147,7 +147,7 @@ public class InputDataPersonalActivity extends AppCompatActivity {
         datosPersonal.setDateRegister(dateRegister);
 
         ref_db_mina_personal_data
-                .child(Common.unidadMineraSelected)
+                .child(Common.unidadTrabajoSelected.getNameUT())
                 .child(personal.getDni())
                 .child(date_atention)
                 .setValue(datosPersonal)
@@ -174,14 +174,14 @@ public class InputDataPersonalActivity extends AppCompatActivity {
 
     private void gotoMAin() {
         Intent intent = new Intent(InputDataPersonalActivity.this, AllActivity.class);
-
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
         finish();
     }
 
     private void consultarDniPersonal(String dni_personal) {
         DatabaseReference ref_db_mina_personal = database.getReference(Common.db_mina_personal);
-        DatabaseReference ref_mina = ref_db_mina_personal.child(Common.unidadMineraSelected);
+        DatabaseReference ref_mina = ref_db_mina_personal.child(Common.unidadTrabajoSelected.getNameUT());
         ref_mina.child(dni_personal).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -284,6 +284,7 @@ public class InputDataPersonalActivity extends AppCompatActivity {
                 int value = Integer.parseInt(input_pulso.getText().toString());
                 if (value < 50 || value > 115) {
                     input_pulso_layout.setError("Solo rango [50-115]");
+                    return false;
                 }
             }
         }

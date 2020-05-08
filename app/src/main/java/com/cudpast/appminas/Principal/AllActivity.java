@@ -27,7 +27,7 @@ public class AllActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        tv_selectedunidadminera.setText(Common.unidadMineraSelected);
+        tv_selectedunidadminera.setText(Common.unidadTrabajoSelected.getAliasUT());
     }
 
     public void btnNewMinero(View view) {

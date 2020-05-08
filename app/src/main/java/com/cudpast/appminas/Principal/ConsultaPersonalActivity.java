@@ -64,19 +64,14 @@ public class ConsultaPersonalActivity extends AppCompatActivity {
         consulta_dni = findViewById(R.id.consulta_dni);
         myrecycleview_date = findViewById(R.id.myrecycleview_date);
         btn_consulta_dni = findViewById(R.id.btn_consulta_dni);
-
         //
-
         show_name_consulta_dni = findViewById(R.id.show_name_consulta_dni);
-
         btn_consulta_dni.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 consultarDatosPaciente();
             }
         });
-
-
     }
 
     private void consultarDatosPaciente() {
@@ -84,7 +79,7 @@ public class ConsultaPersonalActivity extends AppCompatActivity {
 
 
         DatabaseReference ref_db_mina_personal = database.getReference(Common.db_mina_personal);
-        DatabaseReference ref_mina = ref_db_mina_personal.child(Common.unidadMineraSelected);
+        DatabaseReference ref_mina = ref_db_mina_personal.child(Common.unidadTrabajoSelected.getNameUT());
         ref_mina.child(dni).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -120,7 +115,7 @@ public class ConsultaPersonalActivity extends AppCompatActivity {
         myrecycleview_date.setHasFixedSize(true);
         myrecycleview_date.setLayoutManager(new LinearLayoutManager(this));
 
-        ref_datos_paciente = FirebaseDatabase.getInstance().getReference(Common.db_mina_personal_data).child(Common.unidadMineraSelected).child(dni);
+        ref_datos_paciente = FirebaseDatabase.getInstance().getReference(Common.db_mina_personal_data).child(Common.unidadTrabajoSelected.getNameUT()).child(dni);
         ref_datos_paciente.keepSynced(true);
         ref_datos_paciente.orderByKey();
 
