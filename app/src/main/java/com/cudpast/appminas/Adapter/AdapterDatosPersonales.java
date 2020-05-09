@@ -17,6 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.cudpast.appminas.Model.DatosPersonal;
@@ -49,18 +50,54 @@ public class AdapterDatosPersonales extends RecyclerView.Adapter<AdapterDatosPer
 
     @Override
     public void onBindViewHolder(@NonNull final MyViewHolder holder, final int position) {
-        myDialog = new Dialog(mContext);
-        myDialog.setContentView(R.layout.pop_up_sintomas);
+        //  myDialog = new Dialog(mContext);
+        //  myDialog.setContentView(R.layout.pop_up_sintomas);
+
+        Log.e("color_temp", mData.get(position).getTempurature());
+        Log.e("color_so", mData.get(position).getTempurature());
+        Log.e("color_pulso", mData.get(position).getTempurature());
+
+
+        //temperatura
         holder.tv_temperatura.setText(mData.get(position).getTempurature());
+        int valueTemp = Integer.parseInt(mData.get(position).getTempurature());
+        if (valueTemp > 1) {
+            holder.tv_temperatura.setTextColor(ContextCompat.getColor(mContext, R.color.rango_normal));
+        }
+        //Saturacion de Oxigenno
         holder.tv_satura.setText(mData.get(position).getSo2());
+        int valueSatura = Integer.parseInt(mData.get(position).getSo2());
+        if (valueSatura >= 95 && valueSatura <= 99) {
+            holder.tv_satura.setTextColor(ContextCompat.getColor(mContext, R.color.rango_normal));
+        } else if (valueSatura >= 91 && valueSatura <= 94) {
+            holder.tv_satura.setTextColor(ContextCompat.getColor(mContext, R.color.rango_leve));
+        } else if (valueSatura >= 86 && valueSatura <= 90) {
+            holder.tv_satura.setTextColor(ContextCompat.getColor(mContext, R.color.rango_moderada));
+        } else {
+            holder.tv_satura.setTextColor(ContextCompat.getColor(mContext, R.color.rango_severa));
+        }
+
+        //Pulso
         holder.tv_pulso.setText(mData.get(position).getPulse());
+        int valuePulso = Integer.parseInt(mData.get(position).getPulse());
+        if (valuePulso >= 86) {
+            holder.tv_pulso.setTextColor(ContextCompat.getColor(mContext, R.color.rango_excelente));
+        } else if (valuePulso >= 70 && valuePulso <= 84) {
+            holder.tv_pulso.setTextColor(ContextCompat.getColor(mContext, R.color.rango_bueno));
+        } else if (valuePulso >= 62 && valuePulso <= 68) {
+            holder.tv_pulso.setTextColor(ContextCompat.getColor(mContext, R.color.rango_adecuado));
+        } else {
+            holder.tv_pulso.setTextColor(ContextCompat.getColor(mContext, R.color.rango_inadecuado));
+        }
+
+
         holder.tv_date.setText(mData.get(position).getDateRegister());
         holder.img_sintomas.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 Toast.makeText(mContext, mData.get(position).getSymptoms(), Toast.LENGTH_SHORT).show();
-
+                /*
                 try {
                     TextView msn_sintomas = (TextView) myDialog.findViewById(R.id.msn_sintomas);
                     msn_sintomas.setText(mData.get(position).getSymptoms());
@@ -68,7 +105,7 @@ public class AdapterDatosPersonales extends RecyclerView.Adapter<AdapterDatosPer
                 } catch (Exception e) {
                     Log.e("asdsa", e.getMessage());
                 }
-
+*/
             }
         });
 

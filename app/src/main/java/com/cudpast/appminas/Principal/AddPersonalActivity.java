@@ -30,6 +30,7 @@ public class AddPersonalActivity extends AppCompatActivity {
     private TextInputLayout
             personal_dni_layout,
             personal_name_layout,
+            personal_last_layout,
             personal_age_layout,
             personal_address_layout,
             personal_born_layout,
@@ -40,6 +41,7 @@ public class AddPersonalActivity extends AppCompatActivity {
     private TextInputEditText
             personal_dni,
             personal_name,
+            personal_last,
             personal_age,
             personal_address,
             personal_born,
@@ -68,6 +70,7 @@ public class AddPersonalActivity extends AppCompatActivity {
         //
         personal_dni = findViewById(R.id.personal_dni);
         personal_name = findViewById(R.id.personal_name);
+        personal_last = findViewById(R.id.personal_last);
         personal_age = findViewById(R.id.personal_age);
         personal_address = findViewById(R.id.personal_address);
         personal_born = findViewById(R.id.personal_born);
@@ -77,6 +80,7 @@ public class AddPersonalActivity extends AppCompatActivity {
         //
         personal_dni_layout = findViewById(R.id.personal_dni_layout);
         personal_name_layout = findViewById(R.id.personal_name_layout);
+        personal_last_layout = findViewById(R.id.personal_last_layout);
         personal_age_layout = findViewById(R.id.personal_age_layout);
         personal_address_layout = findViewById(R.id.personal_address_layout);
         personal_born_layout = findViewById(R.id.personal_born_layout);
@@ -108,16 +112,17 @@ public class AddPersonalActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
-      //  personal_dni_layout.setEnabled(false);
+        //  personal_dni_layout.setEnabled(false);
 
     }
 
     private void createNewPersonal() {
 
         if (submitForm()) {
-            final String dni, name, age, address, born, date, phone1, phone2;
+            final String dni, name, last, age, address, born, date, phone1, phone2;
             dni = personal_dni.getText().toString();
             name = personal_name.getText().toString();
+            last = personal_last.getText().toString();
             age = personal_age.getText().toString();
             address = personal_address.getText().toString();
             born = personal_born.getText().toString();
@@ -125,12 +130,12 @@ public class AddPersonalActivity extends AppCompatActivity {
             phone1 = personal_phone1.getText().toString();
             phone2 = personal_phone2.getText().toString();
 
-            Personal user = new Personal(dni, name, age, address, born, date, phone1, phone2);
+            Personal user = new Personal(dni, name, last, age, address, born, date, phone1, phone2);
             DatabaseReference ref_db_personal = database.getReference(Common.db_mina_personal);
 
 
             mDialog = new ProgressDialog(AddPersonalActivity.this);
-            mDialog.setMessage("Registrando Personal ...");
+            mDialog.setMessage("Registrando trabajador " + name.toString() + " " + last.toString());
             mDialog.show();
 
             ref_db_personal
@@ -140,10 +145,7 @@ public class AddPersonalActivity extends AppCompatActivity {
                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {
-                            Log.e(TAG, Common.unidadMineraSelected);
-                            Log.e(TAG, "dni" + dni);
-                            Log.e(TAG, "personal registrado");
-                            Toast.makeText(AddPersonalActivity.this, "Personal Registrador", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(AddPersonalActivity.this, "El trabajador " + name.toString() + " " + last.toString() + "  ha sido registrado", Toast.LENGTH_SHORT).show();
                             gotoMAin();
                             mDialog.dismiss();
                         }
@@ -151,7 +153,7 @@ public class AddPersonalActivity extends AppCompatActivity {
                     .addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
-                            Toast.makeText(AddPersonalActivity.this, "Personal NO Registrador", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(AddPersonalActivity.this, "Trabajador no ha sido Registrado", Toast.LENGTH_SHORT).show();
                             Log.e(TAG, "personal no registrado");
                             mDialog.dismiss();
                         }
@@ -280,9 +282,13 @@ public class AddPersonalActivity extends AppCompatActivity {
         if (!checkPhone1()) {
             return false;
         }
+
+        /*
         if (!checkPhone2()) {
             return false;
         }
+
+         */
 
         return true;
     }

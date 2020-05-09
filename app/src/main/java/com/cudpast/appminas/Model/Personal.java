@@ -2,16 +2,16 @@ package com.cudpast.appminas.Model;
 
 public class Personal {
 
-    private String dni, name, age, address, born, date, phone1, phone2;
+    private String dni, name, last, age, address, born, date, phone1, phone2;
 
     public Personal() {
 
     }
 
-    public Personal( String dni, String name, String age, String address, String born, String date, String phone1, String phone2) {
-
+    public Personal(String dni, String name, String last, String age, String address, String born, String date, String phone1, String phone2) {
         this.dni = dni;
         this.name = name;
+        this.last = last;
         this.age = age;
         this.address = address;
         this.born = born;
@@ -19,7 +19,6 @@ public class Personal {
         this.phone1 = phone1;
         this.phone2 = phone2;
     }
-
 
     public String getDni() {
         return dni;
@@ -83,5 +82,13 @@ public class Personal {
 
     public void setPhone2(String phone2) {
         this.phone2 = phone2;
+    }
+
+    public String getLast() {
+        return last;
+    }
+
+    public void setLast(String last) {
+        this.last = last;
     }
 }

@@ -37,8 +37,8 @@ public class MainActivity extends AppCompatActivity {
         listaUT = new ArrayList<>();
 
         UnidadTrabajo e0 = new UnidadTrabajo();
-        e0.setNameUT("Seleccione Unidad");
-        e0.setAliasUT("SeleccioneUnidad");
+        e0.setNameUT("SeleccioneUnidad");
+        e0.setAliasUT("Seleccione Unidad");
 
         UnidadTrabajo e1 = new UnidadTrabajo();
         e1.setNameUT("COPE");
@@ -94,7 +94,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if (position != 0) {
-                    if (listaUnidadMinera.get(position).equalsIgnoreCase("Seleccione Minera")) {
+                    if (listaUnidadMinera.get(position).equalsIgnoreCase("Seleccione Unidad")) {
                         btnContinuar.setVisibility(View.INVISIBLE);
                     } else {
 
@@ -102,7 +102,6 @@ public class MainActivity extends AppCompatActivity {
                         Common.unidadTrabajoSelected = listaUT.get(position);
                         Log.e("main", " Common.unidadMineraSelected = " + Common.unidadMineraSelected);
                         Log.e("main", " Common.unidadTrabajoSelected.getNameUT() = " + Common.unidadTrabajoSelected.getNameUT());
-
                         btnContinuar.setVisibility(View.VISIBLE);
                     }
 

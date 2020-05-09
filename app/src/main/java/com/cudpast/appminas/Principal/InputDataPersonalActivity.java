@@ -189,7 +189,7 @@ public class InputDataPersonalActivity extends AppCompatActivity {
                 if (personal != null) {
                     Log.e(TAG, "nombre : " + personal.getName());
                     Log.e(TAG, "dni : " + personal.getDni());
-                    Log.e(TAG, "direccion : " + personal.getAddress());
+                    Log.e(TAG, "dirección : " + personal.getAddress());
                     Log.e(TAG, "phone 1 : " + personal.getPhone1());
                     show_consulta_nombre.setText(personal.getName());
                     show_consulta_edad.setText(personal.getAge() + " años");
@@ -198,12 +198,12 @@ public class InputDataPersonalActivity extends AppCompatActivity {
                     checkEnable();
                     input_dni_layout.setError(null);
                 } else {
-                    Log.e(TAG, "el usuario no existe en  ");
+                    Log.e(TAG, "el trabjador no existe en  ");
                     show_consulta_nombre.setText("");
                     show_consulta_nombre.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.color_error));
                     show_consulta_edad.setText("");
                     notEnable();
-                    input_dni_layout.setError("El usuario no exsite en la base de datos");
+                    input_dni_layout.setError("El trabajador no exsite en la base de datos");
 
                 }
 
@@ -232,7 +232,7 @@ public class InputDataPersonalActivity extends AppCompatActivity {
 
         try {
             if (input_temperatura.getText().toString().trim().isEmpty() && input_temperatura.getText().toString() != null) {
-                input_temperatura_layout.setError("falta ingresar temperatura del paciente");
+                input_temperatura_layout.setError("falta ingresar temperatura del trabajador");
                 Log.e("number", " int   " + Integer.parseInt(input_temperatura.getText().toString()));
                 return false;
             } else {
@@ -240,7 +240,7 @@ public class InputDataPersonalActivity extends AppCompatActivity {
                 Log.e("number", " int   " + Integer.parseInt(input_temperatura.getText().toString()));
                 if (input_temperatura.getText().toString() != null) {
                     int value = Integer.parseInt(input_temperatura.getText().toString());
-                    if (value <= 35 || value > 43) {
+                    if (value < 35 || value > 43) {
                         input_temperatura_layout.setError("Solo rango [35 - 43]");
                         Log.e("number", " int   " + Integer.parseInt(input_temperatura.getText().toString()));
                         return false;
@@ -258,7 +258,7 @@ public class InputDataPersonalActivity extends AppCompatActivity {
 
     private boolean checkSaturacion() {
         if (input_saturacion.getText().toString().trim().isEmpty() && input_saturacion.getText().toString().trim() != null) {
-            input_saturacion_layout.setError("falta ingresar SO2 del paciente");
+            input_saturacion_layout.setError("falta ingresar SO2 del trabajador");
             return false;
         } else {
             input_saturacion_layout.setError(null);
@@ -276,7 +276,7 @@ public class InputDataPersonalActivity extends AppCompatActivity {
 
     private boolean checkPulso() {
         if (input_pulso.getText().toString().trim().isEmpty() && input_pulso.getText().toString() != null) {
-            input_pulso_layout.setError("falta ingresare el pulso del paciente ");
+            input_pulso_layout.setError("falta ingresare el pulso del trabajador ");
             return false;
         } else {
             input_pulso_layout.setError(null);
@@ -327,8 +327,6 @@ public class InputDataPersonalActivity extends AppCompatActivity {
 
         return true;
     }
-
-
     //
     public static String getCurrentTimeStamp() {
         try {
@@ -340,6 +338,6 @@ public class InputDataPersonalActivity extends AppCompatActivity {
             return null;
         }
     }
-
+    //
 
 }

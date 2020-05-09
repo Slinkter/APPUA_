@@ -64,7 +64,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/mb_input"
-                android:hint="nombre"
+                android:hint="Nombre"
                 app:endIconMode="custom"
                 app:errorEnabled="true"
                 app:startIconDrawable="@drawable/ic_account">
@@ -102,7 +102,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/mb_input"
-                android:hint="Temperatura en Celsius"
+                android:hint="Temperatura  [35 - 43]"
                 app:endIconMode="custom"
                 app:errorEnabled="true"
                 app:startIconDrawable="@drawable/ic_tempe">
@@ -121,7 +121,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/mb_input"
-                android:hint="Saturación(SO2)"
+                android:hint="Saturación [85-100]"
                 app:endIconMode="custom"
                 app:errorEnabled="true"
                 app:startIconDrawable="@drawable/ic_age">
@@ -141,7 +141,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/mb_input"
-                android:hint="Pulso"
+                android:hint="Pulso [50-115] "
                 app:endIconMode="custom"
                 app:errorEnabled="true"
                 app:startIconDrawable="@drawable/ic_pulso">

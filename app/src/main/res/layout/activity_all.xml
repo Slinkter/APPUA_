@@ -69,7 +69,7 @@
                         android:layout_margin="5dp"
                         android:fontFamily="@font/headland_one"
                         android:gravity="center"
-                        android:text="Agregar\nPersonal"
+                        android:text="Agregar\nTrabajador"
                         android:textSize="@dimen/text_size_h3"
                         android:textStyle="bold">
 
@@ -108,7 +108,8 @@
                         android:layout_height="wrap_content"
                         android:layout_margin="5dp"
                         android:gravity="center"
-                        android:text="Eliminar\nPersonal "
+                        android:fontFamily="@font/headland_one"
+                        android:text="Eliminar\nTrabajador"
                         android:textSize="@dimen/text_size_h3"
                         android:textStyle="bold" />
                 </LinearLayout>
@@ -155,7 +156,7 @@
                         android:layout_margin="5dp"
                         android:fontFamily="@font/headland_one"
                         android:gravity="center"
-                        android:text="Ingresar\nDatos"
+                        android:text="Ingresar\nDatos del Trabajador"
                         android:textSize="@dimen/text_size_h3"
                         android:textStyle="bold" />
                 </LinearLayout>
@@ -192,7 +193,7 @@
                         android:layout_margin="5dp"
                         android:fontFamily="@font/headland_one"
                         android:gravity="center"
-                        android:text="Consultar\nPersonal"
+                        android:text="Consultar\nTrabajador"
                         android:textSize="@dimen/text_size_h3"
                         android:textStyle="bold" />
                 </LinearLayout>
@@ -212,7 +213,7 @@
                 android:id="@+id/tv_selectedunidadminera"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="5dp"
+                android:layout_margin="7dp"
                 android:fontFamily="@font/headland_one"
                 android:gravity="center"
                 android:text="UNIDAD DE TRABAJO"

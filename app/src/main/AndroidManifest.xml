@@ -43,7 +43,10 @@
 
         <activity
             android:name=".Activities.EmptyActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait" >
+
+
+        </activity>
         <activity
             android:name=".Activities.RegisterActivity"
             android:screenOrientation="portrait" />

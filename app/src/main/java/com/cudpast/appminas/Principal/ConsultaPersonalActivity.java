@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.cudpast.appminas.Adapter.AdapterDatosPersonales;
 import com.cudpast.appminas.Common.Common;
@@ -69,7 +70,9 @@ public class ConsultaPersonalActivity extends AppCompatActivity {
         btn_consulta_dni.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                consultarDatosPaciente();
+                if (submitForm()) {
+                    consultarDatosPaciente();
+                }
             }
         });
     }
@@ -77,34 +80,36 @@ public class ConsultaPersonalActivity extends AppCompatActivity {
     private void consultarDatosPaciente() {
         final String dni = consulta_dni.getText().toString();
 
+        if (dni.toString().isEmpty()) {
 
-        DatabaseReference ref_db_mina_personal = database.getReference(Common.db_mina_personal);
-        DatabaseReference ref_mina = ref_db_mina_personal.child(Common.unidadTrabajoSelected.getNameUT());
-        ref_mina.child(dni).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                personal = dataSnapshot.getValue(Personal.class);
-                if (personal != null) {
+        } else {
+            DatabaseReference ref_db_mina_personal = database.getReference(Common.db_mina_personal);
+            DatabaseReference ref_mina = ref_db_mina_personal.child(Common.unidadTrabajoSelected.getNameUT());
+            ref_mina.child(dni).addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    personal = dataSnapshot.getValue(Personal.class);
+                    if (personal != null) {
+                        consulta_dni_layout.setError(null);
+                        show_name_consulta_dni.setText("Trabajador : " + personal.getName() + " " + personal.getLast());
+                        ejecutar(dni);
+                    } else {
+                        consulta_dni_layout.setError("El trabajador no exsite en la base de datos");
+                        myrecycleview_date.setAdapter(null);
+                        myrecycleview_date.clearOnScrollListeners();
+                        show_name_consulta_dni.setText("");
+                    }
 
-                    consulta_dni_layout.setError(null);
-                    show_name_consulta_dni.setText("Nombre : " + personal.getName());
-                    ejecutar(dni);
-
-                } else {
-                    consulta_dni_layout.setError("El usuario no exsite en la base de datos");
-                    myrecycleview_date.setAdapter(null);
-                    myrecycleview_date.clearOnScrollListeners();
-                    show_name_consulta_dni.setText("");
                 }
 
-            }
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                    Log.e(TAG, "error : " + databaseError.getMessage());
+                    myrecycleview_date.setAdapter(null);
+                }
+            });
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                Log.e(TAG, "error : " + databaseError.getMessage());
-                myrecycleview_date.setAdapter(null);
-            }
-        });
+        }
 
 
     }
@@ -141,5 +146,24 @@ public class ConsultaPersonalActivity extends AppCompatActivity {
 
     }
 
+
+    //Validacion
+    private boolean checkDNI() {
+        if (consulta_dni.getText().toString().trim().isEmpty()) {
+            consulta_dni_layout.setError("Ingrese su DNI");
+            return false;
+        } else {
+            consulta_dni_layout.setError(null);
+        }
+        return true;
+    }
+
+
+    private boolean submitForm() {
+        if (!checkDNI()) {
+            return false;
+        }
+        return true;
+    }
 
 }
