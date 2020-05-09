@@ -31,12 +31,24 @@ public class AdapterDatosPersonales extends RecyclerView.Adapter<AdapterDatosPer
 
     private Context mContext;
     private List<DatosPersonal> mData;
+    private OnItemClickListener mListener;
+
+
+    public interface OnItemClickListener {
+        void onItemClick(int position);
+    }
+
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        mListener = listener;
+    }
+
 
     Dialog myDialog;
 
     public AdapterDatosPersonales(Context mContext, List<DatosPersonal> mData) {
         this.mContext = mContext;
         this.mData = mData;
+        myDialog = new Dialog(mContext);
     }
 
     // Extends RecyclerView
@@ -44,19 +56,14 @@ public class AdapterDatosPersonales extends RecyclerView.Adapter<AdapterDatosPer
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View row = LayoutInflater.from(mContext).inflate(R.layout.layout_raw_consulta_pesonal_item_v1, parent, false);
+        MyViewHolder myViewHolder = new MyViewHolder(row, mListener);
 
-        return new MyViewHolder(row);
+
+        return myViewHolder;
     }
 
     @Override
     public void onBindViewHolder(@NonNull final MyViewHolder holder, final int position) {
-        //  myDialog = new Dialog(mContext);
-        //  myDialog.setContentView(R.layout.pop_up_sintomas);
-
-        Log.e("color_temp", mData.get(position).getTempurature());
-        Log.e("color_so", mData.get(position).getTempurature());
-        Log.e("color_pulso", mData.get(position).getTempurature());
-
 
         //temperatura
         holder.tv_temperatura.setText(mData.get(position).getTempurature());
@@ -97,20 +104,14 @@ public class AdapterDatosPersonales extends RecyclerView.Adapter<AdapterDatosPer
             public void onClick(View v) {
 
                 Toast.makeText(mContext, mData.get(position).getSymptoms(), Toast.LENGTH_SHORT).show();
-                /*
-                try {
-                    TextView msn_sintomas = (TextView) myDialog.findViewById(R.id.msn_sintomas);
-                    msn_sintomas.setText(mData.get(position).getSymptoms());
-                    myDialog.show();
-                } catch (Exception e) {
-                    Log.e("asdsa", e.getMessage());
-                }
-*/
+
+
             }
         });
 
 
     }
+
 
     @Override
     public int getItemCount() {
@@ -118,13 +119,13 @@ public class AdapterDatosPersonales extends RecyclerView.Adapter<AdapterDatosPer
     }
 
     //Class Aux
-    public class MyViewHolder extends RecyclerView.ViewHolder {
+    public static class MyViewHolder extends RecyclerView.ViewHolder {
 
         LinearLayout rv_click_simtomas;
         TextView tv_temperatura, tv_satura, tv_pulso, tv_date;
         ImageView img_sintomas;
 
-        public MyViewHolder(@NonNull View itemView) {
+        public MyViewHolder(@NonNull View itemView, final OnItemClickListener listener) {
             super(itemView);
             rv_click_simtomas = itemView.findViewById(R.id.rv_click_simtomas);
             tv_temperatura = itemView.findViewById(R.id.rv_temperatura);
@@ -132,6 +133,18 @@ public class AdapterDatosPersonales extends RecyclerView.Adapter<AdapterDatosPer
             tv_pulso = itemView.findViewById(R.id.rv_pulso);
             tv_date = itemView.findViewById(R.id.rv_date);
             img_sintomas = itemView.findViewById(R.id.img_sintomas);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (listener != null) {
+                        int position = getAdapterPosition();
+                        if (position != RecyclerView.NO_POSITION) {
+                            listener.onItemClick(position);
+                        }
+                    }
+                }
+            });
 
         }
     }

@@ -22,6 +22,7 @@ public class AllActivity extends AppCompatActivity {
         getSupportActionBar().hide();
         setContentView(R.layout.activity_all);
         tv_selectedunidadminera = findViewById(R.id.tv_selectedunidadminera);
+        tv_selectedunidadminera.setText(Common.unidadTrabajoSelected.getAliasUT());
     }
 
     @Override
@@ -49,6 +50,7 @@ public class AllActivity extends AppCompatActivity {
     public void btnQueryMinero(View view) {
         Intent intent = new Intent(AllActivity.this, ConsultaPersonalActivity.class);
         startActivity(intent);
+        finish();
 
     }
 

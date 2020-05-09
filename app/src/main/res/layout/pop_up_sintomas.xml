@@ -1,28 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
+    android:layout_margin="20dp"
     android:gravity="center"
     android:orientation="vertical">
 
+
     <androidx.cardview.widget.CardView
-        android:layout_width="wrap_content"
+        android:layout_width="340dp"
         android:layout_height="wrap_content"
         android:layout_margin="20dp"
         app:cardCornerRadius="25dp"
         app:cardElevation="8dp"
+        android:layout_gravity="center"
         app:cardUseCompatPadding="true">
 
-        <TextView
-            android:id="@+id/msn_sintomas"
+        <LinearLayout
+            android:layout_gravity="center"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="20dp"
             android:gravity="center"
-            android:text="Lorem ipsum ds neque. Maecenas srit vehicula massa. Ut nec vulpu"
-            android:textColor="@color/border_color_edge" />
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/msn_sintomas"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:gravity="center"
+                android:text="Lorem ipsum ds neque. Maecenas srit vehicula massa. Ut nec vulpu"
+                android:textColor="@color/border_color_edge" />
+
+            <Button
+                android:id="@+id/btn_sintomas"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="regresar" />
+
+        </LinearLayout>
 
     </androidx.cardview.widget.CardView>
 

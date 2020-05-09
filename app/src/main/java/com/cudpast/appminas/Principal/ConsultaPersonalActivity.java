@@ -6,9 +6,13 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -99,7 +103,6 @@ public class ConsultaPersonalActivity extends AppCompatActivity {
                         myrecycleview_date.clearOnScrollListeners();
                         show_name_consulta_dni.setText("");
                     }
-
                 }
 
                 @Override
@@ -108,10 +111,7 @@ public class ConsultaPersonalActivity extends AppCompatActivity {
                     myrecycleview_date.setAdapter(null);
                 }
             });
-
         }
-
-
     }
 
 
@@ -134,7 +134,16 @@ public class ConsultaPersonalActivity extends AppCompatActivity {
                 }
                 //todo : adapterRV
                 AdapterDatosPersonales adapter = new AdapterDatosPersonales(getApplicationContext(), listtemp);
+                adapter.setOnItemClickListener(new AdapterDatosPersonales.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(int position) {
+                        String algo = listtemp.get(position).getSymptoms();
+                        Log.e(TAG, "prubadno el dialogo  :  " + algo);
+                        showDiaglo1(algo);
+                    }
+                });
                 myrecycleview_date.setAdapter(adapter);
+
             }
 
             @Override
@@ -142,8 +151,6 @@ public class ConsultaPersonalActivity extends AppCompatActivity {
                 myrecycleview_date.setAdapter(null);
             }
         });
-
-
     }
 
 
@@ -164,6 +171,43 @@ public class ConsultaPersonalActivity extends AppCompatActivity {
             return false;
         }
         return true;
+    }
+
+
+    public void showDiaglo1(String msn) {
+
+
+        Log.e(TAG, "esto es el menjaje " + msn);
+
+        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(ConsultaPersonalActivity.this);
+        LayoutInflater inflater = getLayoutInflater();
+        View view = inflater.inflate(R.layout.pop_up_sintomas, null);
+        builder.setView(view);
+        builder.setCancelable(false);
+        view.setKeepScreenOn(true);
+        final AlertDialog dialog = builder.create();
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        //
+        Button btn_back = view.findViewById(R.id.btn_sintomas);
+
+
+        TextView tv_msn = view.findViewById(R.id.msn_sintomas);
+
+        if (msn == null) {
+            tv_msn.setText("sin comentarios ");
+        } else {
+            tv_msn.setText(msn);
+        }
+
+
+        btn_back
+                .setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        dialog.dismiss();
+                    }
+                });
+        dialog.show();
     }
 
 }

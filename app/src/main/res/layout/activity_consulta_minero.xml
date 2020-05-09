@@ -26,9 +26,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="20dp"
                 android:fontFamily="@font/headland_one"
-                android:text="Consulta trabajador"
+                android:gravity="center"
+                android:text="Consultar trabajador"
                 android:textAllCaps="true"
-                android:textSize="@dimen/text_size_h1"
+                android:textSize="22sp"
                 android:textStyle="bold" />
 
             <LinearLayout
@@ -80,13 +81,13 @@
             android:orientation="vertical">
 
             <TextView
-                android:textColor="@color/colorPrimaryDark"
                 android:id="@+id/show_name_consulta_dni"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textStyle="bold"
+                android:text=""
+                android:textColor="@color/colorPrimaryDark"
                 android:textSize="18sp"
-                android:text="" />
+                android:textStyle="bold" />
 
         </LinearLayout>
 
