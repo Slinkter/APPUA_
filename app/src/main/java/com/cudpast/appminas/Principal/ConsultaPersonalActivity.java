@@ -95,6 +95,10 @@ public class ConsultaPersonalActivity extends AppCompatActivity {
                     personal = dataSnapshot.getValue(Personal.class);
                     if (personal != null) {
                         consulta_dni_layout.setError(null);
+
+                        if (personal.getLast() == null) {
+                            personal.setLast(" ");
+                        }
                         show_name_consulta_dni.setText("Trabajador : " + personal.getName() + " " + personal.getLast());
                         ejecutar(dni);
                     } else {

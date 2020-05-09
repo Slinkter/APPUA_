@@ -37,9 +37,9 @@ public class AllActivity extends AppCompatActivity {
     }
 
     public void btnDeleteMinero(View view) {
-        Toast.makeText(this, "No disponible , proximanente ", Toast.LENGTH_SHORT).show();
-        // Intent intent = new Intent(AllActivity.this, DeletePersonalActivity.class);
-        // startActivity(intent);
+
+        Intent intent = new Intent(AllActivity.this, DeletePersonalActivity.class);
+        startActivity(intent);
     }
 
     public void btnInputData(View view) {
@@ -50,7 +50,7 @@ public class AllActivity extends AppCompatActivity {
     public void btnQueryMinero(View view) {
         Intent intent = new Intent(AllActivity.this, ConsultaPersonalActivity.class);
         startActivity(intent);
-        finish();
+
 
     }
 

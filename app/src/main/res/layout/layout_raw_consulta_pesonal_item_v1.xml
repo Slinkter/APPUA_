@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rv_click_simtomas"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:id="@+id/rv_click_simtomas"
     android:layout_marginBottom="20dp"
     android:orientation="vertical">
-
 
     <TextView
         android:id="@+id/rv_date"
@@ -42,7 +42,6 @@
 
 
                 <TextView
-
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="start"
@@ -64,7 +63,6 @@
 
 
                 <TextView
-
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/headland_one"
@@ -78,7 +76,7 @@
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="4"
+                android:layout_weight="2"
                 android:orientation="vertical">
 
 
@@ -119,16 +117,19 @@
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="2"
+                android:layout_weight="4"
                 android:gravity="center_vertical|center_horizontal"
                 android:orientation="vertical">
 
-
-                <ImageView
+                <Button
                     android:id="@+id/img_sintomas"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:src="@drawable/ic_library_books" />
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/card_edge_button"
+                    android:text="sintomas"
+                    android:textColor="#fff" />
+
+
             </LinearLayout>
 
 

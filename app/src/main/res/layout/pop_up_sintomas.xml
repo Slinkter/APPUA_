@@ -8,20 +8,19 @@
     android:gravity="center"
     android:orientation="vertical">
 
-
     <androidx.cardview.widget.CardView
         android:layout_width="340dp"
-        android:layout_height="wrap_content"
+        android:layout_height="240dp"
+        android:layout_gravity="center"
         android:layout_margin="20dp"
         app:cardCornerRadius="25dp"
         app:cardElevation="8dp"
-        android:layout_gravity="center"
         app:cardUseCompatPadding="true">
 
         <LinearLayout
-            android:layout_gravity="center"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:gravity="center"
             android:orientation="vertical">
 

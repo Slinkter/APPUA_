@@ -99,15 +99,6 @@ public class AdapterDatosPersonales extends RecyclerView.Adapter<AdapterDatosPer
 
 
         holder.tv_date.setText(mData.get(position).getDateRegister());
-        holder.img_sintomas.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                Toast.makeText(mContext, mData.get(position).getSymptoms(), Toast.LENGTH_SHORT).show();
-
-
-            }
-        });
 
 
     }
@@ -123,7 +114,7 @@ public class AdapterDatosPersonales extends RecyclerView.Adapter<AdapterDatosPer
 
         LinearLayout rv_click_simtomas;
         TextView tv_temperatura, tv_satura, tv_pulso, tv_date;
-        ImageView img_sintomas;
+        Button img_sintomas;
 
         public MyViewHolder(@NonNull View itemView, final OnItemClickListener listener) {
             super(itemView);
@@ -134,7 +125,7 @@ public class AdapterDatosPersonales extends RecyclerView.Adapter<AdapterDatosPer
             tv_date = itemView.findViewById(R.id.rv_date);
             img_sintomas = itemView.findViewById(R.id.img_sintomas);
 
-            itemView.setOnClickListener(new View.OnClickListener() {
+            img_sintomas.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (listener != null) {
@@ -145,7 +136,6 @@ public class AdapterDatosPersonales extends RecyclerView.Adapter<AdapterDatosPer
                     }
                 }
             });
-
         }
     }
 
@@ -155,6 +145,5 @@ public class AdapterDatosPersonales extends RecyclerView.Adapter<AdapterDatosPer
         String date = DateFormat.format("dd-MM-yyyy", calendar).toString();
         return date;
     }
-
 
 }
