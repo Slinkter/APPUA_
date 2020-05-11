@@ -14,6 +14,7 @@
         android:orientation="vertical">
 
         <TextView
+            android:visibility="gone"
             android:fontFamily="@font/headland_one"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -110,8 +111,9 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/input_temperatura"
                     android:layout_width="match_parent"
+                    android:maxLength="5"
                     android:layout_height="wrap_content"
-                    android:inputType="number" />
+                    android:inputType="numberDecimal" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -129,6 +131,7 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/input_saturacion"
                     android:layout_width="match_parent"
+                    android:maxLength="3"
                     android:layout_height="wrap_content"
                     android:inputType="number" />
 
@@ -150,6 +153,7 @@
                     android:id="@+id/input_pulso"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:maxLength="3"
                     android:inputType="number" />
 
             </com.google.android.material.textfield.TextInputLayout>

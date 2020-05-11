@@ -7,17 +7,19 @@ public class DatosPersonal {
     private String pulse;
     private String symptoms;
     private String dateRegister;
+    private String who_user_register;
 
     public DatosPersonal() {
 
     }
 
-    public DatosPersonal(String tempurature, String so2, String pulse, String symptoms, String dateRegister) {
+    public DatosPersonal(String tempurature, String so2, String pulse, String symptoms, String dateRegister, String who_user_register) {
         this.tempurature = tempurature;
         this.so2 = so2;
         this.pulse = pulse;
         this.symptoms = symptoms;
         this.dateRegister = dateRegister;
+        this.who_user_register = who_user_register;
     }
 
     public String getDateRegister() {
@@ -58,5 +60,13 @@ public class DatosPersonal {
 
     public void setSymptoms(String symptoms) {
         this.symptoms = symptoms;
+    }
+
+    public String getWho_user_register() {
+        return who_user_register;
+    }
+
+    public void setWho_user_register(String who_user_register) {
+        this.who_user_register = who_user_register;
     }
 }

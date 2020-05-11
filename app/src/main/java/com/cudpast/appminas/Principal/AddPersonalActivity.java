@@ -60,7 +60,7 @@ public class AddPersonalActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_minero);
-        getSupportActionBar().setTitle("Registro de Paciente ");
+        getSupportActionBar().setTitle("Registra a un trabajador ");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         //
         mAuth = FirebaseAuth.getInstance();

@@ -67,7 +67,8 @@ public class AdapterDatosPersonales extends RecyclerView.Adapter<AdapterDatosPer
 
         //temperatura
         holder.tv_temperatura.setText(mData.get(position).getTempurature());
-        int valueTemp = Integer.parseInt(mData.get(position).getTempurature());
+        //int valueTemp = Integer.parseInt(mData.get(position).getTempurature());
+        double valueTemp = Double.parseDouble(mData.get(position).getTempurature());
         if (valueTemp > 1) {
             holder.tv_temperatura.setTextColor(ContextCompat.getColor(mContext, R.color.rango_normal));
         }

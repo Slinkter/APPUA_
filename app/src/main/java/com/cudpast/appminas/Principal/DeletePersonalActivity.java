@@ -45,7 +45,7 @@ public class DeletePersonalActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getSupportActionBar().setTitle("Eliminar Pacientes");
+        getSupportActionBar().setTitle("Dar de baja a  trabajador");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setContentView(R.layout.activity_delete_minero);
 

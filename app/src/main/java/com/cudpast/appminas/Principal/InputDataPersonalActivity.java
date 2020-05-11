@@ -145,6 +145,7 @@ public class InputDataPersonalActivity extends AppCompatActivity {
         datosPersonal.setPulse(pulse);
         datosPersonal.setSymptoms(symptoms);
         datosPersonal.setDateRegister(dateRegister);
+        datosPersonal.setWho_user_register(Common.currentUser.getUid()); // requerido
 
         ref_db_mina_personal_data
                 .child(Common.unidadTrabajoSelected.getNameUT())
@@ -154,17 +155,15 @@ public class InputDataPersonalActivity extends AppCompatActivity {
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        Log.e(TAG, Common.unidadMineraSelected);
                         Log.e(TAG, "datos registrado");
-                        Log.e(TAG, "fecha de atencion : " + date_atention);
-                        Toast.makeText(InputDataPersonalActivity.this, "Personal Registrador", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(InputDataPersonalActivity.this, "Datos registrados correctamente", Toast.LENGTH_SHORT).show();
                         gotoMAin();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(InputDataPersonalActivity.this, "Personal NO Registrador", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(InputDataPersonalActivity.this, "Error al ingresar los datos", Toast.LENGTH_SHORT).show();
                         Log.e(TAG, "datos no registrado");
 
                     }
@@ -327,6 +326,7 @@ public class InputDataPersonalActivity extends AppCompatActivity {
 
         return true;
     }
+
     //
     public static String getCurrentTimeStamp() {
         try {

@@ -14,7 +14,7 @@ import com.cudpast.appminas.R;
 
 public class AllActivity extends AppCompatActivity {
 
-    private TextView tv_selectedunidadminera;
+    private TextView tv_selectedunidadminera ,currentuser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,12 +23,18 @@ public class AllActivity extends AppCompatActivity {
         setContentView(R.layout.activity_all);
         tv_selectedunidadminera = findViewById(R.id.tv_selectedunidadminera);
         tv_selectedunidadminera.setText(Common.unidadTrabajoSelected.getAliasUT());
+
+        currentuser=findViewById(R.id.currentuser);
+        currentuser.setText(Common.currentUser.getReg_name());
+
+
     }
 
     @Override
     protected void onStart() {
         super.onStart();
         tv_selectedunidadminera.setText(Common.unidadTrabajoSelected.getAliasUT());
+        currentuser.setText(Common.currentUser.getReg_name());
     }
 
     public void btnNewMinero(View view) {
@@ -37,7 +43,6 @@ public class AllActivity extends AppCompatActivity {
     }
 
     public void btnDeleteMinero(View view) {
-
         Intent intent = new Intent(AllActivity.this, DeletePersonalActivity.class);
         startActivity(intent);
     }
@@ -50,9 +55,6 @@ public class AllActivity extends AppCompatActivity {
     public void btnQueryMinero(View view) {
         Intent intent = new Intent(AllActivity.this, ConsultaPersonalActivity.class);
         startActivity(intent);
-
-
     }
-
 
 }

@@ -20,12 +20,23 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginBottom="20dp"
+            android:layout_marginBottom="5dp"
             android:fontFamily="@font/headland_one"
             android:gravity="center"
             android:text="Seleccione Actividad"
             android:textSize="@dimen/text_size_h1"
             android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/currentuser"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginBottom="10dp"
+            android:fontFamily="@font/headland_one"
+            android:gravity="center"
+            android:text="Seleccione Actividad"
+            android:textSize="13dp" />
         <!-- 1 -->
         <LinearLayout
             android:layout_width="match_parent"
@@ -61,7 +72,7 @@
                         android:layout_width="75dp"
                         android:layout_height="75dp"
                         android:baselineAligned="false"
-                        android:src="@drawable/ic_personal_add" />
+                        android:src="@drawable/ic_addtrabajador" />
 
                     <TextView
                         android:layout_width="match_parent"
@@ -101,15 +112,15 @@
                         android:layout_width="75dp"
                         android:layout_height="75dp"
                         android:baselineAligned="false"
-                        android:src="@drawable/ic_personal_delete" />
+                        android:src="@drawable/ic_dardebaja" />
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="5dp"
-                        android:gravity="center"
                         android:fontFamily="@font/headland_one"
-                        android:text="Eliminar\nTrabajador"
+                        android:gravity="center"
+                        android:text="Dar de baja\nTrabajador"
                         android:textSize="@dimen/text_size_h3"
                         android:textStyle="bold" />
                 </LinearLayout>
@@ -156,7 +167,7 @@
                         android:layout_margin="5dp"
                         android:fontFamily="@font/headland_one"
                         android:gravity="center"
-                        android:text="Ingresar\nDatos del Trabajador"
+                        android:text="Ingresar\nDatos "
                         android:textSize="@dimen/text_size_h3"
                         android:textStyle="bold" />
                 </LinearLayout>
@@ -193,7 +204,7 @@
                         android:layout_margin="5dp"
                         android:fontFamily="@font/headland_one"
                         android:gravity="center"
-                        android:text="Consultar\nTrabajador"
+                        android:text="Consultar\nDatos"
                         android:textSize="@dimen/text_size_h3"
                         android:textStyle="bold" />
                 </LinearLayout>
