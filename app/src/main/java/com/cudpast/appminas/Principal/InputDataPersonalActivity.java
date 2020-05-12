@@ -98,7 +98,7 @@ public class InputDataPersonalActivity extends AppCompatActivity {
         btn_input_data.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(InputDataPersonalActivity.this, "Ingresar", Toast.LENGTH_SHORT).show();
+
                 if (submitForm()) {
                     savePersonalData();
                 }
@@ -125,7 +125,7 @@ public class InputDataPersonalActivity extends AppCompatActivity {
                 if (isChecked) {
                     input_test_no.setEnabled(false);
                     testfastcovid = true;
-                    Toast.makeText(InputDataPersonalActivity.this, "test_fast_covid : " + testfastcovid, Toast.LENGTH_SHORT).show();
+                    //   Toast.makeText(InputDataPersonalActivity.this, "test_fast_covid : " + testfastcovid, Toast.LENGTH_SHORT).show();
                 } else {
                     input_test_no.setEnabled(true);
                 }
@@ -138,7 +138,7 @@ public class InputDataPersonalActivity extends AppCompatActivity {
                 if (isChecked) {
                     input_test_yes.setEnabled(false);
                     testfastcovid = false;
-                    Toast.makeText(InputDataPersonalActivity.this, "test_fast_covid : " + testfastcovid, Toast.LENGTH_SHORT).show();
+                    // Toast.makeText(InputDataPersonalActivity.this, "test_fast_covid : " + testfastcovid, Toast.LENGTH_SHORT).show();
                 } else {
                     input_test_yes.setEnabled(true);
                 }
@@ -191,6 +191,7 @@ public class InputDataPersonalActivity extends AppCompatActivity {
         datosPersonal.setSymptoms(symptoms);
         datosPersonal.setDateRegister(dateRegister);
         datosPersonal.setWho_user_register(Common.currentUser.getUid()); // requerido
+        datosPersonal.setTestpruebarapida(testfastcovid);
 
         ref_db_mina_personal_data
                 .child(Common.unidadTrabajoSelected.getNameUT())
@@ -368,6 +369,10 @@ public class InputDataPersonalActivity extends AppCompatActivity {
             return false;
         }
 
+        if ((input_test_no.isChecked() || !input_test_yes.isChecked()) && (!input_test_no.isChecked() || input_test_yes.isChecked())) {
+            Toast.makeText(this, "falta  prueba rapida", Toast.LENGTH_SHORT).show();
+            return false;
+        }
 
         return true;
     }

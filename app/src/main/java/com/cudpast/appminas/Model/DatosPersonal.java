@@ -8,19 +8,13 @@ public class DatosPersonal {
     private String symptoms;
     private String dateRegister;
     private String who_user_register;
+    private Boolean testpruebarapida;
 
     public DatosPersonal() {
 
     }
 
-    public DatosPersonal(String tempurature, String so2, String pulse, String symptoms, String dateRegister, String who_user_register) {
-        this.tempurature = tempurature;
-        this.so2 = so2;
-        this.pulse = pulse;
-        this.symptoms = symptoms;
-        this.dateRegister = dateRegister;
-        this.who_user_register = who_user_register;
-    }
+
 
     public String getDateRegister() {
         return dateRegister;
@@ -68,5 +62,14 @@ public class DatosPersonal {
 
     public void setWho_user_register(String who_user_register) {
         this.who_user_register = who_user_register;
+    }
+
+
+    public Boolean getTestpruebarapida() {
+        return testpruebarapida;
+    }
+
+    public void setTestpruebarapida(Boolean testpruebarapida) {
+        this.testpruebarapida = testpruebarapida;
     }
 }
