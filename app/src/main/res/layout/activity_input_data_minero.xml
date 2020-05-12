@@ -14,15 +14,15 @@
         android:orientation="vertical">
 
         <TextView
-            android:visibility="gone"
-            android:fontFamily="@font/headland_one"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="20dp"
+            android:fontFamily="@font/headland_one"
             android:text="Ingresar Datos"
             android:textAllCaps="true"
             android:textSize="25dp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:visibility="gone" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -111,9 +111,9 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/input_temperatura"
                     android:layout_width="match_parent"
-                    android:maxLength="5"
                     android:layout_height="wrap_content"
-                    android:inputType="numberDecimal" />
+                    android:inputType="numberDecimal"
+                    android:maxLength="5" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -131,9 +131,9 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/input_saturacion"
                     android:layout_width="match_parent"
-                    android:maxLength="3"
                     android:layout_height="wrap_content"
-                    android:inputType="number" />
+                    android:inputType="number"
+                    android:maxLength="3" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -153,12 +153,37 @@
                     android:id="@+id/input_pulso"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:maxLength="3"
-                    android:inputType="number" />
+                    android:inputType="number"
+                    android:maxLength="3" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Prueba Rapida " />
+
+                <CheckBox
+                    android:id="@+id/input_test_yes"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="SI"
+                    app:useMaterialThemeColors="false" />
+
+                <CheckBox
+                    android:id="@+id/input_test_no"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="NO"
+                    app:useMaterialThemeColors="false" />
+
+            </LinearLayout>
 
 
             <TextView

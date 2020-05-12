@@ -9,6 +9,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -38,6 +40,9 @@ public class InputDataPersonalActivity extends AppCompatActivity {
     private TextInputEditText input_dni, input_temperatura, input_saturacion, input_pulso;
     private EditText input_sintomas;
     private Button btn_input_consulta, btn_input_data, btn_input_back;
+
+    private CheckBox input_test_yes, input_test_no;
+    private boolean testfastcovid;
 
     public static final String TAG = InputDataPersonalActivity.class.getSimpleName();
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -74,6 +79,14 @@ public class InputDataPersonalActivity extends AppCompatActivity {
         btn_input_data = findViewById(R.id.btn_input_data);
         btn_input_back = findViewById(R.id.btn_input_back);
 
+
+        input_test_yes = findViewById(R.id.input_test_yes);
+        input_test_no = findViewById(R.id.input_test_no);
+
+
+        //
+        toggleCheck();
+
         btn_input_consulta.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -98,6 +111,38 @@ public class InputDataPersonalActivity extends AppCompatActivity {
                 Intent intent = new Intent(InputDataPersonalActivity.this, AllActivity.class);
                 startActivity(intent);
                 finish();
+            }
+        });
+
+
+    }
+
+    private void toggleCheck() {
+
+        input_test_yes.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    input_test_no.setEnabled(false);
+                    testfastcovid = true;
+                    Toast.makeText(InputDataPersonalActivity.this, "test_fast_covid : " + testfastcovid, Toast.LENGTH_SHORT).show();
+                } else {
+                    input_test_no.setEnabled(true);
+                }
+            }
+        });
+
+        input_test_no.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    input_test_yes.setEnabled(false);
+                    testfastcovid = false;
+                    Toast.makeText(InputDataPersonalActivity.this, "test_fast_covid : " + testfastcovid, Toast.LENGTH_SHORT).show();
+                } else {
+                    input_test_yes.setEnabled(true);
+                }
+
             }
         });
 
