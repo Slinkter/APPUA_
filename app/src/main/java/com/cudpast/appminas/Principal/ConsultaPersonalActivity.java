@@ -95,7 +95,6 @@ public class ConsultaPersonalActivity extends AppCompatActivity {
                     personal = dataSnapshot.getValue(Personal.class);
                     if (personal != null) {
                         consulta_dni_layout.setError(null);
-
                         if (personal.getLast() == null) {
                             personal.setLast(" ");
                         }

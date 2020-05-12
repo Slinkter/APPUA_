@@ -98,8 +98,21 @@ public class AdapterDatosPersonales extends RecyclerView.Adapter<AdapterDatosPer
             holder.tv_pulso.setTextColor(ContextCompat.getColor(mContext, R.color.rango_inadecuado));
         }
 
+        //Change background
+        if (mData.get(position).getTestpruebarapida() !=null){
+            Boolean change_background = mData.get(position).getTestpruebarapida();
+            if (change_background){
+                holder.img_sintomas.setBackgroundResource(R.drawable.card_edge_button_true);
+            }else{
+                holder.img_sintomas.setBackgroundResource(R.drawable.card_edge_button_false);
+            }
 
-        holder.tv_date.setText(mData.get(position).getDateRegister());
+        }else{
+            Log.e("TAG" , "ERROR NULL BUTTON BACKGORUND");
+        }
+
+
+
 
 
     }

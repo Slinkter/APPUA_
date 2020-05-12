@@ -125,7 +125,7 @@
                     android:id="@+id/img_sintomas"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/card_edge_button"
+                    android:background="@drawable/card_edge_button_false"
                     android:text="sintomas"
                     android:textColor="#fff" />
 
