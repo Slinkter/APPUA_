@@ -1,27 +1,88 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:gravity="center_vertical|center_horizontal"
-    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:layout_gravity="center"
+    android:fitsSystemWindows="false"
     tools:context=".Principal.VisualActivity">
 
-
-    <lecho.lib.hellocharts.view.LineChartView
-        android:id="@+id/chart1"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="140dp" />
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20sp"
+        android:orientation="vertical">
 
-    <lecho.lib.hellocharts.view.LineChartView
-        android:id="@+id/chart2"
-        android:layout_width="match_parent"
-        android:layout_height="140dp" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="20sp"
+            android:orientation="vertical">
 
-    <lecho.lib.hellocharts.view.LineChartView
-        android:id="@+id/chart3"
-        android:layout_width="match_parent"
-        android:layout_height="140dp" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="vertical">
 
-</LinearLayout>
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/consulta_dni_layout"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/mb_input"
+                    android:hint="DNI"
+                    app:counterEnabled="true"
+                    app:counterMaxLength="8"
+                    app:endIconMode="custom"
+                    app:errorEnabled="true"
+                    app:startIconDrawable="@drawable/ic_dni">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/consulta_dni"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="number"
+                        android:maxLength="8" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <Button
+                    android:id="@+id/btn_consulta_dni"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="2dp"
+                    android:drawableEnd="@drawable/ic_search"
+                    android:text="Buscar"
+                    app:icon="@drawable/ic_search" />
+            </LinearLayout>
+        </LinearLayout>
+
+
+        <lecho.lib.hellocharts.view.LineChartView
+            android:id="@+id/chart1"
+            android:layout_width="match_parent"
+            android:layout_height="140dp" />
+
+        <lecho.lib.hellocharts.view.LineChartView
+            android:id="@+id/chart2"
+            android:layout_width="match_parent"
+            android:layout_height="140dp" />
+
+        <lecho.lib.hellocharts.view.LineChartView
+            android:id="@+id/chart3"
+            android:layout_width="match_parent"
+            android:layout_height="140dp" />
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="40sp" />
+
+    </LinearLayout>
+
+
+</ScrollView>
