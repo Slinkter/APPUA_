@@ -27,7 +27,7 @@
                 android:orientation="vertical">
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/consulta_dni_layout"
+                    android:id="@+id/visual_dni_layout"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -40,7 +40,7 @@
                     app:startIconDrawable="@drawable/ic_dni">
 
                     <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/consulta_dni"
+                        android:id="@+id/visual_dni"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="number"
@@ -49,38 +49,56 @@
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <Button
-                    android:id="@+id/btn_consulta_dni"
+                    android:id="@+id/btn_visual_dni"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginTop="2dp"
-                    android:drawableEnd="@drawable/ic_search"
-                    android:text="Buscar"
-                    app:icon="@drawable/ic_search" />
+                    android:text="Buscar" />
+
+
+                <TextView
+                    android:id="@+id/show_name_visual_dni"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="nombre de trabajador"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:textStyle="bold" />
             </LinearLayout>
         </LinearLayout>
 
 
-        <lecho.lib.hellocharts.view.LineChartView
-            android:id="@+id/chart1"
-            android:layout_width="match_parent"
-            android:layout_height="140dp" />
-
-        <lecho.lib.hellocharts.view.LineChartView
-            android:id="@+id/chart2"
-            android:layout_width="match_parent"
-            android:layout_height="140dp" />
-
-        <lecho.lib.hellocharts.view.LineChartView
-            android:id="@+id/chart3"
-            android:layout_width="match_parent"
-            android:layout_height="140dp" />
-
-
-        <TextView
+        <LinearLayout
+            android:id="@+id/visual_linerlayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="40sp" />
+            android:orientation="vertical"
+            android:visibility="invisible">
+
+            <lecho.lib.hellocharts.view.LineChartView
+                android:id="@+id/chart1"
+                android:layout_width="match_parent"
+                android:layout_height="140dp" />
+
+            <lecho.lib.hellocharts.view.LineChartView
+                android:id="@+id/chart2"
+                android:layout_width="match_parent"
+                android:layout_height="140dp" />
+
+            <lecho.lib.hellocharts.view.LineChartView
+                android:id="@+id/chart3"
+                android:layout_width="match_parent"
+                android:layout_height="140dp" />
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="40sp"
+                android:text="fin" />
+
+        </LinearLayout>
+
 
     </LinearLayout>
 

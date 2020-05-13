@@ -1,12 +1,26 @@
 package com.cudpast.appminas.Principal;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
+import com.cudpast.appminas.Common.Common;
+import com.cudpast.appminas.Model.Personal;
 import com.cudpast.appminas.R;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +35,18 @@ import lecho.lib.hellocharts.view.LineChartView;
 
 public class VisualActivity extends AppCompatActivity {
 
+    public static final String TAG = VisualActivity.class.getSimpleName();
+
+    TextInputLayout visual_dni_layout;
+    TextInputEditText visual_dni;
+    Button btn_visual_dni;
+
+    FirebaseDatabase database = FirebaseDatabase.getInstance(); // conexion a firebase
+    Personal personal;
+    TextView show_name_visual_dni;
+
+
+    LinearLayout visual_linerlayout;
 
     LineChartView lineChartViewTemperatura;
     LineChartView lineChartViewSaturacion;
@@ -35,14 +61,24 @@ public class VisualActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_visual);
 
+        visual_dni_layout = findViewById(R.id.visual_dni_layout);
+        visual_dni = findViewById(R.id.visual_dni);
+        btn_visual_dni = findViewById(R.id.btn_visual_dni);
+
+        show_name_visual_dni = findViewById(R.id.show_name_visual_dni);
+
+        visual_linerlayout = findViewById(R.id.visual_linerlayout);
 
         lineChartViewTemperatura = findViewById(R.id.chart1);
         lineChartViewSaturacion = findViewById(R.id.chart2);
         lineChartViewOxigeno = findViewById(R.id.chart3);
 
-
-
-
+        btn_visual_dni.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                consultarDatosPaciente();
+            }
+        });
 
 
         graficotem();
@@ -50,8 +86,40 @@ public class VisualActivity extends AppCompatActivity {
         graficoOxige();
 
 
+    }
 
+    private void consultarDatosPaciente() {
+        final String dni = visual_dni.getText().toString();
 
+        if (dni.toString().isEmpty()) {
+
+        } else {
+            DatabaseReference ref_db_mina_personal = database.getReference(Common.db_mina_personal);
+            DatabaseReference ref_mina = ref_db_mina_personal.child(Common.unidadTrabajoSelected.getNameUT());
+            ref_mina.child(dni).addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    personal = dataSnapshot.getValue(Personal.class);
+                    if (personal != null) {
+                        visual_dni_layout.setError(null);
+                        if (personal.getLast() == null) {
+                            personal.setLast(" ");
+                        }
+                        show_name_visual_dni.setText("Trabajador : " + personal.getName() + " " + personal.getLast());
+                        visual_linerlayout.setVisibility(View.VISIBLE);
+                    } else {
+                        visual_dni_layout.setError("El trabajador no exsite en la base de datos");
+                        show_name_visual_dni.setText("");
+                        visual_linerlayout.setVisibility(View.INVISIBLE);
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                    Log.e(TAG, "error : " + databaseError.getMessage());
+                }
+            });
+        }
     }
 
 
