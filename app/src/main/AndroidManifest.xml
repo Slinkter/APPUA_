@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.cudpast.appminas"
     tools:ignore="LockedOrientationActivity">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
 
     <application
@@ -15,13 +14,11 @@
         android:roundIcon="@drawable/ic_app_mina3"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
+        <activity android:name=".Principal.ExportActivity"></activity>
+        <activity android:name=".Principal.VisualActivity" />
         <activity
             android:name=".Principal.AllActivity"
-
             android:screenOrientation="portrait" />
-
-
         <activity
             android:name=".Principal.AddPersonalActivity"
             android:parentActivityName=".Principal.AllActivity"
@@ -34,19 +31,13 @@
             android:name=".Principal.ConsultaPersonalActivity"
             android:parentActivityName=".Principal.AllActivity"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".Principal.DeletePersonalActivity"
             android:parentActivityName=".Principal.AllActivity"
             android:screenOrientation="portrait" />
-
-
         <activity
             android:name=".Activities.EmptyActivity"
-            android:screenOrientation="portrait" >
-
-
-        </activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Activities.RegisterActivity"
             android:screenOrientation="portrait" />

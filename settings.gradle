@@ -1,2 +1,2 @@
 rootProject.name='AppMinas'
-include ':app'
+include ':app', ':hellocharts-library-1.5.8'

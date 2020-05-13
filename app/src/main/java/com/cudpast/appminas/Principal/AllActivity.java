@@ -57,4 +57,13 @@ public class AllActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    public void btnVisualData(View view) {
+        Intent intent = new Intent(AllActivity.this, VisualActivity.class);
+        startActivity(intent);
+    }
+
+    public void btnExportData(View view) {
+        Intent intent = new Intent(AllActivity.this, ExportActivity.class);
+        startActivity(intent);
+    }
 }
