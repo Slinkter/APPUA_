@@ -83,7 +83,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/mb_input"
-                android:hint="Apeliidos"
+                android:hint="Apellidos"
                 app:errorEnabled="true"
 
                 app:startIconDrawable="@drawable/ic_account">
@@ -182,7 +182,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/mb_input"
-                android:hint="Telefono principal"
+                android:hint="Teléfono principal"
                 app:counterEnabled="true"
                 app:counterMaxLength="9"
                 app:endIconMode="custom"
@@ -204,7 +204,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/mb_input"
-                android:hint="Telefono alternativo"
+                android:hint="Teléfono alternativo"
                 app:endIconMode="custom"
                 app:errorEnabled="true"
                 app:startIconDrawable="@drawable/ic_phone">

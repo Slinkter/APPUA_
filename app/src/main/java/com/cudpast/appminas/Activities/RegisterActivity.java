@@ -72,12 +72,19 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private void createUser() {
+        // 12 - 05 - 2020
+        // restrición de contraseña por el Ing. Rodrigo
+        // para evitar q otros ingrese al app
+        // motivo : por ahora no es comercial
+        // opcion 1 : contraseña default ---> pero si se pasan alguien
+        // opcion 2 : generador aletorio
         if (submitForm()) {
             mDialog = new ProgressDialog(RegisterActivity.this);
             mDialog.setMessage("Registrando ...");
             mDialog.show();
             String email = reg_email.getText().toString();
-            String password = reg_password.getText().toString();
+            String password = "FWS1pH2020";
+            //    String password = reg_password.getText().toString();
 
             mAuth
                     .createUserWithEmailAndPassword(email, password)
@@ -86,7 +93,8 @@ public class RegisterActivity extends AppCompatActivity {
                         public void onSuccess(AuthResult authResult) {
                             String uid = authResult.getUser().getUid();
                             String email = reg_email.getText().toString();
-                            String password = reg_password.getText().toString();
+
+                            String password = "FWS1pH2020";
                             String name = reg_name.getText().toString();
                             String dni = reg_dni.getText().toString();
                             String phone = reg_phone.getText().toString();

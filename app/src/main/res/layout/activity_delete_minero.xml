@@ -17,7 +17,6 @@
         android:orientation="vertical">
 
         <TextView
-            android:visibility="gone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="20dp"
@@ -25,7 +24,8 @@
             android:text="ELIMINAR TrabAJADOR"
             android:textAllCaps="true"
             android:textSize="@dimen/text_size_h1"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:visibility="gone" />
 
         <LinearLayout
 
@@ -62,7 +62,6 @@
                 android:id="@+id/btndeletepersonalcosultardni"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="10dp"
                 android:layout_weight="1"
                 android:text="consultar" />
 
@@ -70,7 +69,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
-                android:text="Datos"
+                android:text="Datos del trabajador "
                 android:textStyle="bold" />
 
             <TextView
@@ -78,19 +77,19 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
-                android:text="nombre del PERSONAL" />
+                android:text="nombre del trabajador" />
 
 
         </LinearLayout>
 
         <LinearLayout
             android:id="@+id/layout_delete"
-            android:visibility="invisible"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:gravity="center"
             android:orientation="horizontal"
+            android:visibility="invisible"
             android:weightSum="2">
 
             <Button
@@ -103,6 +102,7 @@
 
             <Button
                 android:id="@+id/btndeleteback"
+                style="?attr/materialButtonOutlinedStyle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"

@@ -107,7 +107,7 @@ public class DeletePersonalActivity extends AppCompatActivity {
                     Log.e(TAG, "dni : " + personal.getDni());
                     Log.e(TAG, "dirección : " + personal.getAddress());
                     Log.e(TAG, "phone 1 : " + personal.getPhone1());
-                    show_delete_personal.setText(personal.getName());
+                    show_delete_personal.setText(personal.getName() + " " + personal.getLast());
                     show_delete_personal.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.color_error_null));
                     delete_personal_dni_layout.setError(null);
                     layout_delete.setVisibility(View.VISIBLE);

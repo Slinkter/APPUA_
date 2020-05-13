@@ -113,7 +113,7 @@ public class AdapterDatosPersonales extends RecyclerView.Adapter<AdapterDatosPer
 
 
 
-
+        holder.tv_date.setText(mData.get(position).getDateRegister());
 
     }
 
@@ -138,6 +138,8 @@ public class AdapterDatosPersonales extends RecyclerView.Adapter<AdapterDatosPer
             tv_pulso = itemView.findViewById(R.id.rv_pulso);
             tv_date = itemView.findViewById(R.id.rv_date);
             img_sintomas = itemView.findViewById(R.id.img_sintomas);
+
+
 
             img_sintomas.setOnClickListener(new View.OnClickListener() {
                 @Override

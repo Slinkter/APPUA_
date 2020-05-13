@@ -140,9 +140,10 @@ public class ConsultaPersonalActivity extends AppCompatActivity {
                 adapter.setOnItemClickListener(new AdapterDatosPersonales.OnItemClickListener() {
                     @Override
                     public void onItemClick(int position) {
-                        String algo = listtemp.get(position).getSymptoms();
-                        Log.e(TAG, "prubadno el dialogo  :  " + algo);
-                        showDiaglo1(algo);
+                        String data_sintomas = listtemp.get(position).getSymptoms();
+                        Boolean data_testfast = listtemp.get(position).getTestpruebarapida();
+                        Log.e(TAG, "prubadno el dialogo  :  " + data_sintomas);
+                        showDiaglo1(data_sintomas, data_testfast);
                     }
                 });
                 myrecycleview_date.setAdapter(adapter);
@@ -177,7 +178,7 @@ public class ConsultaPersonalActivity extends AppCompatActivity {
     }
 
 
-    public void showDiaglo1(String msn) {
+    public void showDiaglo1(String msn, Boolean data_testfast) {
 
 
         Log.e(TAG, "esto es el menjaje " + msn);
@@ -193,8 +194,20 @@ public class ConsultaPersonalActivity extends AppCompatActivity {
         //
         Button btn_back = view.findViewById(R.id.btn_sintomas);
 
-
+        TextView tv_prueba = view.findViewById(R.id.msn_testfast);
         TextView tv_msn = view.findViewById(R.id.msn_sintomas);
+
+        if (data_testfast == null) {
+            tv_prueba.setText("NO");
+            Log.e(TAG, "datafast es null");
+        } else {
+            if (data_testfast) {
+                tv_prueba.setText("SI");
+            } else {
+                tv_prueba.setText("NO");
+            }
+        }
+
 
         if (msn == null) {
             tv_msn.setText("sin comentarios ");
