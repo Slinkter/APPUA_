@@ -72,13 +72,22 @@
             android:id="@+id/visual_linerlayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:visibility="invisible">
+            android:gravity="center"
+            android:orientation="vertical">
 
             <lecho.lib.hellocharts.view.LineChartView
                 android:id="@+id/chart1"
                 android:layout_width="match_parent"
-                android:layout_height="140dp" />
+                android:layout_height="160dp"
+                android:layout_margin="10dp" />
+
+
+            <TextView
+                android:id="@+id/meanTempe"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Promedio temperatura : " />
+
 
             <lecho.lib.hellocharts.view.LineChartView
                 android:id="@+id/chart2"

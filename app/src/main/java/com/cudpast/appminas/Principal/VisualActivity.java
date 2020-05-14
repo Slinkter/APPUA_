@@ -11,7 +11,6 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.cudpast.appminas.Adapter.AdapterDatosPersonales;
 import com.cudpast.appminas.Common.Common;
 import com.cudpast.appminas.Model.DatosPersonal;
 import com.cudpast.appminas.Model.Personal;
@@ -46,11 +45,17 @@ public class VisualActivity extends AppCompatActivity {
 
     FirebaseDatabase database = FirebaseDatabase.getInstance(); // conexion a firebase
     Personal personal;
-    TextView show_name_visual_dni;
+    TextView show_name_visual_dni, meanTempe;
     LinearLayout visual_linerlayout;
 
     private DatabaseReference ref_datos_paciente;
     private List<DatosPersonal> listtemp;
+
+
+    private List<String> listDate;
+    private List<String> listTemperatura;
+    private List<Integer> listSaturacion;
+    private List<Integer> listPulso;
 
     LineChartView lineChartViewTemperatura;
     LineChartView lineChartViewSaturacion;
@@ -68,6 +73,9 @@ public class VisualActivity extends AppCompatActivity {
         lineChartViewTemperatura = findViewById(R.id.chart1);
         lineChartViewSaturacion = findViewById(R.id.chart2);
         lineChartViewOxigeno = findViewById(R.id.chart3);
+
+
+        meanTempe = findViewById(R.id.meanTempe);
 
         btn_visual_dni.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -97,9 +105,9 @@ public class VisualActivity extends AppCompatActivity {
                         show_name_visual_dni.setText("Trabajador : " + personal.getName() + " " + personal.getLast());
                         visual_linerlayout.setVisibility(View.VISIBLE);
 
-                        graficotem(dni);
-                        graficosatu();
-                        graficoOxige();
+                        getDataFromFirebase(dni);
+                        //  tempShowChart();
+
 
                     } else {
                         visual_dni_layout.setError("El trabajador no exsite en la base de datos");
@@ -117,78 +125,129 @@ public class VisualActivity extends AppCompatActivity {
     }
 
 
-    private void graficotem(String dni) {
+    private void getDataFromFirebase(String dni) {
 
-        String[] axisData = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"};
-        int[] yAxisData = {50, 20, 15, 30, 20, 60, 15, 40, 45, 10, 90, 18};
-
-
-        ref_datos_paciente = FirebaseDatabase.getInstance().getReference(Common.db_mina_personal_data).child(Common.unidadTrabajoSelected.getNameUT()).child(dni);
-        ref_datos_paciente.limitToFirst(4);
-        ref_datos_paciente.keepSynced(true);
-        ref_datos_paciente.orderByKey();
+        listtemp = new ArrayList<>();
+        listDate = new ArrayList<String>();
+        listTemperatura = new ArrayList<>();
+        listSaturacion = new ArrayList<>();
+        listPulso = new ArrayList<>();
 
         Query query = FirebaseDatabase.getInstance().getReference(Common.db_mina_personal_data).child(Common.unidadTrabajoSelected.getNameUT()).child(dni)
                 .orderByKey()
-                .limitToFirst(15);
+                .limitToFirst(12);
 
-        query.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                listtemp = new ArrayList<>();
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    DatosPersonal datosPersonal = snapshot.getValue(DatosPersonal.class);
-                    listtemp.add(datosPersonal);
-                    Log.e(TAG, "tamaño  " + " : " + listtemp.size());
-                    Log.e(TAG, "fecha  " + " : " + datosPersonal.getDateRegister());
-                    Log.e(TAG, "temperutara  " + " : " + datosPersonal.getTempurature());
+        query
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                            DatosPersonal datosPersonal = snapshot.getValue(DatosPersonal.class);
+                            if (datosPersonal != null) {
+
+                                listtemp.add(datosPersonal);
+                                //
+                                listDate.add(datosPersonal.getDateRegister().substring(8, 10));
+                                listTemperatura.add((datosPersonal.getTempurature()));
+                                listSaturacion.add(Integer.parseInt(datosPersonal.getSo2()));
+                                listPulso.add(Integer.parseInt(datosPersonal.getPulse()));
+
+                            } else {
+
+                            }
+                        }
+
+                        tempShowChart();
+
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                        Log.e(TAG, "error" + " : " + databaseError.getMessage());
+                    }
+                });
+    }
+
+
+    private void tempShowChart() {
+
+        if (listDate != null && listTemperatura != null) {
+
+            String[] axisData = listDate.stream().toArray(String[]::new);
+            // String[] axisData = {"2020-05-12", "2020-05-12", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"}; /// fecha
+            //     int[] yAxisData = {50, 20, 15, 30, 20, 60, 15, 40, 45, 10, 90, 18};
+            int[] yAxisData = new int[listTemperatura.size()];
+            double suma = 0;
+            double promedio = 0.0f;
+            try {
+                for (int i = 0; i < listTemperatura.size(); i++) {
+                    Log.e(TAG, " " + (int) (Double.parseDouble(listTemperatura.get(i).toString())));
+                    suma = suma + Double.parseDouble(listTemperatura.get(i).toString());
+                    Log.e(TAG, "suma = " + suma);
+                    yAxisData[i] = (int) (Double.parseDouble(listTemperatura.get(i).toString()));
+
                 }
+
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                Log.e(TAG, "[error]" + e.getMessage());
             }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
+            promedio = suma / listTemperatura.size();
 
+            String cad = String.valueOf(promedio);
+
+            meanTempe.setText("Promedio temperatura : " + cad.substring(0, 5));
+            meanTempe.setTextColor(Color.parseColor("#03A9F4"));
+
+
+            List yAxisValues = new ArrayList();
+            List axisValues = new ArrayList();
+
+            Line line = new Line(yAxisValues).setColor(Color.parseColor("#9C27B0"));
+
+            for (int i = 0; i < axisData.length; i++) {
+                Log.e(TAG, "axisData " + i + " = " + axisData[i]);
+                axisValues.add(i, new AxisValue(i).setLabel(axisData[i]));
             }
-        });
 
+            for (int i = 0; i < yAxisData.length; i++) {
+                yAxisValues.add(new PointValue(i, (int) (yAxisData[i])));
+            }
 
-        List yAxisValues = new ArrayList();
-        List axisValues = new ArrayList();
-        Line line = new Line(yAxisValues).setColor(Color.parseColor("#9C27B0"));
+            List lines = new ArrayList();
+            lines.add(line);
 
-        for (int i = 0; i < axisData.length; i++) {
-            axisValues.add(i, new AxisValue(i).setLabel(axisData[i]));
+            LineChartData data = new LineChartData();
+            data.setLines(lines);
+
+            Axis axis = new Axis();
+            axis.setValues(axisValues);
+            axis.setTextSize(16);
+            axis.setName("dias");
+            axis.setTextColor(Color.parseColor("#03A9F4"));
+            data.setAxisXBottom(axis);
+
+            Axis yAxis = new Axis();
+            //  yAxis.setName("Temperatura");
+            yAxis.setTextColor(Color.parseColor("#03A9F4"));
+            yAxis.setTextSize(16);
+            data.setAxisYLeft(yAxis);
+
+            lineChartViewTemperatura.setLineChartData(data);
+            Viewport viewport = new Viewport(lineChartViewTemperatura.getMaximumViewport());
+            viewport.bottom = 30;
+            viewport.top = 45;
+            lineChartViewTemperatura.setMaximumViewport(viewport);
+            lineChartViewTemperatura.setCurrentViewport(viewport);
+        } else {
+            Log.e(TAG, "lista data null");
         }
 
-        for (int i = 0; i < yAxisData.length; i++) {
-            yAxisValues.add(new PointValue(i, yAxisData[i]));
-        }
-
-        List lines = new ArrayList();
-        lines.add(line);
-
-        LineChartData data = new LineChartData();
-        data.setLines(lines);
-
-        Axis axis = new Axis();
-        axis.setValues(axisValues);
-        axis.setTextSize(16);
-        axis.setTextColor(Color.parseColor("#03A9F4"));
-        data.setAxisXBottom(axis);
-
-        Axis yAxis = new Axis();
-        yAxis.setName("Temperatura");
-        yAxis.setTextColor(Color.parseColor("#03A9F4"));
-        yAxis.setTextSize(16);
-        data.setAxisYLeft(yAxis);
-
-        lineChartViewTemperatura.setLineChartData(data);
-        Viewport viewport = new Viewport(lineChartViewTemperatura.getMaximumViewport());
-        viewport.top = 110;
-        lineChartViewTemperatura.setMaximumViewport(viewport);
-        lineChartViewTemperatura.setCurrentViewport(viewport);
 
     }
+
 
     private void graficosatu() {
 
