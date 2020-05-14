@@ -11,7 +11,9 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.cudpast.appminas.Adapter.AdapterDatosPersonales;
 import com.cudpast.appminas.Common.Common;
+import com.cudpast.appminas.Model.DatosPersonal;
 import com.cudpast.appminas.Model.Personal;
 import com.cudpast.appminas.R;
 import com.google.android.material.textfield.TextInputEditText;
@@ -20,6 +22,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
@@ -44,31 +47,24 @@ public class VisualActivity extends AppCompatActivity {
     FirebaseDatabase database = FirebaseDatabase.getInstance(); // conexion a firebase
     Personal personal;
     TextView show_name_visual_dni;
-
-
     LinearLayout visual_linerlayout;
+
+    private DatabaseReference ref_datos_paciente;
+    private List<DatosPersonal> listtemp;
 
     LineChartView lineChartViewTemperatura;
     LineChartView lineChartViewSaturacion;
     LineChartView lineChartViewOxigeno;
 
-
-    String[] axisData = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"};
-    int[] yAxisData = {50, 20, 15, 30, 20, 60, 15, 40, 45, 10, 90, 18};
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_visual);
-
         visual_dni_layout = findViewById(R.id.visual_dni_layout);
         visual_dni = findViewById(R.id.visual_dni);
         btn_visual_dni = findViewById(R.id.btn_visual_dni);
-
         show_name_visual_dni = findViewById(R.id.show_name_visual_dni);
-
         visual_linerlayout = findViewById(R.id.visual_linerlayout);
-
         lineChartViewTemperatura = findViewById(R.id.chart1);
         lineChartViewSaturacion = findViewById(R.id.chart2);
         lineChartViewOxigeno = findViewById(R.id.chart3);
@@ -79,13 +75,6 @@ public class VisualActivity extends AppCompatActivity {
                 consultarDatosPaciente();
             }
         });
-
-
-        graficotem();
-        graficosatu();
-        graficoOxige();
-
-
     }
 
     private void consultarDatosPaciente() {
@@ -107,6 +96,11 @@ public class VisualActivity extends AppCompatActivity {
                         }
                         show_name_visual_dni.setText("Trabajador : " + personal.getName() + " " + personal.getLast());
                         visual_linerlayout.setVisibility(View.VISIBLE);
+
+                        graficotem(dni);
+                        graficosatu();
+                        graficoOxige();
+
                     } else {
                         visual_dni_layout.setError("El trabajador no exsite en la base de datos");
                         show_name_visual_dni.setText("");
@@ -123,7 +117,41 @@ public class VisualActivity extends AppCompatActivity {
     }
 
 
-    private void graficotem() {
+    private void graficotem(String dni) {
+
+        String[] axisData = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"};
+        int[] yAxisData = {50, 20, 15, 30, 20, 60, 15, 40, 45, 10, 90, 18};
+
+
+        ref_datos_paciente = FirebaseDatabase.getInstance().getReference(Common.db_mina_personal_data).child(Common.unidadTrabajoSelected.getNameUT()).child(dni);
+        ref_datos_paciente.limitToFirst(4);
+        ref_datos_paciente.keepSynced(true);
+        ref_datos_paciente.orderByKey();
+
+        Query query = FirebaseDatabase.getInstance().getReference(Common.db_mina_personal_data).child(Common.unidadTrabajoSelected.getNameUT()).child(dni)
+                .orderByKey()
+                .limitToFirst(15);
+
+        query.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                listtemp = new ArrayList<>();
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    DatosPersonal datosPersonal = snapshot.getValue(DatosPersonal.class);
+                    listtemp.add(datosPersonal);
+                    Log.e(TAG, "tamaño  " + " : " + listtemp.size());
+                    Log.e(TAG, "fecha  " + " : " + datosPersonal.getDateRegister());
+                    Log.e(TAG, "temperutara  " + " : " + datosPersonal.getTempurature());
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+
         List yAxisValues = new ArrayList();
         List axisValues = new ArrayList();
         Line line = new Line(yAxisValues).setColor(Color.parseColor("#9C27B0"));
@@ -163,6 +191,12 @@ public class VisualActivity extends AppCompatActivity {
     }
 
     private void graficosatu() {
+
+
+        String[] axisData = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"};
+        int[] yAxisData = {50, 20, 15, 30, 20, 60, 15, 40, 45, 10, 90, 18};
+
+
         List yAxisValues = new ArrayList();
         List axisValues = new ArrayList();
         Line line = new Line(yAxisValues).setColor(Color.parseColor("#9C27B0"));
@@ -201,6 +235,11 @@ public class VisualActivity extends AppCompatActivity {
     }
 
     private void graficoOxige() {
+
+        String[] axisData = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"};
+        int[] yAxisData = {50, 20, 15, 30, 20, 60, 15, 40, 45, 10, 90, 18};
+
+
         List yAxisValues = new ArrayList();
         List axisValues = new ArrayList();
         Line line = new Line(yAxisValues).setColor(Color.parseColor("#9C27B0"));

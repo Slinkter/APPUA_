@@ -119,6 +119,7 @@ public class ConsultaPersonalActivity extends AppCompatActivity {
 
 
     private void ejecutar(String dni) {
+
         myrecycleview_date.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         myrecycleview_date.setHasFixedSize(true);
         myrecycleview_date.setLayoutManager(new LinearLayoutManager(this));
