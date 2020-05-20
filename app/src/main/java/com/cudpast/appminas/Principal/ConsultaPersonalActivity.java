@@ -49,11 +49,8 @@ public class ConsultaPersonalActivity extends AppCompatActivity {
     private TextView show_name_consulta_dni;
 
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
-
     private DatabaseReference ref_datos_paciente;
     private List<DatosPersonal> listtemp;
-
-
     private Personal personal;
 
     public static final String TAG = ConsultaPersonalActivity.class.getSimpleName();
