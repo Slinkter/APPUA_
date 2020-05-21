@@ -90,58 +90,61 @@ public class ExportActivity extends AppCompatActivity {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         listaMetricasPersonales = new ArrayList<>();
-                        listaPersonal = new ArrayList<>();
+
                         for (DataSnapshot snapshotDatosPersonales : dataSnapshot.getChildren()) {
                             try {
-                                String dni = snapshotDatosPersonales.getKey(); // <-- DNI del Personal
-                                //
-                                for (DataSnapshot dataSnapshot1 : snapshotDatosPersonales.getChildren()) {
-                                    MetricasPersonal metricasPersonal = dataSnapshot1.getValue(MetricasPersonal.class);
-                                    String fecha = metricasPersonal.getDateRegister().substring(0, 10).trim();
-                                    //Buscar fecha q coincide
-                                    if (fecha.equalsIgnoreCase(seletedDate)) {
-                                        // LOG
-                                        Log.e(TAG, "----------> Fecha : " + fecha + " ");
-                                        Log.e(TAG, "getSymptoms = " + metricasPersonal.getSymptoms());
-                                        Log.e(TAG, "getTempurature = " + metricasPersonal.getTempurature());
-                                        Log.e(TAG, "getSo2 = " + metricasPersonal.getSo2());
-                                        Log.e(TAG, "getDateRegister = " + metricasPersonal.getDateRegister());
-                                        Log.e(TAG, "getPulse = " + metricasPersonal.getPulse());
-                                        Log.e(TAG, "getWho_user_register= " + metricasPersonal.getWho_user_register());
-                                        //Si la fecha coincide enlistar datos
-                                        listaMetricasPersonales.add(metricasPersonal);
-                                        // Buscar datos
-                                        DatabaseReference ref_db_mina_personal = database.getReference(Common.db_mina_personal);
-                                        DatabaseReference ref_mina = ref_db_mina_personal.child(Common.unidadTrabajoSelected.getNameUT());
-                                        //
-                                        ref_mina.child(dni).addValueEventListener(new ValueEventListener() {
-                                            @Override
-                                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                                personal = dataSnapshot.getValue(Personal.class);
-                                                if (personal != null) {
-                                                    Log.e(TAG, "nombre: " + personal.getName() + " ");
-
-
-                                                } else {
-
+                                // <-- DNI del Personal
+                                String dniPersonal = snapshotDatosPersonales.getKey();
+                                // --> Lista de snapshotDatosPersonales
+                                listaPersonal = new ArrayList<>();
+                                for (DataSnapshot item : snapshotDatosPersonales.getChildren()) {
+                                    //
+                                    MetricasPersonal metricasPersonal = item.getValue(MetricasPersonal.class);
+                                    if (metricasPersonal != null) {
+                                        String dateRegister = metricasPersonal.getDateRegister().substring(0, 10).trim();
+                                        //Buscar dateRegister q coincide
+                                        if (dateRegister.equalsIgnoreCase(seletedDate)) {
+                                            // LOG
+                                            Log.e(TAG, "----------> Fecha : " + dateRegister + " ");
+                                            Log.e(TAG, "getSymptoms = " + metricasPersonal.getSymptoms());
+                                            Log.e(TAG, "getTempurature = " + metricasPersonal.getTempurature());
+                                            Log.e(TAG, "getSo2 = " + metricasPersonal.getSo2());
+                                            Log.e(TAG, "getDateRegister = " + metricasPersonal.getDateRegister());
+                                            Log.e(TAG, "getPulse = " + metricasPersonal.getPulse());
+                                            Log.e(TAG, "getWho_user_register= " + metricasPersonal.getWho_user_register());
+                                            //Si la dateRegister coincide enlistar datos
+                                            listaMetricasPersonales.add(metricasPersonal);
+                                            // Buscar datos
+                                            DatabaseReference ref_db_mina_personal = database.getReference(Common.db_mina_personal);
+                                            DatabaseReference ref_mina = ref_db_mina_personal.child(Common.unidadTrabajoSelected.getNameUT());
+                                            //
+                                            ref_mina.child(dniPersonal).addValueEventListener(new ValueEventListener() {
+                                                @Override
+                                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                    personal = dataSnapshot.getValue(Personal.class);
+                                                    if (personal != null) {
+                                                        listaPersonal.add(personal);
+                                                        Log.e(TAG, "nombre : " + personal.getName() + " ");
+                                                    }
+                                                    generarPdf(listaMetricasPersonales, listaPersonal, seletedDate);
                                                 }
-                                            }
 
-                                            @Override
-                                            public void onCancelled(@NonNull DatabaseError databaseError) {
-                                                Log.e(TAG, "error : " + databaseError.getMessage());
-                                            }
-                                        });
-
-
+                                                @Override
+                                                public void onCancelled(@NonNull DatabaseError databaseError) {
+                                                    Log.e(TAG, "error : " + databaseError.getMessage());
+                                                }
+                                            });
+                                            //  generarPdf(listaMetricasPersonales, listaPersonal, seletedDate);
+                                        }
                                     }
+                                    //    generarPdf(listaMetricasPersonales, listaPersonal, seletedDate);
                                 }
+                                //  generarPdf(listaMetricasPersonales, listaPersonal, seletedDate);
                             } catch (Exception e) {
                                 e.getMessage();
                             }
-                        }
 
-                        generarPdf(listaMetricasPersonales, listaPersonal, seletedDate);
+                        }
 
 
                     }
@@ -150,6 +153,8 @@ public class ExportActivity extends AppCompatActivity {
                     public void onCancelled(@NonNull DatabaseError databaseError) {
                         Log.e(TAG, "error : " + databaseError.getMessage());
                     }
+
+
                 });
 
 
@@ -169,7 +174,8 @@ public class ExportActivity extends AppCompatActivity {
 
     private void generarPdf(List<MetricasPersonal> metricasPersonal, List<Personal> personal, String seletedDate) {
         //
-        Log.e(TAG, "error : generarPDF");
+        Log.e(TAG, "metricasPersonal.size() : " + metricasPersonal.size());
+        Log.e(TAG, "personal.size() : " + personal.size());
         int pageWidth = 1200;
         Date currentDate = new Date();
 
@@ -237,25 +243,32 @@ public class ExportActivity extends AppCompatActivity {
         cansas01.drawLine(1030, 380, 1030, 430, myPaint);
 
 
-
         int ytext = 400;
         int ysum = 100;
+
+        Log.e(TAG, "personal.get(0).getName()) : " + personal.get(0).getName());
+
         for (int i = 0; i < metricasPersonal.size(); i++) {
+            Log.e(TAG, "metricasPersonal = " + metricasPersonal.get(i).getNamepaciente());
             cansas01.drawText(i + ".", 50, ytext + ysum, myPaint);
             cansas01.drawText("", 170, ytext + ysum, myPaint);
-            cansas01.drawText("Juan Pedro Rodrigues Morales", 340, ytext + ysum, myPaint);
+            //       cansas01.drawText(personal.get(i).getName().toString(), 340, ytext + ysum, myPaint);
             cansas01.drawText(metricasPersonal.get(i).getTempurature().toString(), 760, ytext + ysum, myPaint);
             cansas01.drawText(metricasPersonal.get(i).getSo2().toString(), 940, ytext + ysum, myPaint);
             cansas01.drawText(metricasPersonal.get(i).getPulse().toString(), 1090, ytext + ysum, myPaint);
             ysum = ysum + 80;
         }
 
-
-
+        int ytextname = 400;
+        int ysumname = 100;
+        for (int i = 0; i < personal.size(); i++) {
+            cansas01.drawText(personal.get(i).getName().toString(), 340, ytextname + ysumname, myPaint);
+            ysumname = ysumname + 80;
+        }
 
 
         pdfDocument.finishPage(myPage01);
-        File file = new File(Environment.getExternalStorageDirectory(), "/mypdf1010.pdf");
+        File file = new File(Environment.getExternalStorageDirectory(), "/arsi.pdf");
         try {
             pdfDocument.writeTo(new FileOutputStream(file));
         } catch (IOException e) {

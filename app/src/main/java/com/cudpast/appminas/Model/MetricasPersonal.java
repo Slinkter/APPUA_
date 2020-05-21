@@ -10,11 +10,19 @@ public class MetricasPersonal {
     private String who_user_register;
     private Boolean testpruebarapida;
 
+    private String namepaciente;
+
     public MetricasPersonal() {
 
     }
 
+    public String getNamepaciente() {
+        return namepaciente;
+    }
 
+    public void setNamepaciente(String namepaciente) {
+        this.namepaciente = namepaciente;
+    }
 
     public String getDateRegister() {
         return dateRegister;

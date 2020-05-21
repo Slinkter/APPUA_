@@ -4,6 +4,7 @@ public class Personal {
 
     private String dni, name, last, age, address, born, date, phone1, phone2;
 
+
     public Personal() {
 
     }
