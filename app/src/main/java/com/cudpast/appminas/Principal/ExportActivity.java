@@ -203,6 +203,7 @@ public class ExportActivity extends AppCompatActivity {
         cansas01.drawText("FECHA DE CONSULTA ", pageWidth - 20, 60, fecha);
         fecha.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL));
         cansas01.drawText("" + dateFormat.format(currentDate), pageWidth - 80, 90, fecha);
+        String fechapdf = dateFormat.format(currentDate);
 
         dateFormat = new SimpleDateFormat("HH:mm:ss");
         fecha.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
@@ -263,7 +264,7 @@ public class ExportActivity extends AppCompatActivity {
         int ysumname = 100;
         for (int i = 0; i < personal.size(); i++) {
             cansas01.drawText(personal.get(i).getName().toString(), 340, ytextname + ysumname, myPaint);
-            ysumname = ysumname + 80;
+            ysumname = ysumname + 50;
         }
 
 
