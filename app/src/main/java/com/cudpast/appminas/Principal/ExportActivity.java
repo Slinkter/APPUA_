@@ -8,11 +8,12 @@ import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.cudpast.appminas.Adapter.AdapterDatosPersonales;
 import com.cudpast.appminas.Common.Common;
 import com.cudpast.appminas.Model.DatosPersonal;
+import com.cudpast.appminas.Model.Personal;
 import com.cudpast.appminas.R;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
@@ -22,18 +23,17 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Locale;
 import java.util.TimeZone;
 
 public class ExportActivity extends AppCompatActivity {
 
     public static final String TAG = ExportActivity.class.getSimpleName();
     Button btn_export_date;
-    TextView fecha;
+    TextView tv_fecha;
 
+    private FirebaseDatabase database = FirebaseDatabase.getInstance();
+    private Personal personal;
     private DatabaseReference ref_datos_paciente;
 
     @Override
@@ -42,14 +42,11 @@ public class ExportActivity extends AppCompatActivity {
         setContentView(R.layout.activity_export);
 
         btn_export_date = findViewById(R.id.btn_export_date);
-        fecha = findViewById(R.id.fecha);
+        tv_fecha = findViewById(R.id.fecha);
 
         MaterialDatePicker.Builder builder = MaterialDatePicker.Builder.datePicker();
-
-
         builder.setTitleText("Seleccionar Fecha");
         final MaterialDatePicker materialDatePicker = builder.build();
-
         btn_export_date.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -60,11 +57,11 @@ public class ExportActivity extends AppCompatActivity {
         materialDatePicker.addOnPositiveButtonClickListener(new MaterialPickerOnPositiveButtonClickListener<Long>() {
             @Override
             public void onPositiveButtonClick(Long selection) {
-                Log.e("DATE", "selection  : " + selection.toString());
-                Log.e("DATE", "timestampToString  : " + timestampToString(selection));
-                Log.e("DATE", "materialDatePicker.getSelection().toString()   : " + materialDatePicker.getSelection().toString());
-                Log.e("DATE", "materialDatePicker.getHeaderText().toString()  : " + materialDatePicker.getHeaderText().toString());
-                fecha.setText("fecha  " + timestampToString(selection));
+                // Log.e("DATE", "selection  : " + selection.toString());
+                // Log.e("DATE", "timestampToString  : " + timestampToString(selection));
+                // Log.e("DATE", "materialDatePicker.getSelection().toString()   : " + materialDatePicker.getSelection().toString());
+                // Log.e("DATE", "materialDatePicker.getHeaderText().toString()  : " + materialDatePicker.getHeaderText().toString());
+                tv_fecha.setText("fecha  " + timestampToString(selection));
                 final String seletedDate = timestampToString(selection);
 
 
@@ -75,16 +72,13 @@ public class ExportActivity extends AppCompatActivity {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                            String cad = snapshot.getValue().toString();
-                          //  Log.e(TAG, cad);
 
                             try {
-                                Log.e(TAG, "==============================");
-                                Log.e(TAG, "snapshot.getKey() " + snapshot.getKey());
-                                //   Log.e(TAG, "snapshot.getChildren() = " + snapshot.getChildren().toString());
-                                //   Log.e(TAG, "snapshot.getValue().toString() = " + snapshot.getValue().toString());
-                                //   Log.e(TAG, "snapshot.child(snapshot.getKey()) = " + snapshot.child(snapshot.getKey()));
-
+                                //  Log.e(TAG, "==============================");
+                                //  Log.e(TAG, "snapshot.getKey() " + snapshot.getKey());
+                                //
+                                String dni = snapshot.getKey();
+                                //
                                 for (DataSnapshot dataSnapshot1 : snapshot.getChildren()) {
                                     DatosPersonal datosPersonal = dataSnapshot1.getValue(DatosPersonal.class);
                                     String fecha = datosPersonal.getDateRegister().substring(0, 10).trim();
@@ -96,16 +90,33 @@ public class ExportActivity extends AppCompatActivity {
                                         Log.e(TAG, "getDateRegister = " + datosPersonal.getDateRegister());
                                         Log.e(TAG, "getPulse = " + datosPersonal.getPulse());
                                         Log.e(TAG, "getWho_user_register= " + datosPersonal.getWho_user_register());
+
+                                        DatabaseReference ref_db_mina_personal = database.getReference(Common.db_mina_personal);
+                                        DatabaseReference ref_mina = ref_db_mina_personal.child(Common.unidadTrabajoSelected.getNameUT());
+                                        //
+                                        ref_mina.child(dni).addValueEventListener(new ValueEventListener() {
+                                            @Override
+                                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                personal = dataSnapshot.getValue(Personal.class);
+                                                if (personal != null) {
+                                                    Log.e(TAG, "nombre: " + personal.getName() + " ");
+                                                } else {
+
+                                                }
+                                            }
+
+                                            @Override
+                                            public void onCancelled(@NonNull DatabaseError databaseError) {
+                                                Log.e(TAG, "error : " + databaseError.getMessage());
+                                            }
+                                        });
+
+
                                     }
-
                                 }
-
-
                             } catch (Exception e) {
                                 e.getMessage();
                             }
-
-
                         }
                     }
 
