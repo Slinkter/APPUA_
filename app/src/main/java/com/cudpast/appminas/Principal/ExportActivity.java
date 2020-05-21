@@ -93,6 +93,8 @@ public class ExportActivity extends AppCompatActivity {
 
             seletedDate = timestampToString(dateSelected);
 
+
+
             ref_datos_paciente = FirebaseDatabase.getInstance().getReference(Common.db_mina_personal_data).child(Common.unidadTrabajoSelected.getNameUT());
             ref_datos_paciente.keepSynced(true);
             ref_datos_paciente.orderByKey();
@@ -156,14 +158,16 @@ public class ExportActivity extends AppCompatActivity {
                     Log.e(TAG, "error : " + databaseError.getMessage());
                 }
 
-
             });
 
-
         });
-
-
     }
+
+
+
+
+
+
 
     private String timestampToString(long time) {
         Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
