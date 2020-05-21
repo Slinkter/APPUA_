@@ -94,7 +94,6 @@ public class ExportActivity extends AppCompatActivity {
             seletedDate = timestampToString(dateSelected);
 
 
-
             ref_datos_paciente = FirebaseDatabase.getInstance().getReference(Common.db_mina_personal_data).child(Common.unidadTrabajoSelected.getNameUT());
             ref_datos_paciente.keepSynced(true);
             ref_datos_paciente.orderByKey();
@@ -162,11 +161,6 @@ public class ExportActivity extends AppCompatActivity {
 
         });
     }
-
-
-
-
-
 
 
     private String timestampToString(long time) {
@@ -249,38 +243,60 @@ public class ExportActivity extends AppCompatActivity {
         cansas01.drawLine(1030, 380, 1030, 430, myPaint);
 
 
+
         int ytext = 400;
         int ysum = 100;
-
-        Log.e(TAG, "personal.get(0).getName()) : " + personal.get(0).getName());
-
-        for (int i = 0; i < metricasPersonal.size(); i++) {
-            Log.e(TAG, "metricasPersonal = " + metricasPersonal.get(i).getNamepaciente());
-            cansas01.drawText(i + ".", 50, ytext + ysum, myPaint);
-            cansas01.drawText("", 170, ytext + ysum, myPaint);
-            //       cansas01.drawText(personal.get(i).getName().toString(), 340, ytext + ysum, myPaint);
-            cansas01.drawText(metricasPersonal.get(i).getTempurature().toString(), 760, ytext + ysum, myPaint);
-            cansas01.drawText(metricasPersonal.get(i).getSo2().toString(), 940, ytext + ysum, myPaint);
-            cansas01.drawText(metricasPersonal.get(i).getPulse().toString(), 1090, ytext + ysum, myPaint);
-            ysum = ysum + 80;
-        }
-
         int ytextname = 400;
         int ysumname = 100;
-        for (int i = 0; i < personal.size(); i++) {
-            cansas01.drawText(personal.get(i).getName().toString(), 340, ytextname + ysumname, myPaint);
-            ysumname = ysumname + 50;
-        }
+        if (metricasPersonal.size() <= 28) {
+            //---> Pagina 01
+            //metricas
+            for (int i = 0; i < metricasPersonal.size(); i++) {
+                Log.e(TAG, "metricasPersonal = " + metricasPersonal.get(i).getNamepaciente());
+                cansas01.drawText(i + ".", 50, ytext + ysum, myPaint);
+                cansas01.drawText(metricasPersonal.get(i).getTempurature().toString(), 760, ytext + ysum, myPaint);
+                cansas01.drawText(metricasPersonal.get(i).getSo2().toString(), 940, ytext + ysum, myPaint);
+                cansas01.drawText(metricasPersonal.get(i).getPulse().toString(), 1090, ytext + ysum, myPaint);
+                ysum = ysum + 50;
+            }
+           // info trabajador
+            for (int i = 0; i < personal.size(); i++) {
+                cansas01.drawText(personal.get(i).getDni().toString(), 170, ytextname + ysumname, myPaint);
+                cansas01.drawText(personal.get(i).getName().toString(), 340, ytextname + ysumname, myPaint);
+                ysumname = ysumname + 50;
+            }
+
+            pdfDocument.finishPage(myPage01);
+            File file = new File(Environment.getExternalStorageDirectory(), "/arsi21.pdf");
+            try {
+                pdfDocument.writeTo(new FileOutputStream(file));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            pdfDocument.close();
+            //---> End Pagina 01
+        } else if (metricasPersonal.size() > 28 && metricasPersonal.size() <= 48) {
+            Toast.makeText(this, "pagina 2", Toast.LENGTH_SHORT).show();
+            //---> Pagina 01
 
 
-        pdfDocument.finishPage(myPage01);
-        File file = new File(Environment.getExternalStorageDirectory(), "/arsi21.pdf");
-        try {
-            pdfDocument.writeTo(new FileOutputStream(file));
-        } catch (IOException e) {
-            e.printStackTrace();
+
+
+
+
+
+            //---> Cierre
+            File file = new File(Environment.getExternalStorageDirectory(), "/arsi21.pdf");
+            try {
+                pdfDocument.writeTo(new FileOutputStream(file));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            pdfDocument.close();
+
+        } else if (metricasPersonal.size() > 49 && metricasPersonal.size() <= 68) {
+            Toast.makeText(this, "pagina 3", Toast.LENGTH_SHORT).show();
         }
-        pdfDocument.close();
 
 
     }
