@@ -2,30 +2,24 @@ package com.cudpast.appminas.Principal;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.AlertDialog;
-import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.cudpast.appminas.Adapter.AdapterDatosPersonales;
 import com.cudpast.appminas.Common.Common;
-import com.cudpast.appminas.Model.DatosPersonal;
+import com.cudpast.appminas.Model.MetricasPersonal;
 import com.cudpast.appminas.Model.Personal;
 import com.cudpast.appminas.R;
-import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.database.DataSnapshot;
@@ -36,8 +30,6 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.cudpast.appminas.R.layout.layout_raw_consulta_pesonal_item;
 
 public class ConsultaPersonalActivity extends AppCompatActivity {
 
@@ -50,7 +42,7 @@ public class ConsultaPersonalActivity extends AppCompatActivity {
 
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
     private DatabaseReference ref_datos_paciente;
-    private List<DatosPersonal> listtemp;
+    private List<MetricasPersonal> listtemp;
     private Personal personal;
 
     public static final String TAG = ConsultaPersonalActivity.class.getSimpleName();
@@ -130,8 +122,8 @@ public class ConsultaPersonalActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 listtemp = new ArrayList<>();
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    DatosPersonal datosPersonal = snapshot.getValue(DatosPersonal.class);
-                    listtemp.add(datosPersonal);
+                    MetricasPersonal metricasPersonal = snapshot.getValue(MetricasPersonal.class);
+                    listtemp.add(metricasPersonal);
                 }
                 //todo : adapterRV
                 AdapterDatosPersonales adapter = new AdapterDatosPersonales(getApplicationContext(), listtemp);

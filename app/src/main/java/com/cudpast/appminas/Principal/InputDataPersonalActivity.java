@@ -16,7 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cudpast.appminas.Common.Common;
-import com.cudpast.appminas.Model.DatosPersonal;
+import com.cudpast.appminas.Model.MetricasPersonal;
 import com.cudpast.appminas.Model.Personal;
 import com.cudpast.appminas.R;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -184,20 +184,20 @@ public class InputDataPersonalActivity extends AppCompatActivity {
         String dateRegister = date_atention;
 
         //String tempurature, String so2, String pulse, String symptoms, String dateRegister
-        DatosPersonal datosPersonal = new DatosPersonal();
-        datosPersonal.setTempurature(tempurature);
-        datosPersonal.setSo2(so2);
-        datosPersonal.setPulse(pulse);
-        datosPersonal.setSymptoms(symptoms);
-        datosPersonal.setDateRegister(dateRegister);
-        datosPersonal.setWho_user_register(Common.currentUser.getUid()); // requerido
-        datosPersonal.setTestpruebarapida(testfastcovid);
+        MetricasPersonal metricasPersonal = new MetricasPersonal();
+        metricasPersonal.setTempurature(tempurature);
+        metricasPersonal.setSo2(so2);
+        metricasPersonal.setPulse(pulse);
+        metricasPersonal.setSymptoms(symptoms);
+        metricasPersonal.setDateRegister(dateRegister);
+        metricasPersonal.setWho_user_register(Common.currentUser.getUid()); // requerido
+        metricasPersonal.setTestpruebarapida(testfastcovid);
 
         ref_db_mina_personal_data
                 .child(Common.unidadTrabajoSelected.getNameUT())
                 .child(personal.getDni())
                 .child(date_atention)
-                .setValue(datosPersonal)
+                .setValue(metricasPersonal)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {

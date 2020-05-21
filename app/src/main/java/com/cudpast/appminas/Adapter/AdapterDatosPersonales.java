@@ -1,26 +1,21 @@
 package com.cudpast.appminas.Adapter;
 
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.cudpast.appminas.Model.DatosPersonal;
+import com.cudpast.appminas.Model.MetricasPersonal;
 import com.cudpast.appminas.R;
 
 import java.util.Calendar;
@@ -30,7 +25,7 @@ import java.util.Locale;
 public class AdapterDatosPersonales extends RecyclerView.Adapter<AdapterDatosPersonales.MyViewHolder> {
 
     private Context mContext;
-    private List<DatosPersonal> mData;
+    private List<MetricasPersonal> mData;
     private OnItemClickListener mListener;
 
 
@@ -45,7 +40,7 @@ public class AdapterDatosPersonales extends RecyclerView.Adapter<AdapterDatosPer
 
     Dialog myDialog;
 
-    public AdapterDatosPersonales(Context mContext, List<DatosPersonal> mData) {
+    public AdapterDatosPersonales(Context mContext, List<MetricasPersonal> mData) {
         this.mContext = mContext;
         this.mData = mData;
         myDialog = new Dialog(mContext);

@@ -12,7 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.cudpast.appminas.Common.Common;
-import com.cudpast.appminas.Model.DatosPersonal;
+import com.cudpast.appminas.Model.MetricasPersonal;
 import com.cudpast.appminas.Model.Personal;
 import com.cudpast.appminas.R;
 import com.google.android.material.textfield.TextInputEditText;
@@ -49,7 +49,7 @@ public class VisualActivity extends AppCompatActivity {
     LinearLayout visual_linerlayout;
 
     private DatabaseReference ref_datos_paciente;
-    private List<DatosPersonal> listtemp;
+    private List<MetricasPersonal> listtemp;
 
 
     private List<String> listDate;
@@ -142,15 +142,15 @@ public class VisualActivity extends AppCompatActivity {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                            DatosPersonal datosPersonal = snapshot.getValue(DatosPersonal.class);
-                            if (datosPersonal != null) {
+                            MetricasPersonal metricasPersonal = snapshot.getValue(MetricasPersonal.class);
+                            if (metricasPersonal != null) {
 
-                                listtemp.add(datosPersonal);
+                                listtemp.add(metricasPersonal);
                                 //
-                                listDate.add(datosPersonal.getDateRegister().substring(8, 10));
-                                listTemperatura.add((datosPersonal.getTempurature()));
-                                listSaturacion.add(Integer.parseInt(datosPersonal.getSo2()));
-                                listPulso.add(Integer.parseInt(datosPersonal.getPulse()));
+                                listDate.add(metricasPersonal.getDateRegister().substring(8, 10));
+                                listTemperatura.add((metricasPersonal.getTempurature()));
+                                listSaturacion.add(Integer.parseInt(metricasPersonal.getSo2()));
+                                listPulso.add(Integer.parseInt(metricasPersonal.getPulse()));
 
                             } else {
 

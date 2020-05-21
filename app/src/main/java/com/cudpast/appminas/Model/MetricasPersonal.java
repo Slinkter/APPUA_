@@ -1,6 +1,6 @@
 package com.cudpast.appminas.Model;
 
-public class DatosPersonal {
+public class MetricasPersonal {
 
     private String tempurature;
     private String so2;//saturacion
@@ -10,7 +10,7 @@ public class DatosPersonal {
     private String who_user_register;
     private Boolean testpruebarapida;
 
-    public DatosPersonal() {
+    public MetricasPersonal() {
 
     }
 
