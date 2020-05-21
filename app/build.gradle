@@ -46,6 +46,9 @@ dependencies {
     implementation 'com.firebaseui:firebase-ui-database:0.4.0'
     //
     implementation 'com.github.lecho:hellocharts-android:v1.5.8'
+    //
+    implementation 'com.github.barteksc:android-pdf-viewer:2.8.2'
+
 }
 apply plugin: 'com.google.gms.google-services'
 apply plugin: 'com.android.application'

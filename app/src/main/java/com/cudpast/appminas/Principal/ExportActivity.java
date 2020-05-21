@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -45,8 +46,6 @@ import java.util.TimeZone;
 public class ExportActivity extends AppCompatActivity {
 
     public static final String TAG = ExportActivity.class.getSimpleName();
-
-
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
     private Personal personal;
     private DatabaseReference ref_datos_paciente;
@@ -78,10 +77,7 @@ public class ExportActivity extends AppCompatActivity {
         btn_selectDate.setOnClickListener(v -> materialDatePicker.show(getSupportFragmentManager(), "DATE_PICKER"));
 
         materialDatePicker.addOnPositiveButtonClickListener((MaterialPickerOnPositiveButtonClickListener<Long>) dateSelected -> {
-            // Log.e("DATE", "dateSelected  : " + dateSelected.toString());
-            // Log.e("DATE", "timestampToString  : " + timestampToString(dateSelected));
-            // Log.e("DATE", "materialDatePicker.getSelection().toString()   : " + materialDatePicker.getSelection().toString());
-            // Log.e("DATE", "materialDatePicker.getHeaderText().toString()  : " + materialDatePicker.getHeaderText().toString());
+
             tv_show_date.setVisibility(View.VISIBLE);
             tv_show_date.setText("Fecha Selecionada :  " + timestampToString(dateSelected));
             btn_viewPdf.setVisibility(View.VISIBLE);
@@ -89,6 +85,9 @@ public class ExportActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     Toast.makeText(ExportActivity.this, "Hola soy pdf", Toast.LENGTH_SHORT).show();
+                    generarPdf(listaMetricasPersonales, listaPersonal, seletedDate);
+                    Intent intent = new Intent(ExportActivity.this, ShowPdfActivity.class);
+                    startActivity(intent);
                 }
             });
 
@@ -101,7 +100,7 @@ public class ExportActivity extends AppCompatActivity {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     listaMetricasPersonales = new ArrayList<>();
-
+                    //
                     for (DataSnapshot snapshotDatosPersonales : dataSnapshot.getChildren()) {
                         try {
                             // <-- DNI del Personal
@@ -115,14 +114,6 @@ public class ExportActivity extends AppCompatActivity {
                                     String dateRegister = metricasPersonal.getDateRegister().substring(0, 10).trim();
                                     //Buscar dateRegister q coincide
                                     if (dateRegister.equalsIgnoreCase(seletedDate)) {
-                                        // LOG
-                                        Log.e(TAG, "----------> Fecha : " + dateRegister + " ");
-                                        Log.e(TAG, "getSymptoms = " + metricasPersonal.getSymptoms());
-                                        Log.e(TAG, "getTempurature = " + metricasPersonal.getTempurature());
-                                        Log.e(TAG, "getSo2 = " + metricasPersonal.getSo2());
-                                        Log.e(TAG, "getDateRegister = " + metricasPersonal.getDateRegister());
-                                        Log.e(TAG, "getPulse = " + metricasPersonal.getPulse());
-                                        Log.e(TAG, "getWho_user_register= " + metricasPersonal.getWho_user_register());
                                         //Si la dateRegister coincide enlistar datos
                                         listaMetricasPersonales.add(metricasPersonal);
                                         // Buscar datos
@@ -137,7 +128,7 @@ public class ExportActivity extends AppCompatActivity {
                                                     listaPersonal.add(personal);
                                                     Log.e(TAG, "nombre : " + personal.getName() + " ");
                                                 }
-                                                generarPdf(listaMetricasPersonales, listaPersonal, seletedDate);
+
                                             }
 
                                             @Override
@@ -279,7 +270,7 @@ public class ExportActivity extends AppCompatActivity {
 
 
         pdfDocument.finishPage(myPage01);
-        File file = new File(Environment.getExternalStorageDirectory(), "/arsi.pdf");
+        File file = new File(Environment.getExternalStorageDirectory(), "/arsi21.pdf");
         try {
             pdfDocument.writeTo(new FileOutputStream(file));
         } catch (IOException e) {
