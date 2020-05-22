@@ -47,7 +47,7 @@ public class ExportActivity extends AppCompatActivity {
 
     public static final String TAG = ExportActivity.class.getSimpleName();
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
-    private Personal personal;
+
     private DatabaseReference ref_datos_paciente;
     private List<MetricasPersonal> listaMetricasPersonales;
     private List<Personal> listaPersonal;
@@ -73,7 +73,6 @@ public class ExportActivity extends AppCompatActivity {
         dialogCalendar.setTitleText("Seleccionar Fecha");
         materialDatePicker = dialogCalendar.build();
 
-
         btn_selectDate.setOnClickListener(v -> materialDatePicker.show(getSupportFragmentManager(), "DATE_PICKER"));
 
         materialDatePicker.addOnPositiveButtonClickListener((MaterialPickerOnPositiveButtonClickListener<Long>) dateSelected -> {
@@ -81,75 +80,55 @@ public class ExportActivity extends AppCompatActivity {
             tv_show_date.setVisibility(View.VISIBLE);
             tv_show_date.setText("Fecha Selecionada :  " + timestampToString(dateSelected));
             btn_viewPdf.setVisibility(View.VISIBLE);
-            btn_viewPdf.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Toast.makeText(ExportActivity.this, "Hola soy pdf", Toast.LENGTH_SHORT).show();
-                    generarPdf(listaMetricasPersonales, listaPersonal, seletedDate);
-                    Intent intent = new Intent(ExportActivity.this, ShowPdfActivity.class);
-                    startActivity(intent);
-                }
-            });
 
             seletedDate = timestampToString(dateSelected);
 
+            listaMetricasPersonales = new ArrayList<>();
+            listaPersonal = new ArrayList<>();
 
             ref_datos_paciente = FirebaseDatabase.getInstance().getReference(Common.db_mina_personal_data).child(Common.unidadTrabajoSelected.getNameUT());
             ref_datos_paciente.keepSynced(true);
             ref_datos_paciente.orderByKey();
-            ref_datos_paciente.addValueEventListener(new ValueEventListener() {
+            ref_datos_paciente.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    listaMetricasPersonales = new ArrayList<>();
-                    //
                     for (DataSnapshot snapshotDatosPersonales : dataSnapshot.getChildren()) {
-                        try {
-                            // <-- DNI del Personal
-                            String dniPersonal = snapshotDatosPersonales.getKey();
-                            // --> Lista de snapshotDatosPersonales
-                            listaPersonal = new ArrayList<>();
-                            for (DataSnapshot item : snapshotDatosPersonales.getChildren()) {
-                                //
-                                MetricasPersonal metricasPersonal = item.getValue(MetricasPersonal.class);
-                                if (metricasPersonal != null) {
-                                    String dateRegister = metricasPersonal.getDateRegister().substring(0, 10).trim();
-                                    //Buscar dateRegister q coincide
-                                    if (dateRegister.equalsIgnoreCase(seletedDate)) {
-                                        //Si la dateRegister coincide enlistar datos
-                                        listaMetricasPersonales.add(metricasPersonal);
-                                        // Buscar datos
-                                        DatabaseReference ref_db_mina_personal = database.getReference(Common.db_mina_personal);
-                                        DatabaseReference ref_mina = ref_db_mina_personal.child(Common.unidadTrabajoSelected.getNameUT());
-                                        //
-                                        ref_mina.child(dniPersonal).addValueEventListener(new ValueEventListener() {
-                                            @Override
-                                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                                personal = dataSnapshot.getValue(Personal.class);
-                                                if (personal != null) {
-                                                    listaPersonal.add(personal);
-                                                    Log.e(TAG, "nombre : " + personal.getName() + " ");
-                                                }
-
+                        // --> DNI del Personal
+                        String dniPersonal = snapshotDatosPersonales.getKey();
+                        // --> Lista de snapshotDatosPersonales
+                        for (DataSnapshot item : snapshotDatosPersonales.getChildren()) {
+                            MetricasPersonal metricasPersonal = item.getValue(MetricasPersonal.class);
+                            if (metricasPersonal != null) {
+                                String dateRegister = metricasPersonal.getDateRegister().substring(0, 10).trim();
+                                //Buscar dateRegister q coincide
+                                if (dateRegister.equalsIgnoreCase(seletedDate)) {
+                                    // Si la dateRegister coincide enlistar datos
+                                    listaMetricasPersonales.add(metricasPersonal);
+                                    Log.e(TAG, "tamaño metricas  : " + listaMetricasPersonales.size());
+                                    // Buscar datos
+                                    DatabaseReference ref_db_mina_personal = database.getReference(Common.db_mina_personal);
+                                    DatabaseReference ref_mina = ref_db_mina_personal.child(Common.unidadTrabajoSelected.getNameUT());
+                                    //
+                                    ref_mina.child(dniPersonal).addListenerForSingleValueEvent(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                            Personal personal = dataSnapshot.getValue(Personal.class);
+                                            if (personal != null) {
+                                                listaPersonal.add(personal);
+                                                Log.e(TAG, "tamaño personal : " + listaPersonal.size());
                                             }
 
-                                            @Override
-                                            public void onCancelled(@NonNull DatabaseError databaseError) {
-                                                Log.e(TAG, "error : " + databaseError.getMessage());
-                                            }
-                                        });
+                                        }
 
-                                    }
+                                        @Override
+                                        public void onCancelled(@NonNull DatabaseError databaseError) {
+                                            Log.e(TAG, "error : " + databaseError.getMessage());
+                                        }
+                                    });
                                 }
-
                             }
-
-                        } catch (Exception e) {
-                            e.getMessage();
                         }
-
                     }
-
-
                 }
 
                 @Override
@@ -157,6 +136,22 @@ public class ExportActivity extends AppCompatActivity {
                     Log.e(TAG, "error : " + databaseError.getMessage());
                 }
 
+            });
+
+
+            btn_viewPdf.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(ExportActivity.this, "Hola soy pdf", Toast.LENGTH_SHORT).show();
+                    try {
+                        generarPdf(listaMetricasPersonales, listaPersonal, seletedDate);
+                        Intent intent = new Intent(ExportActivity.this, ShowPdfActivity.class);
+                        startActivity(intent);
+                    } catch (Exception e) {
+                        Log.e(TAG, "btn_viewPdf - Error = " + e.getMessage());
+                    }
+
+                }
             });
 
         });
@@ -171,13 +166,14 @@ public class ExportActivity extends AppCompatActivity {
     }
 
 
-    private void generarPdf(List<MetricasPersonal> metricasPersonal, List<Personal> personal, String seletedDate) {
+    private void generarPdf(List<MetricasPersonal> listMetricasPersonal, List<Personal> listPersonal, String seletedDate) {
         //
-        Log.e(TAG, "metricasPersonal.size() : " + metricasPersonal.size());
-        Log.e(TAG, "personal.size() : " + personal.size());
+        Log.e(TAG, "listMetricasPersonal.size() : " + listMetricasPersonal.size());
+        Log.e(TAG, "listPersonal.size() : " + listPersonal.size());
+
         int pageWidth = 1200;
         Date currentDate = new Date();
-
+        //
         java.text.DateFormat dateFormat;
         //
         PdfDocument pdfDocument = new PdfDocument();
@@ -243,48 +239,32 @@ public class ExportActivity extends AppCompatActivity {
         cansas01.drawLine(1030, 380, 1030, 430, myPaint);
 
 
-
         int ytext = 400;
         int ysum = 100;
         int ytextname = 400;
         int ysumname = 100;
-        if (metricasPersonal.size() <= 28) {
-            //---> Pagina 01
+        Log.e(TAG, "1   " + listPersonal.size());
+
+        Log.e(TAG, "2  " + listPersonal.size());
+        if (listMetricasPersonal.size() <= 28) {
+            //-------------------------------------------------------------------------------
+            //---> Pagina 01 Pagina 01 : [0-28]
             //metricas
-            for (int i = 0; i < metricasPersonal.size(); i++) {
-                Log.e(TAG, "metricasPersonal = " + metricasPersonal.get(i).getNamepaciente());
+            for (int i = 0; i < listMetricasPersonal.size(); i++) {
                 cansas01.drawText(i + ".", 50, ytext + ysum, myPaint);
-                cansas01.drawText(metricasPersonal.get(i).getTempurature().toString(), 760, ytext + ysum, myPaint);
-                cansas01.drawText(metricasPersonal.get(i).getSo2().toString(), 940, ytext + ysum, myPaint);
-                cansas01.drawText(metricasPersonal.get(i).getPulse().toString(), 1090, ytext + ysum, myPaint);
+                cansas01.drawText(listMetricasPersonal.get(i).getTempurature().toString(), 760, ytext + ysum, myPaint);
+                cansas01.drawText(listMetricasPersonal.get(i).getSo2().toString(), 940, ytext + ysum, myPaint);
+                cansas01.drawText(listMetricasPersonal.get(i).getPulse().toString(), 1090, ytext + ysum, myPaint);
                 ysum = ysum + 50;
             }
-           // info trabajador
-            for (int i = 0; i < personal.size(); i++) {
-                cansas01.drawText(personal.get(i).getDni().toString(), 170, ytextname + ysumname, myPaint);
-                cansas01.drawText(personal.get(i).getName().toString(), 340, ytextname + ysumname, myPaint);
+            // info trabajador
+            for (int i = 0; i < listPersonal.size(); i++) {
+                cansas01.drawText(listPersonal.get(i).getDni().toString(), 170, ytextname + ysumname, myPaint);
+                cansas01.drawText(listPersonal.get(i).getName().toString(), 340, ytextname + ysumname, myPaint);
                 ysumname = ysumname + 50;
             }
 
             pdfDocument.finishPage(myPage01);
-            File file = new File(Environment.getExternalStorageDirectory(), "/arsi21.pdf");
-            try {
-                pdfDocument.writeTo(new FileOutputStream(file));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            pdfDocument.close();
-            //---> End Pagina 01
-        } else if (metricasPersonal.size() > 28 && metricasPersonal.size() <= 48) {
-            Toast.makeText(this, "pagina 2", Toast.LENGTH_SHORT).show();
-            //---> Pagina 01
-
-
-
-
-
-
-
             //---> Cierre
             File file = new File(Environment.getExternalStorageDirectory(), "/arsi21.pdf");
             try {
@@ -293,9 +273,64 @@ public class ExportActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
             pdfDocument.close();
+            //-------------------------------------------------------------------------------
+        } else if (listMetricasPersonal.size() >= 29 ) {
+            Toast.makeText(this, "pagina 2", Toast.LENGTH_SHORT).show();
+            //-------------------------------------------------------------------------------
+            //---> Pagina 01 : [0-30]
+            for (int i = 0; i <= 30; i++) {
+                Log.e(TAG, "pagina 01 " + i );
+                cansas01.drawText(i + ".", 50, ytext + ysum, myPaint);
+                cansas01.drawText(listMetricasPersonal.get(i).getTempurature().toString(), 760, ytext + ysum, myPaint);
+                cansas01.drawText(listMetricasPersonal.get(i).getSo2().toString(), 940, ytext + ysum, myPaint);
+                cansas01.drawText(listMetricasPersonal.get(i).getPulse().toString(), 1090, ytext + ysum, myPaint);
+                ysum = ysum + 50;
+            }
+            //
+            for (int i = 0; i <= 30; i++) {
+                cansas01.drawText(listPersonal.get(i).getDni().toString(), 170, ytextname + ysumname, myPaint);
+                cansas01.drawText(listPersonal.get(i).getName().toString(), 340, ytextname + ysumname, myPaint);
+                ysumname = ysumname + 50;
+            }
+            //
+            pdfDocument.finishPage(myPage01);
+            //-------------------------------------------------------------------------------
+            //---> Pagina 02 : [31-70]
+            PdfDocument.PageInfo myPageInfo2 = new PdfDocument.PageInfo.Builder(1200, 2010, 2).create();
+            PdfDocument.Page myPage2 = pdfDocument.startPage(myPageInfo2);
+            Canvas canvas2 = myPage2.getCanvas();
+            canvas2.drawText("Unidades ARSI  - Cudpast", 40, 50, myPaint);
+            int y2sum = 100;
+            int x2sum = 100;
+            for (int i = 31; i <= 60; i++) {
+                Log.e(TAG, "pagina 02 " + i );
+                canvas2.drawText(i + ".", 50, 70 + y2sum, myPaint);
+                canvas2.drawText(listMetricasPersonal.get(i).getTempurature().toString(), 760, 70 + y2sum, myPaint);
+                canvas2.drawText(listMetricasPersonal.get(i).getSo2().toString(), 940, 70 + y2sum, myPaint);
+                canvas2.drawText(listMetricasPersonal.get(i).getPulse().toString(), 1090, 70 + y2sum, myPaint);
+                y2sum = y2sum + 50;
+            }
+            //
+            for (int i = 31; i <= 60; i++) {
+                canvas2.drawText(listPersonal.get(i).getDni().toString(), 170, 70 + x2sum, myPaint);
+                canvas2.drawText(listPersonal.get(i).getName().toString(), 340, 70 + x2sum, myPaint);
+                x2sum = x2sum + 50;
+            }
 
-        } else if (metricasPersonal.size() > 49 && metricasPersonal.size() <= 68) {
-            Toast.makeText(this, "pagina 3", Toast.LENGTH_SHORT).show();
+
+            pdfDocument.finishPage(myPage2);
+            //---> Cierre
+            File file = new File(Environment.getExternalStorageDirectory(), "/arsi21.pdf");
+            try {
+
+                pdfDocument.writeTo(new FileOutputStream(file));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            pdfDocument.close();
+
+        }else{
+            Log.e(TAG, "ERROR problemas de index");
         }
 
 
