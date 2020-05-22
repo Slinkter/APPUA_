@@ -12,7 +12,7 @@
 
 
     <color name="rango_normal">#11E6A5</color>
-    <color name="rango_leve">#FFF003</color>
+    <color name="rango_leve">#FFEB3B</color>
     <color name="rango_moderada">#FF2626</color>
     <color name="rango_severa">#FF0000</color>
 

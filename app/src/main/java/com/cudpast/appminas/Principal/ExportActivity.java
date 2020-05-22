@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
 import android.Manifest;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Canvas;
@@ -21,6 +22,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.cudpast.appminas.Activities.RegisterActivity;
 import com.cudpast.appminas.Common.Common;
 import com.cudpast.appminas.Model.MetricasPersonal;
 import com.cudpast.appminas.Model.Personal;
@@ -56,6 +58,7 @@ public class ExportActivity extends AppCompatActivity {
     private MaterialDatePicker.Builder dialogCalendar;
     private MaterialDatePicker materialDatePicker;
     private String seletedDate;
+    private ProgressDialog mDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,6 +79,10 @@ public class ExportActivity extends AppCompatActivity {
         btn_selectDate.setOnClickListener(v -> materialDatePicker.show(getSupportFragmentManager(), "DATE_PICKER"));
 
         materialDatePicker.addOnPositiveButtonClickListener((MaterialPickerOnPositiveButtonClickListener<Long>) dateSelected -> {
+
+            mDialog = new ProgressDialog(ExportActivity.this);
+            mDialog.setMessage("Obteniendo datos ...");
+            mDialog.show();
 
             tv_show_date.setVisibility(View.VISIBLE);
             tv_show_date.setText("Fecha Selecionada :  " + timestampToString(dateSelected));
@@ -104,7 +111,8 @@ public class ExportActivity extends AppCompatActivity {
                                 if (dateRegister.equalsIgnoreCase(seletedDate)) {
                                     // Si la dateRegister coincide enlistar datos
                                     listaMetricasPersonales.add(metricasPersonal);
-                                    Log.e(TAG, "tamaño metricas  : " + listaMetricasPersonales.size());
+                                    //    Log.e(TAG, " metricas temperatura : " + metricasPersonal.getTempurature());
+                                    //   Log.e(TAG, "tamaño metricas  : " + listaMetricasPersonales.size());
                                     // Buscar datos
                                     DatabaseReference ref_db_mina_personal = database.getReference(Common.db_mina_personal);
                                     DatabaseReference ref_mina = ref_db_mina_personal.child(Common.unidadTrabajoSelected.getNameUT());
@@ -112,17 +120,19 @@ public class ExportActivity extends AppCompatActivity {
                                     ref_mina.child(dniPersonal).addListenerForSingleValueEvent(new ValueEventListener() {
                                         @Override
                                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                            mDialog.dismiss();
                                             Personal personal = dataSnapshot.getValue(Personal.class);
                                             if (personal != null) {
                                                 listaPersonal.add(personal);
-                                                Log.e(TAG, "tamaño personal : " + listaPersonal.size());
+                                                Log.e(TAG, listaPersonal.size() + " personal : " + personal.getName());
+                                                //  Log.e(TAG, "tamaño personal : " + listaPersonal.size());
                                             }
-
                                         }
 
                                         @Override
                                         public void onCancelled(@NonNull DatabaseError databaseError) {
                                             Log.e(TAG, "error : " + databaseError.getMessage());
+                                            mDialog.dismiss();
                                         }
                                     });
                                 }
@@ -134,23 +144,18 @@ public class ExportActivity extends AppCompatActivity {
                 @Override
                 public void onCancelled(@NonNull DatabaseError databaseError) {
                     Log.e(TAG, "error : " + databaseError.getMessage());
+                    mDialog.dismiss();
                 }
 
             });
 
-
-            btn_viewPdf.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Toast.makeText(ExportActivity.this, "Hola soy pdf", Toast.LENGTH_SHORT).show();
-                    try {
-                        generarPdf(listaMetricasPersonales, listaPersonal, seletedDate);
-                        Intent intent = new Intent(ExportActivity.this, ShowPdfActivity.class);
-                        startActivity(intent);
-                    } catch (Exception e) {
-                        Log.e(TAG, "btn_viewPdf - Error = " + e.getMessage());
-                    }
-
+            btn_viewPdf.setOnClickListener(v -> {
+                try {
+                    generarPdf(listaMetricasPersonales, listaPersonal, seletedDate);
+                    Intent intent = new Intent(ExportActivity.this, ShowPdfActivity.class);
+                    startActivity(intent);
+                } catch (Exception e) {
+                    Log.e(TAG, "btn_viewPdf - Error = " + e.getMessage());
                 }
             });
 
@@ -168,9 +173,8 @@ public class ExportActivity extends AppCompatActivity {
 
     private void generarPdf(List<MetricasPersonal> listMetricasPersonal, List<Personal> listPersonal, String seletedDate) {
         //
-        Log.e(TAG, "listMetricasPersonal.size() : " + listMetricasPersonal.size());
-        Log.e(TAG, "listPersonal.size() : " + listPersonal.size());
-
+        //  Log.e(TAG, "listMetricasPersonal.size() : " + listMetricasPersonal.size());
+        //  Log.e(TAG, "listPersonal.size() : " + listPersonal.size());
         int pageWidth = 1200;
         Date currentDate = new Date();
         //
@@ -224,7 +228,7 @@ public class ExportActivity extends AppCompatActivity {
         //
         myPaint.setTextAlign(Paint.Align.LEFT);
         myPaint.setStyle(Paint.Style.FILL);
-        myPaint.setColor(Color.rgb(0, 113, 188));
+
         cansas01.drawText("Nro.", 40, 415, myPaint);
         cansas01.drawText("DNI", 180, 415, myPaint);
         cansas01.drawText("NOMBRE", 390, 415, myPaint);
@@ -242,16 +246,46 @@ public class ExportActivity extends AppCompatActivity {
         int ysum = 100;
         int ytextname = 400;
         int ysumname = 100;
+        //
 
+        Paint temp = new Paint();
+        Paint so = new Paint();
+        so.setTextSize(25f);
+        Paint pulse = new Paint();
+        pulse.setTextSize(25f);
+        //
         if (listMetricasPersonal.size() <= 28) {
             //-------------------------------------------------------------------------------
             //---> Pagina 01 Pagina 01 : [0-28]
             //metricas
             for (int i = 0; i < listMetricasPersonal.size(); i++) {
                 cansas01.drawText(i + ".", 50, ytext + ysum, myPaint);
+
                 cansas01.drawText(listMetricasPersonal.get(i).getTempurature().toString(), 760, ytext + ysum, myPaint);
-                cansas01.drawText(listMetricasPersonal.get(i).getSo2().toString(), 940, ytext + ysum, myPaint);
-                cansas01.drawText(listMetricasPersonal.get(i).getPulse().toString(), 1090, ytext + ysum, myPaint);
+
+                int valueSatura = Integer.parseInt(listMetricasPersonal.get(i).getSo2().toString());
+                if (valueSatura >= 95 && valueSatura <= 99) {
+                    so.setColor(Color.rgb(17, 230, 165));
+                } else if (valueSatura >= 91 && valueSatura <= 94) {
+                    so.setColor(Color.rgb(255, 235, 59));
+                } else if (valueSatura >= 86 && valueSatura <= 90) {
+                    so.setColor(Color.rgb(255, 38, 38));
+                } else {
+                    so.setColor(Color.rgb(255, 38, 38));
+                }
+                cansas01.drawText(listMetricasPersonal.get(i).getSo2().toString(), 940, ytext + ysum, so);
+
+                int valuePulso = Integer.parseInt(listMetricasPersonal.get(i).getPulse().toString());
+                if (valuePulso >= 86) {
+                    pulse.setColor(Color.rgb(17, 230, 165));
+                } else if (valuePulso >= 70 && valuePulso <= 84) {
+                    pulse.setColor(Color.rgb(255, 235, 59));
+                } else if (valuePulso >= 62 && valuePulso <= 68) {
+                    pulse.setColor(Color.rgb(255, 38, 38));
+                } else {
+                    pulse.setColor(Color.rgb(255, 38, 38));
+                }
+                cansas01.drawText(listMetricasPersonal.get(i).getPulse().toString(), 1090, ytext + ysum, pulse);
                 ysum = ysum + 50;
             }
             // info trabajador
@@ -271,12 +305,12 @@ public class ExportActivity extends AppCompatActivity {
             }
             pdfDocument.close();
             //-------------------------------------------------------------------------------
-        } else if (listMetricasPersonal.size() >= 27 ) {
+        } else if (listMetricasPersonal.size() >= 27) {
             Toast.makeText(this, "pagina 2", Toast.LENGTH_SHORT).show();
             //-------------------------------------------------------------------------------
             //---> Pagina 01 : [0-30]
-            for (int i = 1; i <= 27; i++) {
-                Log.e(TAG, "pagina 01 " + i );
+            for (int i = 0; i <= 27; i++) {
+                Log.e(TAG, "pagina 01 " + i);
                 cansas01.drawText(i + ".", 50, ytext + ysum, myPaint);
                 cansas01.drawText(listMetricasPersonal.get(i).getTempurature().toString(), 760, ytext + ysum, myPaint);
                 cansas01.drawText(listMetricasPersonal.get(i).getSo2().toString(), 940, ytext + ysum, myPaint);
@@ -284,7 +318,7 @@ public class ExportActivity extends AppCompatActivity {
                 ysum = ysum + 55;
             }
             //
-            for (int i = 1; i <= 27; i++) {
+            for (int i = 0; i <= 27; i++) {
                 cansas01.drawText(listPersonal.get(i).getDni().toString(), 170, ytextname + ysumname, myPaint);
                 cansas01.drawText(listPersonal.get(i).getName().toString(), 340, ytextname + ysumname, myPaint);
                 ysumname = ysumname + 55;
@@ -299,8 +333,10 @@ public class ExportActivity extends AppCompatActivity {
 
             int y2sum = 100;
             int x2sum = 100;
-            for (int i = 28; i < listMetricasPersonal.size(); i++) {
-                Log.e(TAG, "pagina 02 " + i );
+            int list2a = listMetricasPersonal.size();
+            int list2b = listPersonal.size();
+            for (int i = 28; i < list2a; i++) {
+                Log.e(TAG, "error lista  position " + i);
                 canvas2.drawText(i + ".", 50, 30 + y2sum, myPaint);
                 canvas2.drawText(listMetricasPersonal.get(i).getTempurature().toString(), 760, 30 + y2sum, myPaint);
                 canvas2.drawText(listMetricasPersonal.get(i).getSo2().toString(), 940, 30 + y2sum, myPaint);
@@ -308,7 +344,7 @@ public class ExportActivity extends AppCompatActivity {
                 y2sum = y2sum + 50;
             }
             //
-            for (int i = 28; i < listPersonal.size(); i++) {
+            for (int i = 28; i < list2b; i++) {
                 canvas2.drawText(listPersonal.get(i).getDni().toString(), 170, 30 + x2sum, myPaint);
                 canvas2.drawText(listPersonal.get(i).getName().toString(), 340, 30 + x2sum, myPaint);
                 x2sum = x2sum + 50;
@@ -319,14 +355,16 @@ public class ExportActivity extends AppCompatActivity {
             //---> Cierre
             File file = new File(Environment.getExternalStorageDirectory(), "/arsi21.pdf");
             try {
-
                 pdfDocument.writeTo(new FileOutputStream(file));
+
             } catch (IOException e) {
                 e.printStackTrace();
+
             }
+
             pdfDocument.close();
 
-        }else{
+        } else {
             Log.e(TAG, "ERROR problemas de index");
         }
 
