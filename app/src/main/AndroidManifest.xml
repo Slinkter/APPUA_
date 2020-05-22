@@ -19,7 +19,6 @@
             android:name=".Principal.ShowPdfActivity"
             android:parentActivityName=".Principal.ExportActivity"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".Principal.ExportActivity"
             android:parentActivityName=".Principal.AllActivity"
@@ -68,7 +67,6 @@
         <activity
             android:name=".Principal.MainActivity"
             android:screenOrientation="portrait" />
-
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
