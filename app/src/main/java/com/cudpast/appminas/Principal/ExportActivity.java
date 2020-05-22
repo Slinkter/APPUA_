@@ -237,15 +237,12 @@ public class ExportActivity extends AppCompatActivity {
         cansas01.drawLine(660, 380, 660, 430, myPaint);
         cansas01.drawLine(880, 380, 880, 430, myPaint);
         cansas01.drawLine(1030, 380, 1030, 430, myPaint);
-
-
+        //
         int ytext = 400;
         int ysum = 100;
         int ytextname = 400;
         int ysumname = 100;
-        Log.e(TAG, "1   " + listPersonal.size());
 
-        Log.e(TAG, "2  " + listPersonal.size());
         if (listMetricasPersonal.size() <= 28) {
             //-------------------------------------------------------------------------------
             //---> Pagina 01 Pagina 01 : [0-28]
@@ -274,46 +271,46 @@ public class ExportActivity extends AppCompatActivity {
             }
             pdfDocument.close();
             //-------------------------------------------------------------------------------
-        } else if (listMetricasPersonal.size() >= 29 ) {
+        } else if (listMetricasPersonal.size() >= 27 ) {
             Toast.makeText(this, "pagina 2", Toast.LENGTH_SHORT).show();
             //-------------------------------------------------------------------------------
             //---> Pagina 01 : [0-30]
-            for (int i = 0; i <= 30; i++) {
+            for (int i = 1; i <= 27; i++) {
                 Log.e(TAG, "pagina 01 " + i );
                 cansas01.drawText(i + ".", 50, ytext + ysum, myPaint);
                 cansas01.drawText(listMetricasPersonal.get(i).getTempurature().toString(), 760, ytext + ysum, myPaint);
                 cansas01.drawText(listMetricasPersonal.get(i).getSo2().toString(), 940, ytext + ysum, myPaint);
                 cansas01.drawText(listMetricasPersonal.get(i).getPulse().toString(), 1090, ytext + ysum, myPaint);
-                ysum = ysum + 50;
+                ysum = ysum + 55;
             }
             //
-            for (int i = 0; i <= 30; i++) {
+            for (int i = 1; i <= 27; i++) {
                 cansas01.drawText(listPersonal.get(i).getDni().toString(), 170, ytextname + ysumname, myPaint);
                 cansas01.drawText(listPersonal.get(i).getName().toString(), 340, ytextname + ysumname, myPaint);
-                ysumname = ysumname + 50;
+                ysumname = ysumname + 55;
             }
             //
             pdfDocument.finishPage(myPage01);
             //-------------------------------------------------------------------------------
-            //---> Pagina 02 : [31-70]
+            //---> Pagina 02 : [28-70]
             PdfDocument.PageInfo myPageInfo2 = new PdfDocument.PageInfo.Builder(1200, 2010, 2).create();
             PdfDocument.Page myPage2 = pdfDocument.startPage(myPageInfo2);
             Canvas canvas2 = myPage2.getCanvas();
-            canvas2.drawText("Unidades ARSI  - Cudpast", 40, 50, myPaint);
+
             int y2sum = 100;
             int x2sum = 100;
-            for (int i = 31; i <= 60; i++) {
+            for (int i = 28; i < listMetricasPersonal.size(); i++) {
                 Log.e(TAG, "pagina 02 " + i );
-                canvas2.drawText(i + ".", 50, 70 + y2sum, myPaint);
-                canvas2.drawText(listMetricasPersonal.get(i).getTempurature().toString(), 760, 70 + y2sum, myPaint);
-                canvas2.drawText(listMetricasPersonal.get(i).getSo2().toString(), 940, 70 + y2sum, myPaint);
-                canvas2.drawText(listMetricasPersonal.get(i).getPulse().toString(), 1090, 70 + y2sum, myPaint);
+                canvas2.drawText(i + ".", 50, 30 + y2sum, myPaint);
+                canvas2.drawText(listMetricasPersonal.get(i).getTempurature().toString(), 760, 30 + y2sum, myPaint);
+                canvas2.drawText(listMetricasPersonal.get(i).getSo2().toString(), 940, 30 + y2sum, myPaint);
+                canvas2.drawText(listMetricasPersonal.get(i).getPulse().toString(), 1090, 30 + y2sum, myPaint);
                 y2sum = y2sum + 50;
             }
             //
-            for (int i = 31; i <= 60; i++) {
-                canvas2.drawText(listPersonal.get(i).getDni().toString(), 170, 70 + x2sum, myPaint);
-                canvas2.drawText(listPersonal.get(i).getName().toString(), 340, 70 + x2sum, myPaint);
+            for (int i = 28; i < listPersonal.size(); i++) {
+                canvas2.drawText(listPersonal.get(i).getDni().toString(), 170, 30 + x2sum, myPaint);
+                canvas2.drawText(listPersonal.get(i).getName().toString(), 340, 30 + x2sum, myPaint);
                 x2sum = x2sum + 50;
             }
 
