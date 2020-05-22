@@ -64,6 +64,8 @@ public class VisualActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getSupportActionBar().setTitle("Visualizar Datos");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setContentView(R.layout.activity_visual);
         visual_dni_layout = findViewById(R.id.visual_dni_layout);
         visual_dni = findViewById(R.id.visual_dni);
@@ -107,8 +109,6 @@ public class VisualActivity extends AppCompatActivity {
 
                         getDataFromFirebase(dni);
                         //  tempShowChart();
-
-
                     } else {
                         visual_dni_layout.setError("El trabajador no exsite en la base de datos");
                         show_name_visual_dni.setText("");
@@ -133,39 +133,41 @@ public class VisualActivity extends AppCompatActivity {
         listSaturacion = new ArrayList<>();
         listPulso = new ArrayList<>();
 
-        Query query = FirebaseDatabase.getInstance().getReference(Common.db_mina_personal_data).child(Common.unidadTrabajoSelected.getNameUT()).child(dni)
+        Query query = FirebaseDatabase
+                .getInstance()
+                .getReference(Common.db_mina_personal_data).child(Common.unidadTrabajoSelected.getNameUT())
+                .child(dni)
                 .orderByKey()
-                .limitToFirst(12);
+                .limitToFirst(15);
 
-        query
-                .addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                            MetricasPersonal metricasPersonal = snapshot.getValue(MetricasPersonal.class);
-                            if (metricasPersonal != null) {
+        query.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    MetricasPersonal metricasPersonal = snapshot.getValue(MetricasPersonal.class);
+                    if (metricasPersonal != null) {
 
-                                listtemp.add(metricasPersonal);
-                                //
-                                listDate.add(metricasPersonal.getDateRegister().substring(8, 10));
-                                listTemperatura.add((metricasPersonal.getTempurature()));
-                                listSaturacion.add(Integer.parseInt(metricasPersonal.getSo2()));
-                                listPulso.add(Integer.parseInt(metricasPersonal.getPulse()));
+                        listtemp.add(metricasPersonal);
+                        //
+                        listDate.add(metricasPersonal.getDateRegister().substring(8, 10));
+                        listTemperatura.add((metricasPersonal.getTempurature()));
+                        listSaturacion.add(Integer.parseInt(metricasPersonal.getSo2()));
+                        listPulso.add(Integer.parseInt(metricasPersonal.getPulse()));
 
-                            } else {
-
-                            }
-                        }
-
-                        tempShowChart();
+                    } else {
 
                     }
+                }
 
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-                        Log.e(TAG, "error" + " : " + databaseError.getMessage());
-                    }
-                });
+                tempShowChart();
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.e(TAG, "error" + " : " + databaseError.getMessage());
+            }
+        });
     }
 
 

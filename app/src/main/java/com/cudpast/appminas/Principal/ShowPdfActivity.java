@@ -19,6 +19,11 @@ public class ShowPdfActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        getSupportActionBar().setTitle("Regresar");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+
         setContentView(R.layout.activity_show_pdf);
         pdfView = findViewById(R.id.pdfView);
         init();

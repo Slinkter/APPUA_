@@ -273,6 +273,7 @@ public class ExportActivity extends AppCompatActivity {
                 } else {
                     so.setColor(Color.rgb(255, 38, 38));
                 }
+
                 cansas01.drawText(listMetricasPersonal.get(i).getSo2().toString(), 940, ytext + ysum, so);
 
                 int valuePulso = Integer.parseInt(listMetricasPersonal.get(i).getPulse().toString());
@@ -313,8 +314,33 @@ public class ExportActivity extends AppCompatActivity {
                 Log.e(TAG, "pagina 01 " + i);
                 cansas01.drawText(i + ".", 50, ytext + ysum, myPaint);
                 cansas01.drawText(listMetricasPersonal.get(i).getTempurature().toString(), 760, ytext + ysum, myPaint);
-                cansas01.drawText(listMetricasPersonal.get(i).getSo2().toString(), 940, ytext + ysum, myPaint);
-                cansas01.drawText(listMetricasPersonal.get(i).getPulse().toString(), 1090, ytext + ysum, myPaint);
+
+
+                int valueSatura = Integer.parseInt(listMetricasPersonal.get(i).getSo2().toString());
+                if (valueSatura >= 95 && valueSatura <= 99) {
+                    so.setColor(Color.rgb(17, 230, 165));
+                } else if (valueSatura >= 91 && valueSatura <= 94) {
+                    so.setColor(Color.rgb(255, 235, 59));
+                } else if (valueSatura >= 86 && valueSatura <= 90) {
+                    so.setColor(Color.rgb(255, 38, 38));
+                } else {
+                    so.setColor(Color.rgb(255, 38, 38));
+                }
+
+                cansas01.drawText(listMetricasPersonal.get(i).getSo2().toString(), 940, ytext + ysum, so);
+
+                int valuePulso = Integer.parseInt(listMetricasPersonal.get(i).getPulse().toString());
+                if (valuePulso >= 86) {
+                    pulse.setColor(Color.rgb(17, 230, 165));
+                } else if (valuePulso >= 70 && valuePulso <= 84) {
+                    pulse.setColor(Color.rgb(255, 235, 59));
+                } else if (valuePulso >= 62 && valuePulso <= 68) {
+                    pulse.setColor(Color.rgb(255, 38, 38));
+                } else {
+                    pulse.setColor(Color.rgb(255, 38, 38));
+                }
+
+                cansas01.drawText(listMetricasPersonal.get(i).getPulse().toString(), 1090, ytext + ysum, pulse);
                 ysum = ysum + 55;
             }
             //
@@ -338,9 +364,32 @@ public class ExportActivity extends AppCompatActivity {
             for (int i = 28; i < list2a; i++) {
                 Log.e(TAG, "error lista  position " + i);
                 canvas2.drawText(i + ".", 50, 30 + y2sum, myPaint);
+
                 canvas2.drawText(listMetricasPersonal.get(i).getTempurature().toString(), 760, 30 + y2sum, myPaint);
-                canvas2.drawText(listMetricasPersonal.get(i).getSo2().toString(), 940, 30 + y2sum, myPaint);
-                canvas2.drawText(listMetricasPersonal.get(i).getPulse().toString(), 1090, 30 + y2sum, myPaint);
+
+                int valueSatura = Integer.parseInt(listMetricasPersonal.get(i).getSo2().toString());
+                if (valueSatura >= 95 && valueSatura <= 99) {
+                    so.setColor(Color.rgb(17, 230, 165));
+                } else if (valueSatura >= 91 && valueSatura <= 94) {
+                    so.setColor(Color.rgb(255, 235, 59));
+                } else if (valueSatura >= 86 && valueSatura <= 90) {
+                    so.setColor(Color.rgb(255, 38, 38));
+                } else {
+                    so.setColor(Color.rgb(255, 38, 38));
+                }
+                canvas2.drawText(listMetricasPersonal.get(i).getSo2().toString(), 940, 30 + y2sum, so);
+
+                int valuePulso = Integer.parseInt(listMetricasPersonal.get(i).getPulse().toString());
+                if (valuePulso >= 86) {
+                    pulse.setColor(Color.rgb(17, 230, 165));
+                } else if (valuePulso >= 70 && valuePulso <= 84) {
+                    pulse.setColor(Color.rgb(255, 235, 59));
+                } else if (valuePulso >= 62 && valuePulso <= 68) {
+                    pulse.setColor(Color.rgb(255, 38, 38));
+                } else {
+                    pulse.setColor(Color.rgb(255, 38, 38));
+                }
+                canvas2.drawText(listMetricasPersonal.get(i).getPulse().toString(), 1090, 30 + y2sum, pulse);
                 y2sum = y2sum + 50;
             }
             //

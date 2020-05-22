@@ -92,19 +92,22 @@
             <lecho.lib.hellocharts.view.LineChartView
                 android:id="@+id/chart2"
                 android:layout_width="match_parent"
-                android:layout_height="140dp" />
+                android:layout_height="140dp"
+                android:visibility="gone" />
 
             <lecho.lib.hellocharts.view.LineChartView
                 android:id="@+id/chart3"
                 android:layout_width="match_parent"
-                android:layout_height="140dp" />
+                android:layout_height="140dp"
+                android:visibility="gone" />
 
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="40sp"
-                android:text="fin" />
+                android:text="fin"
+                android:visibility="invisible" />
 
         </LinearLayout>
 
