@@ -3,6 +3,7 @@ package com.cudpast.appminas.Principal;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import android.Manifest;
 import android.app.ProgressDialog;
@@ -13,6 +14,8 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.graphics.pdf.PdfDocument;
+import android.net.Uri;
+import android.nfc.Tag;
 import android.os.Bundle;
 import android.os.Environment;
 import android.text.format.DateFormat;
@@ -78,88 +81,134 @@ public class ExportActivity extends AppCompatActivity {
 
         btn_selectDate.setOnClickListener(v -> materialDatePicker.show(getSupportFragmentManager(), "DATE_PICKER"));
 
-        materialDatePicker.addOnPositiveButtonClickListener((MaterialPickerOnPositiveButtonClickListener<Long>) dateSelected -> {
+        materialDatePicker.addOnPositiveButtonClickListener(
+                (MaterialPickerOnPositiveButtonClickListener<Long>) dateSelected -> {
 
-            mDialog = new ProgressDialog(ExportActivity.this);
-            mDialog.setMessage("Obteniendo datos ...");
-            mDialog.show();
+                    mDialog = new ProgressDialog(ExportActivity.this);
+                    mDialog.setMessage("Obteniendo datos ...");
+                    mDialog.show();
 
-            tv_show_date.setVisibility(View.VISIBLE);
-            tv_show_date.setText("Fecha Selecionada :  " + timestampToString(dateSelected));
-            btn_viewPdf.setVisibility(View.VISIBLE);
+                    tv_show_date.setVisibility(View.VISIBLE);
+                    tv_show_date.setText("Fecha Selecionada :  " + timestampToString(dateSelected));
+                    btn_viewPdf.setVisibility(View.VISIBLE);
 
-            seletedDate = timestampToString(dateSelected);
+                    seletedDate = timestampToString(dateSelected);
 
-            listaMetricasPersonales = new ArrayList<>();
-            listaPersonal = new ArrayList<>();
+                    listaMetricasPersonales = new ArrayList<>();
+                    listaPersonal = new ArrayList<>();
 
-            ref_datos_paciente = FirebaseDatabase.getInstance().getReference(Common.db_mina_personal_data).child(Common.unidadTrabajoSelected.getNameUT());
-            ref_datos_paciente.keepSynced(true);
-            ref_datos_paciente.orderByKey();
-            ref_datos_paciente.addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    for (DataSnapshot snapshotDatosPersonales : dataSnapshot.getChildren()) {
-                        // --> DNI del Personal
-                        String dniPersonal = snapshotDatosPersonales.getKey();
-                        // --> Lista de snapshotDatosPersonales
-                        for (DataSnapshot item : snapshotDatosPersonales.getChildren()) {
-                            MetricasPersonal metricasPersonal = item.getValue(MetricasPersonal.class);
-                            if (metricasPersonal != null) {
-                                String dateRegister = metricasPersonal.getDateRegister().substring(0, 10).trim();
-                                //Buscar dateRegister q coincide
-                                if (dateRegister.equalsIgnoreCase(seletedDate)) {
-                                    // Si la dateRegister coincide enlistar datos
-                                    listaMetricasPersonales.add(metricasPersonal);
-                                    //    Log.e(TAG, " metricas temperatura : " + metricasPersonal.getTempurature());
-                                    //   Log.e(TAG, "tamaño metricas  : " + listaMetricasPersonales.size());
-                                    // Buscar datos
-                                    DatabaseReference ref_db_mina_personal = database.getReference(Common.db_mina_personal);
-                                    DatabaseReference ref_mina = ref_db_mina_personal.child(Common.unidadTrabajoSelected.getNameUT());
-                                    //
-                                    ref_mina.child(dniPersonal).addListenerForSingleValueEvent(new ValueEventListener() {
-                                        @Override
-                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                            mDialog.dismiss();
-                                            Personal personal = dataSnapshot.getValue(Personal.class);
-                                            if (personal != null) {
-                                                listaPersonal.add(personal);
-                                                Log.e(TAG, listaPersonal.size() + " personal : " + personal.getName());
-                                                //  Log.e(TAG, "tamaño personal : " + listaPersonal.size());
+                    ref_datos_paciente = FirebaseDatabase.getInstance().getReference(Common.db_mina_personal_data).child(Common.unidadTrabajoSelected.getNameUT());
+                    ref_datos_paciente.keepSynced(true);
+                    ref_datos_paciente.orderByKey();
+                    ref_datos_paciente
+                            .addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                    for (DataSnapshot snapshotDatosPersonales : dataSnapshot.getChildren()) {
+                                        // --> DNI del Personal
+                                        String dniPersonal = snapshotDatosPersonales.getKey();
+                                        Log.e(TAG, "dniPersonal : " + dniPersonal);
+                                        if (dniPersonal.isEmpty()) {
+
+                                        } else {
+                                            // --> Lista de snapshotDatosPersonales
+                                            for (DataSnapshot item : snapshotDatosPersonales.getChildren()) {
+                                                MetricasPersonal metricasPersonal = item.getValue(MetricasPersonal.class);
+                                                if (metricasPersonal != null) {
+                                                    String dateRegister = metricasPersonal.getDateRegister().substring(0, 10).trim();
+                                                    Log.e(TAG, "120 dateRegister = " + dateRegister);
+                                                    //Buscar dateRegister q coincide
+                                                    if (dateRegister.equalsIgnoreCase(seletedDate)) {
+                                                        // enlistar datos
+                                                        listaMetricasPersonales.add(metricasPersonal);
+                                                        //
+
+                                                        // Buscar datos
+                                                        DatabaseReference ref_db_mina_personal = database.getReference(Common.db_mina_personal);
+                                                        DatabaseReference ref_mina = ref_db_mina_personal.child(Common.unidadTrabajoSelected.getNameUT());
+                                                        ref_mina.child(dniPersonal).addListenerForSingleValueEvent(new ValueEventListener() {
+                                                            @Override
+                                                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                                mDialog.dismiss();
+                                                                Personal personal = dataSnapshot.getValue(Personal.class);
+                                                                if (personal != null) {
+                                                                    listaPersonal.add(personal);
+                                                                    Log.e(TAG, listaPersonal.size() + " personal : " + personal.getName());
+                                                                    //  Log.e(TAG, "tamaño personal : " + listaPersonal.size());
+                                                                }
+                                                            }
+
+                                                            @Override
+                                                            public void onCancelled(@NonNull DatabaseError databaseError) {
+                                                                Log.e(TAG, "error : " + databaseError.getMessage());
+                                                                mDialog.dismiss();
+                                                            }
+                                                        });
+
+                                                    }
+
+                                                    if (listaMetricasPersonales.size() != 0) {
+                                                        mDialog.dismiss();
+                                                        Log.e(TAG, "Lista " );
+                                                        btn_viewPdf.setVisibility(View.VISIBLE);
+                                                        tv_show_date.setText("Fecha Selecionada :  " + timestampToString(dateSelected));
+                                                        tv_show_date.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.rango_bueno));
+                                                    } else {
+                                                        // Al no tener fecha no se debe visulizar boton de generar pdf
+                                                        // en el textView mostrar lista vacia
+                                                        btn_viewPdf.setVisibility(View.INVISIBLE);
+                                                        tv_show_date.setText("Lista vacia , seleciona otra fecha");
+                                                        tv_show_date.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.rango_inadecuado));
+                                                        Log.e(TAG, "no existe fecha : lista vacia");
+                                                        mDialog.dismiss();
+                                                    }
+
+                                                } else {
+                                                    Log.e(TAG, "metricasPersonal : lista vacia");
+                                                    mDialog.dismiss();
+
+                                                }
                                             }
+
+
                                         }
 
-                                        @Override
-                                        public void onCancelled(@NonNull DatabaseError databaseError) {
-                                            Log.e(TAG, "error : " + databaseError.getMessage());
-                                            mDialog.dismiss();
-                                        }
-                                    });
+
+                                    }
                                 }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError databaseError) {
+                                    Log.e(TAG, "error : " + databaseError.getMessage());
+                                    mDialog.dismiss();
+                                }
+
+                            });
+
+                    btn_viewPdf.setOnClickListener(v -> {
+
+
+                        try {
+                            if (listaMetricasPersonales.size() != 0) {
+                                generarPdf(listaMetricasPersonales, listaPersonal, seletedDate);
+                                mDialog.dismiss();
+                                Intent intent = new Intent(ExportActivity.this, ShowPdfActivity.class);
+                                startActivity(intent);
+                                Toast.makeText(this, "Documento Generado", Toast.LENGTH_SHORT).show();
+                            } else {
+                                mDialog.dismiss();
+                                Toast.makeText(this, "Lista vacio", Toast.LENGTH_SHORT).show();
                             }
+
+
+                        } catch (Exception e) {
+                            Toast.makeText(this, "Lista Vacio", Toast.LENGTH_SHORT).show();
+                            Log.e(TAG, "Lista vacia  " + e.getMessage());
+                            mDialog.dismiss();
                         }
-                    }
-                }
+                    });
 
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
-                    Log.e(TAG, "error : " + databaseError.getMessage());
-                    mDialog.dismiss();
-                }
-
-            });
-
-            btn_viewPdf.setOnClickListener(v -> {
-                try {
-                    generarPdf(listaMetricasPersonales, listaPersonal, seletedDate);
-                    Intent intent = new Intent(ExportActivity.this, ShowPdfActivity.class);
-                    startActivity(intent);
-                } catch (Exception e) {
-                    Log.e(TAG, "btn_viewPdf - Error = " + e.getMessage());
-                }
-            });
-
-        });
+                });
     }
 
 
@@ -173,8 +222,8 @@ public class ExportActivity extends AppCompatActivity {
 
     private void generarPdf(List<MetricasPersonal> listMetricasPersonal, List<Personal> listPersonal, String seletedDate) {
         //
-        //  Log.e(TAG, "listMetricasPersonal.size() : " + listMetricasPersonal.size());
-        //  Log.e(TAG, "listPersonal.size() : " + listPersonal.size());
+        Log.e(TAG, "listMetricasPersonal.size() : " + listMetricasPersonal.size());
+        Log.e(TAG, "listPersonal.size() : " + listPersonal.size());
         int pageWidth = 1200;
         Date currentDate = new Date();
         //

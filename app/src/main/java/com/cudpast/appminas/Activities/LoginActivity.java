@@ -237,7 +237,7 @@ public class LoginActivity extends AppCompatActivity implements CompoundButton.O
             if (mAuth.getCurrentUser().isEmailVerified()) {
                 Log.e(TAG, "correo verificado");
             } else {
-                Toast.makeText(this, "correo no verificado", Toast.LENGTH_SHORT).show();
+              //  Toast.makeText(this, "correo no verificado", Toast.LENGTH_SHORT).show();
             }
         }
     }
