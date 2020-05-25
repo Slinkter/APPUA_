@@ -70,6 +70,13 @@ public class ExportActivity extends AppCompatActivity {
     private TextInputEditText dni_metrica;
     private TextView show_dni_metricas;
 
+
+    List<String> listDate;
+    List<String> listTemperatura;
+    List<Integer> listSaturacion;
+    List<Integer> listPulso;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -224,14 +231,6 @@ public class ExportActivity extends AppCompatActivity {
                             });
 
                 });
-    }
-
-
-    private String timestampToString(long time) {
-        Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
-        calendar.setTimeInMillis(time);
-        String date = DateFormat.format("yyyy-MM-dd", calendar).toString();
-        return date;
     }
 
 
@@ -487,7 +486,13 @@ public class ExportActivity extends AppCompatActivity {
 
     private void generarListaporPersonalPdf() {
         //
-        Log.e(TAG, "---> generarListaporPersonalPdf : ");
+
+
+        Log.e(TAG, "---> generarListaporPersonalPdf()  ");
+        Log.e(TAG, "---> listDate : " + listDate.size());
+        Log.e(TAG, "---> listTemperatura : " + listTemperatura.size());
+        Log.e(TAG, "---> listSaturacion : " + listSaturacion.size());
+        Log.e(TAG, "---> listPulso : " + listPulso.size());
         int pageWidth = 1200;
         Date currentDate = new Date();
         //
@@ -531,7 +536,7 @@ public class ExportActivity extends AppCompatActivity {
         info.setColor(Color.BLACK);
         cansas01.drawText("Trabajador  : " + Common.currentUser.getReg_name(), 20, 200, info);
         cansas01.drawText("Unidad de Trabajo : " + Common.unidadTrabajoSelected.getNameUT(), 20, 250, info);
-        cansas01.drawText("Responsable : " + seletedDate, 20, 300, info);
+        cansas01.drawText("Responsable : " + Common.currentUser.getReg_name().toString(), 20, 300, info);
 
         // Encabezados
         myPaint.setStyle(Paint.Style.STROKE);
@@ -568,55 +573,52 @@ public class ExportActivity extends AppCompatActivity {
         pulse.setTextSize(25f);
         //
 
-        /*
-        if (listMetricasPersonal.size() <= 28) {
-            //-------------------------------------------------------------------------------
-            //---> Pagina 01 Pagina 01 : [0-28]
-            //metricas
-            for (int i = 0; i < listMetricasPersonal.size(); i++) {
-                cansas01.drawText(i + ".", 50, ytext + ysum, myPaint);
 
-                cansas01.drawText(listMetricasPersonal.get(i).getTempurature().toString(), 760, ytext + ysum, myPaint);
+        //-------------------------------------------------------------------------------
+        //---> Pagina 01 Pagina 01 : [0-28]
+        //metricas
+        for (int i = 0; i < listDate.size(); i++) {
+            cansas01.drawText(i + ".", 50, ytext + ysum, myPaint);
 
-                int valueSatura = Integer.parseInt(listMetricasPersonal.get(i).getSo2().toString());
-                if (valueSatura >= 95 && valueSatura <= 99) {
-                    so.setColor(Color.rgb(17, 230, 165));
-                } else if (valueSatura >= 91 && valueSatura <= 94) {
-                    so.setColor(Color.rgb(255, 235, 59));
-                } else if (valueSatura >= 86 && valueSatura <= 90) {
-                    so.setColor(Color.rgb(255, 38, 38));
-                } else {
-                    so.setColor(Color.rgb(255, 38, 38));
-                }
+            cansas01.drawText(listTemperatura.get(i).toString(), 760, ytext + ysum, myPaint);
 
-                cansas01.drawText(listMetricasPersonal.get(i).getSo2().toString(), 940, ytext + ysum, so);
-
-                int valuePulso = Integer.parseInt(listMetricasPersonal.get(i).getPulse().toString());
-                if (valuePulso >= 86) {
-                    pulse.setColor(Color.rgb(17, 230, 165));
-                } else if (valuePulso >= 70 && valuePulso <= 84) {
-                    pulse.setColor(Color.rgb(255, 235, 59));
-                } else if (valuePulso >= 62 && valuePulso <= 68) {
-                    pulse.setColor(Color.rgb(255, 38, 38));
-                } else {
-                    pulse.setColor(Color.rgb(255, 38, 38));
-                }
-                cansas01.drawText(listMetricasPersonal.get(i).getPulse().toString(), 1090, ytext + ysum, pulse);
-                ysum = ysum + 50;
-            }
-            // info trabajador
-            for (int i = 0; i < listPersonal.size(); i++) {
-                cansas01.drawText(listPersonal.get(i).getDni().toString(), 170, ytextname + ysumname, myPaint);
-                cansas01.drawText(listPersonal.get(i).getName().toString(), 340, ytextname + ysumname, myPaint);
-                ysumname = ysumname + 50;
+            int valueSatura = Integer.parseInt(listSaturacion.get(i).toString());
+            if (valueSatura >= 95 && valueSatura <= 99) {
+                so.setColor(Color.rgb(17, 230, 165));
+            } else if (valueSatura >= 91 && valueSatura <= 94) {
+                so.setColor(Color.rgb(255, 235, 59));
+            } else if (valueSatura >= 86 && valueSatura <= 90) {
+                so.setColor(Color.rgb(255, 38, 38));
+            } else {
+                so.setColor(Color.rgb(255, 38, 38));
             }
 
+            cansas01.drawText(listSaturacion.get(i).toString(), 940, ytext + ysum, so);
 
-            //-------------------------------------------------------------------------------
-        }  else {
-            Log.e(TAG, "ERROR problemas de index");
+            int valuePulso = Integer.parseInt(listPulso.get(i).toString());
+            if (valuePulso >= 86) {
+                pulse.setColor(Color.rgb(17, 230, 165));
+            } else if (valuePulso >= 70 && valuePulso <= 84) {
+                pulse.setColor(Color.rgb(255, 235, 59));
+            } else if (valuePulso >= 62 && valuePulso <= 68) {
+                pulse.setColor(Color.rgb(255, 38, 38));
+            } else {
+                pulse.setColor(Color.rgb(255, 38, 38));
+            }
+            cansas01.drawText(listPulso.get(i).toString(), 1090, ytext + ysum, pulse);
+            ysum = ysum + 50;
         }
-*/
+        // info trabajador
+
+        for (int i = 0; i < listDate.size(); i++) {
+            cansas01.drawText(listDate.get(i), 170, ytextname + ysumname, myPaint);
+
+            ysumname = ysumname + 50;
+        }
+
+
+        //-------------------------------------------------------------------------------
+
         pdfDocument.finishPage(myPage01);
         //---> Cierre
         File file = new File(Environment.getExternalStorageDirectory(), "/arsi21.pdf");
@@ -652,7 +654,7 @@ public class ExportActivity extends AppCompatActivity {
                         }
                         show_dni_metricas.setText("Trabajador : " + personal.getName() + " " + personal.getLast());
                         getDataFromFirebase(dni);
-                        generarListaporPersonalPdf();
+
                     } else {
                         Log.e(TAG, "---> personal.getName() : null ");
                         dni_metrica_layout.setError("El trabajador no exsite en la base de datos");
@@ -673,11 +675,7 @@ public class ExportActivity extends AppCompatActivity {
     private void getDataFromFirebase(String dni) {
 
 
-        List<String> listDate;
-        List<String> listTemperatura;
-        List<Integer> listSaturacion;
-        List<Integer> listPulso;
-
+        Log.e(TAG, "-----> funcion  : getDataFromFirebase");
         listDate = new ArrayList<String>();
         listTemperatura = new ArrayList<>();
         listSaturacion = new ArrayList<>();
@@ -702,9 +700,16 @@ public class ExportActivity extends AppCompatActivity {
                         listPulso.add(Integer.parseInt(metricasPersonal.getPulse()));
 
                     } else {
-
+                        Log.e(TAG, "getDataFromFirebase --> MetricasPersonal = NULL");
                     }
                 }
+
+                Log.e(TAG, "---> listDate : " + listDate.size());
+                Log.e(TAG, "---> listTemperatura : " + listTemperatura.size());
+                Log.e(TAG, "---> listSaturacion : " + listSaturacion.size());
+                Log.e(TAG, "---> listPulso : " + listPulso.size());
+
+                generarListaporPersonalPdf();
 
             }
 
@@ -713,7 +718,15 @@ public class ExportActivity extends AppCompatActivity {
                 Log.e(TAG, "error" + " : " + databaseError.getMessage());
             }
         });
+
+
     }
 
+    private String timestampToString(long time) {
+        Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
+        calendar.setTimeInMillis(time);
+        String date = DateFormat.format("yyyy-MM-dd", calendar).toString();
+        return date;
+    }
 
 }
