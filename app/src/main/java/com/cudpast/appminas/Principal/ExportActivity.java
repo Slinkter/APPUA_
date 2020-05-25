@@ -32,10 +32,13 @@ import com.cudpast.appminas.Model.Personal;
 import com.cudpast.appminas.R;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.io.File;
@@ -56,12 +59,16 @@ public class ExportActivity extends AppCompatActivity {
     private DatabaseReference ref_datos_paciente;
     private List<MetricasPersonal> listaMetricasPersonales;
     private List<Personal> listaPersonal;
-    private Button btn_selectDate, btn_viewPdf;
+    private Button btn_selectDate, btn_viewPdf, btn_viewPdfDni;
     private TextView tv_show_date;
     private MaterialDatePicker.Builder dialogCalendar;
     private MaterialDatePicker materialDatePicker;
     private String seletedDate;
     private ProgressDialog mDialog;
+
+    private TextInputLayout dni_metrica_layout;
+    private TextInputEditText dni_metrica;
+    private TextView show_dni_metricas;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,8 +79,19 @@ public class ExportActivity extends AppCompatActivity {
         //
         btn_selectDate = findViewById(R.id.btn_selectDate);
         btn_viewPdf = findViewById(R.id.btn_viewPdf);
+        btn_viewPdfDni = findViewById(R.id.btn_viewPdfDni);
         //
+        dni_metrica_layout = findViewById(R.id.dni_metrica_layout);
+        dni_metrica = findViewById(R.id.dni_metrica);
+        //
+        btn_viewPdfDni.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                consultarDatosPaciente();
+            }
+        });
         tv_show_date = findViewById(R.id.tv_show_date);
+        show_dni_metricas = findViewById(R.id.show_dni_metricas);
         //
         dialogCalendar = MaterialDatePicker.Builder.datePicker();
         dialogCalendar.setTitleText("Seleccionar Fecha");
@@ -121,8 +139,6 @@ public class ExportActivity extends AppCompatActivity {
                                                     if (dateRegister.equalsIgnoreCase(seletedDate)) {
                                                         // enlistar datos
                                                         listaMetricasPersonales.add(metricasPersonal);
-                                                        //
-
                                                         // Buscar datos
                                                         DatabaseReference ref_db_mina_personal = database.getReference(Common.db_mina_personal);
                                                         DatabaseReference ref_mina = ref_db_mina_personal.child(Common.unidadTrabajoSelected.getNameUT());
@@ -468,10 +484,10 @@ public class ExportActivity extends AppCompatActivity {
 
     }
 
-    private void generarListaporPersonalPdf(List<MetricasPersonal> listMetricasPersonal, List<Personal> listPersonal, String seletedDate) {
+
+    private void generarListaporPersonalPdf() {
         //
-        Log.e(TAG, "listMetricasPersonal.size() : " + listMetricasPersonal.size());
-        Log.e(TAG, "listPersonal.size() : " + listPersonal.size());
+        Log.e(TAG, "---> generarListaporPersonalPdf : ");
         int pageWidth = 1200;
         Date currentDate = new Date();
         //
@@ -513,9 +529,9 @@ public class ExportActivity extends AppCompatActivity {
         info.setTextAlign(Paint.Align.LEFT);
         info.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL));
         info.setColor(Color.BLACK);
-        cansas01.drawText("Responsable : " + Common.currentUser.getReg_name(), 20, 200, info);
+        cansas01.drawText("Trabajador  : " + Common.currentUser.getReg_name(), 20, 200, info);
         cansas01.drawText("Unidad de Trabajo : " + Common.unidadTrabajoSelected.getNameUT(), 20, 250, info);
-        cansas01.drawText("Fecha de medición : " + seletedDate, 20, 300, info);
+        cansas01.drawText("Responsable : " + seletedDate, 20, 300, info);
 
         // Encabezados
         myPaint.setStyle(Paint.Style.STROKE);
@@ -527,17 +543,17 @@ public class ExportActivity extends AppCompatActivity {
         myPaint.setStyle(Paint.Style.FILL);
 
         cansas01.drawText("Nro.", 40, 415, myPaint);
-        cansas01.drawText("DNI", 180, 415, myPaint);
-        cansas01.drawText("NOMBRE", 390, 415, myPaint);
-        cansas01.drawText("TEMPERATURA", 680, 415, myPaint);
-        cansas01.drawText("SO2.", 930, 415, myPaint);
-        cansas01.drawText("PULSO", 1070, 415, myPaint);
+        cansas01.drawText("Fecha", 180, 415, myPaint);
+        cansas01.drawText("TEMPERATURA", 390, 415, myPaint);
+        cansas01.drawText("SO2", 680, 415, myPaint);
+        cansas01.drawText("PULSO.", 930, 415, myPaint);
+
 
         cansas01.drawLine(140, 380, 140, 430, myPaint);
         cansas01.drawLine(340, 380, 340, 430, myPaint);
         cansas01.drawLine(660, 380, 660, 430, myPaint);
         cansas01.drawLine(880, 380, 880, 430, myPaint);
-        cansas01.drawLine(1030, 380, 1030, 430, myPaint);
+
         //
         int ytext = 400;
         int ysum = 100;
@@ -551,6 +567,8 @@ public class ExportActivity extends AppCompatActivity {
         Paint pulse = new Paint();
         pulse.setTextSize(25f);
         //
+
+        /*
         if (listMetricasPersonal.size() <= 28) {
             //-------------------------------------------------------------------------------
             //---> Pagina 01 Pagina 01 : [0-28]
@@ -593,127 +611,109 @@ public class ExportActivity extends AppCompatActivity {
                 ysumname = ysumname + 50;
             }
 
-            pdfDocument.finishPage(myPage01);
-            //---> Cierre
-            File file = new File(Environment.getExternalStorageDirectory(), "/arsi21.pdf");
-            try {
-                pdfDocument.writeTo(new FileOutputStream(file));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            pdfDocument.close();
+
             //-------------------------------------------------------------------------------
-        } else if (listMetricasPersonal.size() >= 27) {
-            Toast.makeText(this, "pagina 2", Toast.LENGTH_SHORT).show();
-            //-------------------------------------------------------------------------------
-            //---> Pagina 01 : [0-30]
-            for (int i = 0; i <= 27; i++) {
-                Log.e(TAG, "pagina 01 " + i);
-                cansas01.drawText(i + ".", 50, ytext + ysum, myPaint);
-                cansas01.drawText(listMetricasPersonal.get(i).getTempurature().toString(), 760, ytext + ysum, myPaint);
-
-
-                int valueSatura = Integer.parseInt(listMetricasPersonal.get(i).getSo2().toString());
-                if (valueSatura >= 95 && valueSatura <= 99) {
-                    so.setColor(Color.rgb(17, 230, 165));
-                } else if (valueSatura >= 91 && valueSatura <= 94) {
-                    so.setColor(Color.rgb(255, 235, 59));
-                } else if (valueSatura >= 86 && valueSatura <= 90) {
-                    so.setColor(Color.rgb(255, 38, 38));
-                } else {
-                    so.setColor(Color.rgb(255, 38, 38));
-                }
-
-                cansas01.drawText(listMetricasPersonal.get(i).getSo2().toString(), 940, ytext + ysum, so);
-
-                int valuePulso = Integer.parseInt(listMetricasPersonal.get(i).getPulse().toString());
-                if (valuePulso >= 86) {
-                    pulse.setColor(Color.rgb(17, 230, 165));
-                } else if (valuePulso >= 70 && valuePulso <= 84) {
-                    pulse.setColor(Color.rgb(255, 235, 59));
-                } else if (valuePulso >= 62 && valuePulso <= 68) {
-                    pulse.setColor(Color.rgb(255, 38, 38));
-                } else {
-                    pulse.setColor(Color.rgb(255, 38, 38));
-                }
-
-                cansas01.drawText(listMetricasPersonal.get(i).getPulse().toString(), 1090, ytext + ysum, pulse);
-                ysum = ysum + 55;
-            }
-            //
-            for (int i = 0; i <= 27; i++) {
-                cansas01.drawText(listPersonal.get(i).getDni().toString(), 170, ytextname + ysumname, myPaint);
-                cansas01.drawText(listPersonal.get(i).getName().toString(), 340, ytextname + ysumname, myPaint);
-                ysumname = ysumname + 55;
-            }
-            //
-            pdfDocument.finishPage(myPage01);
-            //-------------------------------------------------------------------------------
-            //---> Pagina 02 : [28-70]
-            PdfDocument.PageInfo myPageInfo2 = new PdfDocument.PageInfo.Builder(1200, 2010, 2).create();
-            PdfDocument.Page myPage2 = pdfDocument.startPage(myPageInfo2);
-            Canvas canvas2 = myPage2.getCanvas();
-
-            int y2sum = 100;
-            int x2sum = 100;
-            int list2a = listMetricasPersonal.size();
-            int list2b = listPersonal.size();
-            for (int i = 28; i < list2a; i++) {
-                Log.e(TAG, "error lista  position " + i);
-                canvas2.drawText(i + ".", 50, 30 + y2sum, myPaint);
-
-                canvas2.drawText(listMetricasPersonal.get(i).getTempurature().toString(), 760, 30 + y2sum, myPaint);
-
-                int valueSatura = Integer.parseInt(listMetricasPersonal.get(i).getSo2().toString());
-                if (valueSatura >= 95 && valueSatura <= 99) {
-                    so.setColor(Color.rgb(17, 230, 165));
-                } else if (valueSatura >= 91 && valueSatura <= 94) {
-                    so.setColor(Color.rgb(255, 235, 59));
-                } else if (valueSatura >= 86 && valueSatura <= 90) {
-                    so.setColor(Color.rgb(255, 38, 38));
-                } else {
-                    so.setColor(Color.rgb(255, 38, 38));
-                }
-                canvas2.drawText(listMetricasPersonal.get(i).getSo2().toString(), 940, 30 + y2sum, so);
-
-                int valuePulso = Integer.parseInt(listMetricasPersonal.get(i).getPulse().toString());
-                if (valuePulso >= 86) {
-                    pulse.setColor(Color.rgb(17, 230, 165));
-                } else if (valuePulso >= 70 && valuePulso <= 84) {
-                    pulse.setColor(Color.rgb(255, 235, 59));
-                } else if (valuePulso >= 62 && valuePulso <= 68) {
-                    pulse.setColor(Color.rgb(255, 38, 38));
-                } else {
-                    pulse.setColor(Color.rgb(255, 38, 38));
-                }
-                canvas2.drawText(listMetricasPersonal.get(i).getPulse().toString(), 1090, 30 + y2sum, pulse);
-                y2sum = y2sum + 50;
-            }
-            //
-            for (int i = 28; i < list2b; i++) {
-                canvas2.drawText(listPersonal.get(i).getDni().toString(), 170, 30 + x2sum, myPaint);
-                canvas2.drawText(listPersonal.get(i).getName().toString(), 340, 30 + x2sum, myPaint);
-                x2sum = x2sum + 50;
-            }
-
-
-            pdfDocument.finishPage(myPage2);
-            //---> Cierre
-            File file = new File(Environment.getExternalStorageDirectory(), "/arsi21.pdf");
-            try {
-                pdfDocument.writeTo(new FileOutputStream(file));
-
-            } catch (IOException e) {
-                e.printStackTrace();
-
-            }
-
-            pdfDocument.close();
-
-        } else {
+        }  else {
             Log.e(TAG, "ERROR problemas de index");
         }
+*/
+        pdfDocument.finishPage(myPage01);
+        //---> Cierre
+        File file = new File(Environment.getExternalStorageDirectory(), "/arsi21.pdf");
+        try {
+            pdfDocument.writeTo(new FileOutputStream(file));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        pdfDocument.close();
 
 
+        Intent intent = new Intent(ExportActivity.this, ShowPdfActivity.class);
+        startActivity(intent);
     }
+
+
+    private void consultarDatosPaciente() {
+        Log.e(TAG, "---> consultarDatosPaciente");
+        final String dni = dni_metrica.getText().toString();
+        if (!dni.toString().isEmpty()) {
+            Log.e(TAG, "---> dni : " + dni);
+            DatabaseReference ref_db_mina_personal = database.getReference(Common.db_mina_personal);
+            DatabaseReference ref_mina = ref_db_mina_personal.child(Common.unidadTrabajoSelected.getNameUT());
+            ref_mina.child(dni).addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    Personal personal = dataSnapshot.getValue(Personal.class);
+                    if (personal != null) {
+                        Log.e(TAG, "---> personal.getName() : " + personal.getName());
+                        dni_metrica_layout.setError(null);
+                        if (personal.getLast() == null) {
+                            personal.setLast(" ");
+                        }
+                        show_dni_metricas.setText("Trabajador : " + personal.getName() + " " + personal.getLast());
+                        getDataFromFirebase(dni);
+                        generarListaporPersonalPdf();
+                    } else {
+                        Log.e(TAG, "---> personal.getName() : null ");
+                        dni_metrica_layout.setError("El trabajador no exsite en la base de datos");
+                        show_dni_metricas.setText("");
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                    Log.e(TAG, "error : " + databaseError.getMessage());
+                }
+            });
+        } else {
+            Log.e(TAG, "---> dni :  vacio");
+        }
+    }
+
+    private void getDataFromFirebase(String dni) {
+
+
+        List<String> listDate;
+        List<String> listTemperatura;
+        List<Integer> listSaturacion;
+        List<Integer> listPulso;
+
+        listDate = new ArrayList<String>();
+        listTemperatura = new ArrayList<>();
+        listSaturacion = new ArrayList<>();
+        listPulso = new ArrayList<>();
+
+        Query query = FirebaseDatabase
+                .getInstance()
+                .getReference(Common.db_mina_personal_data).child(Common.unidadTrabajoSelected.getNameUT())
+                .child(dni)
+                .orderByKey()
+                .limitToFirst(15);
+
+        query.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    MetricasPersonal metricasPersonal = snapshot.getValue(MetricasPersonal.class);
+                    if (metricasPersonal != null) {
+                        listDate.add(metricasPersonal.getDateRegister().substring(8, 10));
+                        listTemperatura.add((metricasPersonal.getTempurature()));
+                        listSaturacion.add(Integer.parseInt(metricasPersonal.getSo2()));
+                        listPulso.add(Integer.parseInt(metricasPersonal.getPulse()));
+
+                    } else {
+
+                    }
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.e(TAG, "error" + " : " + databaseError.getMessage());
+            }
+        });
+    }
+
+
 }
