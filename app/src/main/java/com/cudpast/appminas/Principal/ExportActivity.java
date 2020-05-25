@@ -80,6 +80,8 @@ public class ExportActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getSupportActionBar().setTitle("Regresar");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setContentView(R.layout.activity_export);
         //Solicitar permisos
         ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, PackageManager.PERMISSION_GRANTED);
@@ -484,15 +486,15 @@ public class ExportActivity extends AppCompatActivity {
     }
 
 
-    private void generarListaporPersonalPdf() {
+    private void generarListaporPersonalPdf(String nombre) {
         //
 
 
         Log.e(TAG, "---> generarListaporPersonalPdf()  ");
-        Log.e(TAG, "---> listDate : " + listDate.size());
-        Log.e(TAG, "---> listTemperatura : " + listTemperatura.size());
-        Log.e(TAG, "---> listSaturacion : " + listSaturacion.size());
-        Log.e(TAG, "---> listPulso : " + listPulso.size());
+        Log.e(TAG, " listDate : " + listDate.size());
+        Log.e(TAG, " listTemperatura : " + listTemperatura.size());
+        Log.e(TAG, " listSaturacion : " + listSaturacion.size());
+        Log.e(TAG, " listPulso : " + listPulso.size());
         int pageWidth = 1200;
         Date currentDate = new Date();
         //
@@ -534,7 +536,7 @@ public class ExportActivity extends AppCompatActivity {
         info.setTextAlign(Paint.Align.LEFT);
         info.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL));
         info.setColor(Color.BLACK);
-        cansas01.drawText("Trabajador  : " + Common.currentUser.getReg_name(), 20, 200, info);
+        cansas01.drawText("Trabajador  : " + nombre, 20, 200, info);
         cansas01.drawText("Unidad de Trabajo : " + Common.unidadTrabajoSelected.getNameUT(), 20, 250, info);
         cansas01.drawText("Responsable : " + Common.currentUser.getReg_name().toString(), 20, 300, info);
 
@@ -547,15 +549,15 @@ public class ExportActivity extends AppCompatActivity {
         myPaint.setTextAlign(Paint.Align.LEFT);
         myPaint.setStyle(Paint.Style.FILL);
 
-        cansas01.drawText("Nro.", 40, 415, myPaint);
-        cansas01.drawText("Fecha", 180, 415, myPaint);
-        cansas01.drawText("TEMPERATURA", 390, 415, myPaint);
-        cansas01.drawText("SO2", 680, 415, myPaint);
-        cansas01.drawText("PULSO.", 930, 415, myPaint);
+        cansas01.drawText("Nro.", 35, 415, myPaint);
+        cansas01.drawText("Fecha y hora", 200, 415, myPaint);
+        cansas01.drawText("TEMPERATURA", 450, 415, myPaint);
+        cansas01.drawText("SO2", 700, 415, myPaint);
+        cansas01.drawText("PULSO.", 950, 415, myPaint);
 
 
         cansas01.drawLine(140, 380, 140, 430, myPaint);
-        cansas01.drawLine(340, 380, 340, 430, myPaint);
+        cansas01.drawLine(420, 380, 420, 430, myPaint);
         cansas01.drawLine(660, 380, 660, 430, myPaint);
         cansas01.drawLine(880, 380, 880, 430, myPaint);
 
@@ -577,12 +579,26 @@ public class ExportActivity extends AppCompatActivity {
         //-------------------------------------------------------------------------------
         //---> Pagina 01 Pagina 01 : [0-28]
         //metricas
+        double sumaTemp = 0;
+        double promedioTemp = 0.0f;
+
+        double sumaSatura = 0;
+        double promedioSatura = 0.0f;
+
+
+        double sumaPulse = 0;
+        double promedioPulse = 0.0f;
+
+
         for (int i = 0; i < listDate.size(); i++) {
-            cansas01.drawText(i + ".", 50, ytext + ysum, myPaint);
-
-            cansas01.drawText(listTemperatura.get(i).toString(), 760, ytext + ysum, myPaint);
-
+            // Nro
+            cansas01.drawText(i + 1 + " ", 80, ytext + ysum, myPaint);
+            // Temperatura
+            cansas01.drawText(listTemperatura.get(i).toString(), 490, ytext + ysum, myPaint);
+            sumaTemp = sumaTemp + Double.parseDouble(listTemperatura.get(i).toString());
+            // Saturacion
             int valueSatura = Integer.parseInt(listSaturacion.get(i).toString());
+            sumaSatura = sumaSatura + valueSatura;
             if (valueSatura >= 95 && valueSatura <= 99) {
                 so.setColor(Color.rgb(17, 230, 165));
             } else if (valueSatura >= 91 && valueSatura <= 94) {
@@ -592,10 +608,11 @@ public class ExportActivity extends AppCompatActivity {
             } else {
                 so.setColor(Color.rgb(255, 38, 38));
             }
-
-            cansas01.drawText(listSaturacion.get(i).toString(), 940, ytext + ysum, so);
-
+            cansas01.drawText(listSaturacion.get(i).toString(), 720, ytext + ysum, so);
+            // Pulse
             int valuePulso = Integer.parseInt(listPulso.get(i).toString());
+            sumaPulse = sumaPulse + valuePulso;
+
             if (valuePulso >= 86) {
                 pulse.setColor(Color.rgb(17, 230, 165));
             } else if (valuePulso >= 70 && valuePulso <= 84) {
@@ -605,18 +622,30 @@ public class ExportActivity extends AppCompatActivity {
             } else {
                 pulse.setColor(Color.rgb(255, 38, 38));
             }
-            cansas01.drawText(listPulso.get(i).toString(), 1090, ytext + ysum, pulse);
+            cansas01.drawText(listPulso.get(i).toString(), 970, ytext + ysum, pulse);
+            //
             ysum = ysum + 50;
         }
         // info trabajador
 
         for (int i = 0; i < listDate.size(); i++) {
             cansas01.drawText(listDate.get(i), 170, ytextname + ysumname, myPaint);
-
             ysumname = ysumname + 50;
         }
 
+        promedioTemp = sumaTemp / listTemperatura.size();
+        promedioSatura = sumaSatura / listTemperatura.size();
+        promedioPulse = sumaPulse / listTemperatura.size();
 
+
+        String cadTemp = String.valueOf(promedioTemp);
+        String cadSatura = String.valueOf(promedioSatura);
+        String cadPulse = String.valueOf(promedioPulse);
+
+        cansas01.drawText("Promedio de los ultimos 15 días", 35, 1600, myPaint);
+        cansas01.drawText("Promedio temperatura : " + cadTemp.substring(0, 5), 35, 1650, myPaint);
+        cansas01.drawText("Promedio saturación  : " + cadSatura.substring(0, 5), 35, 1700, myPaint);
+        cansas01.drawText("Promedio pulso : " + cadPulse.substring(0, 5), 35, 1750, myPaint);
         //-------------------------------------------------------------------------------
 
         pdfDocument.finishPage(myPage01);
@@ -629,7 +658,7 @@ public class ExportActivity extends AppCompatActivity {
         }
         pdfDocument.close();
 
-
+        mDialog.dismiss();
         Intent intent = new Intent(ExportActivity.this, ShowPdfActivity.class);
         startActivity(intent);
     }
@@ -639,6 +668,10 @@ public class ExportActivity extends AppCompatActivity {
         Log.e(TAG, "---> consultarDatosPaciente");
         final String dni = dni_metrica.getText().toString();
         if (!dni.toString().isEmpty()) {
+            mDialog = new ProgressDialog(ExportActivity.this);
+            mDialog.setMessage("Obteniendo datos ...");
+            mDialog.show();
+
             Log.e(TAG, "---> dni : " + dni);
             DatabaseReference ref_db_mina_personal = database.getReference(Common.db_mina_personal);
             DatabaseReference ref_mina = ref_db_mina_personal.child(Common.unidadTrabajoSelected.getNameUT());
@@ -653,7 +686,8 @@ public class ExportActivity extends AppCompatActivity {
                             personal.setLast(" ");
                         }
                         show_dni_metricas.setText("Trabajador : " + personal.getName() + " " + personal.getLast());
-                        getDataFromFirebase(dni);
+                        String fullname = personal.getName() + " " + personal.getLast();
+                        getDataFromFirebase(dni, fullname);
 
                     } else {
                         Log.e(TAG, "---> personal.getName() : null ");
@@ -672,7 +706,7 @@ public class ExportActivity extends AppCompatActivity {
         }
     }
 
-    private void getDataFromFirebase(String dni) {
+    private void getDataFromFirebase(String dni, String nombre) {
 
 
         Log.e(TAG, "-----> funcion  : getDataFromFirebase");
@@ -686,7 +720,7 @@ public class ExportActivity extends AppCompatActivity {
                 .getReference(Common.db_mina_personal_data).child(Common.unidadTrabajoSelected.getNameUT())
                 .child(dni)
                 .orderByKey()
-                .limitToFirst(15);
+                .limitToLast(15);
 
         query.addValueEventListener(new ValueEventListener() {
             @Override
@@ -694,12 +728,13 @@ public class ExportActivity extends AppCompatActivity {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     MetricasPersonal metricasPersonal = snapshot.getValue(MetricasPersonal.class);
                     if (metricasPersonal != null) {
-                        listDate.add(metricasPersonal.getDateRegister().substring(8, 10));
+                        listDate.add(metricasPersonal.getDateRegister().toString());
                         listTemperatura.add((metricasPersonal.getTempurature()));
                         listSaturacion.add(Integer.parseInt(metricasPersonal.getSo2()));
                         listPulso.add(Integer.parseInt(metricasPersonal.getPulse()));
 
                     } else {
+                        mDialog.dismiss();
                         Log.e(TAG, "getDataFromFirebase --> MetricasPersonal = NULL");
                     }
                 }
@@ -709,7 +744,7 @@ public class ExportActivity extends AppCompatActivity {
                 Log.e(TAG, "---> listSaturacion : " + listSaturacion.size());
                 Log.e(TAG, "---> listPulso : " + listPulso.size());
 
-                generarListaporPersonalPdf();
+                generarListaporPersonalPdf(nombre);
 
             }
 
