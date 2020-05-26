@@ -93,12 +93,7 @@ public class ExportActivity extends AppCompatActivity {
         dni_metrica_layout = findViewById(R.id.dni_metrica_layout);
         dni_metrica = findViewById(R.id.dni_metrica);
         //
-        btn_viewPdfDni.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                consultarDatosPaciente();
-            }
-        });
+
         tv_show_date = findViewById(R.id.tv_show_date);
         show_dni_metricas = findViewById(R.id.show_dni_metricas);
         //
@@ -106,6 +101,7 @@ public class ExportActivity extends AppCompatActivity {
         dialogCalendar.setTitleText("Seleccionar Fecha");
         materialDatePicker = dialogCalendar.build();
 
+        // Button 1
         btn_selectDate.setOnClickListener(v -> materialDatePicker.show(getSupportFragmentManager(), "DATE_PICKER"));
 
         materialDatePicker.addOnPositiveButtonClickListener(
@@ -233,6 +229,14 @@ public class ExportActivity extends AppCompatActivity {
                             });
 
                 });
+
+        // Button 2
+        btn_viewPdfDni.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                consultarDatosPaciente();
+            }
+        });
     }
 
 
@@ -485,10 +489,7 @@ public class ExportActivity extends AppCompatActivity {
 
     }
 
-
     private void generarListaporPersonalPdf(String nombre) {
-        //
-
 
         Log.e(TAG, "---> generarListaporPersonalPdf()  ");
         Log.e(TAG, " listDate : " + listDate.size());
@@ -658,11 +659,28 @@ public class ExportActivity extends AppCompatActivity {
         }
         pdfDocument.close();
 
+
+        //
+        /*
+        File filelocation = new File(Environment.getExternalStorageDirectory(), "/arsi21.pdf");
+        Uri path = Uri.fromFile(filelocation);
+        Intent emailIntent = new Intent(Intent.ACTION_SEND);
+        // set the type to 'email'
+        emailIntent.setType("vnd.android.cursor.dir/email");
+        String to[] = {"luis.j.cueva@gmail.com"};
+        emailIntent.putExtra(Intent.EXTRA_EMAIL, to);
+        // the attachment
+        emailIntent.putExtra(Intent.EXTRA_STREAM, path);
+        // the mail subject
+        emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Subject");
+        startActivity(Intent.createChooser(emailIntent, "Send email..."));
+*/
+        //
+
         mDialog.dismiss();
         Intent intent = new Intent(ExportActivity.this, ShowPdfActivity.class);
         startActivity(intent);
     }
-
 
     private void consultarDatosPaciente() {
         Log.e(TAG, "---> consultarDatosPaciente");
@@ -707,8 +725,6 @@ public class ExportActivity extends AppCompatActivity {
     }
 
     private void getDataFromFirebase(String dni, String nombre) {
-
-
         Log.e(TAG, "-----> funcion  : getDataFromFirebase");
         listDate = new ArrayList<String>();
         listTemperatura = new ArrayList<>();
@@ -745,6 +761,7 @@ public class ExportActivity extends AppCompatActivity {
                 Log.e(TAG, "---> listPulso : " + listPulso.size());
 
                 generarListaporPersonalPdf(nombre);
+
 
             }
 
