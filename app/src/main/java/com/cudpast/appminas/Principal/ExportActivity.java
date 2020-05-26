@@ -659,22 +659,6 @@ public class ExportActivity extends AppCompatActivity {
         }
         pdfDocument.close();
 
-
-        //
-        /*
-        File filelocation = new File(Environment.getExternalStorageDirectory(), "/arsi21.pdf");
-        Uri path = Uri.fromFile(filelocation);
-        Intent emailIntent = new Intent(Intent.ACTION_SEND);
-        // set the type to 'email'
-        emailIntent.setType("vnd.android.cursor.dir/email");
-        String to[] = {"luis.j.cueva@gmail.com"};
-        emailIntent.putExtra(Intent.EXTRA_EMAIL, to);
-        // the attachment
-        emailIntent.putExtra(Intent.EXTRA_STREAM, path);
-        // the mail subject
-        emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Subject");
-        startActivity(Intent.createChooser(emailIntent, "Send email..."));
-*/
         //
 
         mDialog.dismiss();
@@ -760,7 +744,12 @@ public class ExportActivity extends AppCompatActivity {
                 Log.e(TAG, "---> listSaturacion : " + listSaturacion.size());
                 Log.e(TAG, "---> listPulso : " + listPulso.size());
 
-                generarListaporPersonalPdf(nombre);
+                try {
+                    generarListaporPersonalPdf(nombre);
+                }catch (Exception e){
+                    Toast.makeText(ExportActivity.this, "Error al Generar PDF ", Toast.LENGTH_SHORT).show();
+                }
+   
 
 
             }
