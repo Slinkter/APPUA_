@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
 
         UnidadTrabajo e1 = new UnidadTrabajo();
         e1.setNameUT("COPE");
-        e1.setAliasUT("COPE");
+        e1.setAliasUT("Cope");
 
         UnidadTrabajo e2 = new UnidadTrabajo();
         e2.setNameUT("Chavincha");
