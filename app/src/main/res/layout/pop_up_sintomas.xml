@@ -6,7 +6,6 @@
     android:layout_gravity="center"
     android:layout_margin="15dp"
     android:gravity="center"
-
     android:orientation="vertical">
 
     <androidx.cardview.widget.CardView

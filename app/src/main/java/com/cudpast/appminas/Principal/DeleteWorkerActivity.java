@@ -37,7 +37,7 @@ public class DeleteWorkerActivity extends AppCompatActivity {
     private TextInputEditText delete_personal_dni;
     private TextView show_delete_personal;
 
-    private Button btndeletepersonal, btndeleteback, btndeletepersonalcosultardni;
+    private Button btnDeletepersonal, btnDeleteback, btnCosultardni;
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
     private Personal personal;
     private LinearLayout layout_delete;
@@ -54,15 +54,15 @@ public class DeleteWorkerActivity extends AppCompatActivity {
         delete_personal_dni = findViewById(R.id.delete_personal_dni);
 
         show_delete_personal = findViewById(R.id.show_delete_personal);
-        btndeletepersonalcosultardni = findViewById(R.id.btndeletepersonalcosultardni);
+        btnCosultardni = findViewById(R.id.btndeletepersonalcosultardni);
 
 
         layout_delete = findViewById(R.id.layout_delete);
-        btndeletepersonal = findViewById(R.id.btndeletepersonal);
-        btndeleteback = findViewById(R.id.btndeleteback);
+        btnDeletepersonal = findViewById(R.id.btndeletepersonal);
+        btnDeleteback = findViewById(R.id.btndeleteback);
 
 
-        btndeletepersonalcosultardni.setOnClickListener(new View.OnClickListener() {
+        btnCosultardni.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (submitForm()) {
@@ -72,7 +72,10 @@ public class DeleteWorkerActivity extends AppCompatActivity {
             }
         });
 
-        btndeletepersonal.setOnClickListener(new View.OnClickListener() {
+
+
+
+        btnDeletepersonal.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String dni = delete_personal_dni.getText().toString();
@@ -82,7 +85,7 @@ public class DeleteWorkerActivity extends AppCompatActivity {
         });
 
 
-        btndeleteback.setOnClickListener(new View.OnClickListener() {
+        btnDeleteback.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(DeleteWorkerActivity.this, AllActivity.class);

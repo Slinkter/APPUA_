@@ -6,6 +6,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -13,12 +14,14 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Typeface;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.pdf.PdfDocument;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.text.format.DateFormat;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -29,6 +32,8 @@ import com.cudpast.appminas.Common.Common;
 import com.cudpast.appminas.Model.MetricasPersonal;
 import com.cudpast.appminas.Model.Personal;
 import com.cudpast.appminas.R;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 import com.google.android.material.textfield.TextInputEditText;
@@ -106,7 +111,7 @@ public class ReportDataActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Toast.makeText(ReportDataActivity.this, "2", Toast.LENGTH_SHORT).show();
                 selectDate("email");
-              //  sendEmail();
+
             }
         });
         //
@@ -114,6 +119,8 @@ public class ReportDataActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Toast.makeText(ReportDataActivity.this, "3", Toast.LENGTH_SHORT).show();
+                showDiaglo();
+
             }
         });
         img_reportworkgmail.setOnClickListener(new View.OnClickListener() {
@@ -194,9 +201,7 @@ public class ReportDataActivity extends AppCompatActivity {
                                                     if (listaMetricasPersonales.size() == listaPersonal.size()) {
 
 
-
-
-                                                        generarListaporFechaPdf(listaMetricasPersonales, listaPersonal, seletedDate , metodo);
+                                                        generarListaporFechaPdf(listaMetricasPersonales, listaPersonal, seletedDate, metodo);
                                                         Log.e(TAG, "se genero la lista pdf");
                                                     } else {
                                                         Log.e(TAG, "todavia no se  genero la lista pdf");
@@ -481,17 +486,16 @@ public class ReportDataActivity extends AppCompatActivity {
         }
 
 
-        if (metodo.equalsIgnoreCase("pdf")){
+        if (metodo.equalsIgnoreCase("pdf")) {
             Log.e(TAG, " metodo pdf ");
             Intent intent = new Intent(ReportDataActivity.this, ShowPdfActivity.class);
             startActivity(intent);
             mDialog.dismiss();
-        }else{
+        } else {
             Log.e(TAG, " metodo sendEmail ");
             sendEmail();
             mDialog.dismiss();
         }
-
 
 
     }
@@ -777,9 +781,6 @@ public class ReportDataActivity extends AppCompatActivity {
     }
 
 
-
-
-
     private void sendEmail() {
         Log.e(TAG, "sendEmail()  2 ");
         File root = Environment.getExternalStorageDirectory();
@@ -791,11 +792,75 @@ public class ReportDataActivity extends AppCompatActivity {
         intent.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://" + filelocation));
         intent.putExtra(Intent.EXTRA_TEXT, message);
         String currentusermail = Common.currentUser.getReg_email();
-        Log.e(TAG,"currentusermail  : "+currentusermail);
-        intent.setData(Uri.parse("mailto:"+currentusermail));
+        Log.e(TAG, "currentusermail  : " + currentusermail);
+        intent.setData(Uri.parse("mailto:" + currentusermail));
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         Log.e(TAG, "sendEmail 2  -->  filelocation " + filelocation);
         startActivity(intent);
     }
+
+
+    /////////
+
+    public void showDiaglo() {
+
+        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(ReportDataActivity.this);
+        LayoutInflater inflater = getLayoutInflater();
+        View view = inflater.inflate(R.layout.pop_up_report_dni, null);
+        builder.setView(view);
+        builder.setCancelable(false);
+        view.setKeepScreenOn(true);
+        final AlertDialog dialog = builder.create();
+
+        TextInputLayout report_dni_layout = view.findViewById(R.id.report_dni_layout);
+        TextInputEditText report_dni = view.findViewById(R.id.report_dni);
+
+        Button btn_report_dni_close = view.findViewById(R.id.btn_report_dni_close);
+        Button btn_report_dni = view.findViewById(R.id.btn_report_dni);
+
+        Button btn_report_dni_generar = view.findViewById(R.id.btn_report_dni_generar);
+
+        btn_report_dni.setOnClickListener( v -> {
+
+            if (report_dni.getText().toString().trim().isEmpty()) {
+                report_dni_layout.setError("Ingrese su DNI");
+            } else {
+                btn_report_dni.setText("Generar");
+                report_dni_layout.setError(null);
+
+            }
+
+
+
+            if (btn_report_dni.getText().toString().equalsIgnoreCase("Generar")){
+                btn_report_dni.setVisibility(View.GONE);
+                btn_report_dni_generar.setVisibility(View.VISIBLE);
+
+            }
+            
+            btn_report_dni_generar.setOnClickListener( v1 -> {
+                Toast.makeText(this, "Documento generado", Toast.LENGTH_SHORT).show();
+            });
+
+
+
+
+        });
+
+
+        btn_report_dni_close.setOnClickListener(v -> dialog.dismiss());
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        //
+
+        dialog.show();
+    }
+
+
+    //Validacion
+
+
+
+
+
 
 }
