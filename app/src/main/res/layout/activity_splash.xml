@@ -19,9 +19,7 @@
             android:layout_width="186dp"
             android:layout_height="186dp"
             android:layout_gravity="center"
-            android:background="@drawable/ic_app_mina3"
-
-            />
+            android:background="@drawable/ic_app_mina3"            />
 
 
     </LinearLayout>

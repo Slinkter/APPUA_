@@ -11,7 +11,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.cudpast.appminas.Activities.RegisterActivity;
 import com.cudpast.appminas.Common.Common;
 import com.cudpast.appminas.Model.Personal;
 import com.cudpast.appminas.R;
@@ -23,9 +22,9 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-public class AddPersonalActivity extends AppCompatActivity {
+public class AddWorkerActivity extends AppCompatActivity {
 
-    public static final String TAG = AddPersonalActivity.class.getSimpleName();
+    public static final String TAG = AddWorkerActivity.class.getSimpleName();
 
     private TextInputLayout
             personal_dni_layout,
@@ -98,7 +97,7 @@ public class AddPersonalActivity extends AppCompatActivity {
         btn_personal_back_main.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(AddPersonalActivity.this, AllActivity.class);
+                Intent intent = new Intent(AddWorkerActivity.this, AllActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
                 finish();
@@ -134,7 +133,7 @@ public class AddPersonalActivity extends AppCompatActivity {
             DatabaseReference ref_db_personal = database.getReference(Common.db_mina_personal);
 
 
-            mDialog = new ProgressDialog(AddPersonalActivity.this);
+            mDialog = new ProgressDialog(AddWorkerActivity.this);
             mDialog.setMessage("Registrando trabajador " + name.toString() + " " + last.toString());
             mDialog.show();
 
@@ -145,7 +144,7 @@ public class AddPersonalActivity extends AppCompatActivity {
                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {
-                            Toast.makeText(AddPersonalActivity.this, "El trabajador " + name.toString() + " " + last.toString() + "  ha sido registrado", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(AddWorkerActivity.this, "El trabajador " + name.toString() + " " + last.toString() + "  ha sido registrado", Toast.LENGTH_SHORT).show();
                             gotoMAin();
                             mDialog.dismiss();
                         }
@@ -153,7 +152,7 @@ public class AddPersonalActivity extends AppCompatActivity {
                     .addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
-                            Toast.makeText(AddPersonalActivity.this, "Trabajador no ha sido Registrado", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(AddWorkerActivity.this, "Trabajador no ha sido Registrado", Toast.LENGTH_SHORT).show();
                             Log.e(TAG, "personal no registrado");
                             mDialog.dismiss();
                         }
@@ -165,7 +164,7 @@ public class AddPersonalActivity extends AppCompatActivity {
     }
 
     private void gotoMAin() {
-        Intent intent = new Intent(AddPersonalActivity.this, AllActivity.class);
+        Intent intent = new Intent(AddWorkerActivity.this, AllActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
         finish();

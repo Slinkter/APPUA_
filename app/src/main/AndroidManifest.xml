@@ -26,10 +26,10 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".Principal.ShowPdfActivity"
-            android:parentActivityName=".Principal.ExportActivity"
+            android:parentActivityName=".Principal.ReportDataActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".Principal.ExportActivity"
+            android:name=".Principal.ReportDataActivity"
             android:parentActivityName=".Principal.AllActivity"
             android:screenOrientation="portrait" />
         <activity
@@ -40,7 +40,7 @@
             android:name=".Principal.AllActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".Principal.AddPersonalActivity"
+            android:name=".Principal.AddWorkerActivity"
             android:parentActivityName=".Principal.AllActivity"
             android:screenOrientation="portrait" />
         <activity
@@ -52,7 +52,7 @@
             android:parentActivityName=".Principal.AllActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".Principal.DeletePersonalActivity"
+            android:name=".Principal.DeleteWorkerActivity"
             android:parentActivityName=".Principal.AllActivity"
             android:screenOrientation="portrait" />
         <activity

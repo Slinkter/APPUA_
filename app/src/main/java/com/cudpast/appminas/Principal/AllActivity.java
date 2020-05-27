@@ -4,7 +4,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -14,7 +13,7 @@ import com.cudpast.appminas.R;
 
 public class AllActivity extends AppCompatActivity {
 
-    private TextView tv_selectedunidadminera ,currentuser;
+    private TextView tv_selectedunidadminera, currentuser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,7 +23,7 @@ public class AllActivity extends AppCompatActivity {
         tv_selectedunidadminera = findViewById(R.id.tv_selectedunidadminera);
         tv_selectedunidadminera.setText(Common.unidadTrabajoSelected.getAliasUT());
 
-        currentuser=findViewById(R.id.currentuser);
+        currentuser = findViewById(R.id.currentuser);
         currentuser.setText(Common.currentUser.getReg_name());
 
 
@@ -37,13 +36,13 @@ public class AllActivity extends AppCompatActivity {
         currentuser.setText(Common.currentUser.getReg_name());
     }
 
-    public void btnNewMinero(View view) {
-        Intent intent = new Intent(AllActivity.this, AddPersonalActivity.class);
+    public void btnAddWorker(View view) {
+        Intent intent = new Intent(AllActivity.this, AddWorkerActivity.class);
         startActivity(intent);
     }
 
-    public void btnDeleteMinero(View view) {
-        Intent intent = new Intent(AllActivity.this, DeletePersonalActivity.class);
+    public void btnDeleteWorker(View view) {
+        Intent intent = new Intent(AllActivity.this, DeleteWorkerActivity.class);
         startActivity(intent);
     }
 
@@ -52,19 +51,24 @@ public class AllActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public void btnQueryMinero(View view) {
-        Intent intent = new Intent(AllActivity.this, ConsultaPersonalActivity.class);
+    public void btnReportData(View view) {
+        Intent intent = new Intent(AllActivity.this, ReportDataActivity.class);
         startActivity(intent);
+    }
+
+
+    // metodos de baja
+    public void btnQueryMinero(View view) {
+        Toast.makeText(this, "Solo admin", Toast.LENGTH_SHORT).show();
+        //   Intent intent = new Intent(AllActivity.this, ConsultaPersonalActivity.class);
+        //   startActivity(intent);
     }
 
     public void btnVisualData(View view) {
         Toast.makeText(this, "Solo admin", Toast.LENGTH_SHORT).show();
-      //  Intent intent = new Intent(AllActivity.this, VisualActivity.class);
-      //  startActivity(intent);
+        //  Intent intent = new Intent(AllActivity.this, VisualActivity.class);
+        //  startActivity(intent);
     }
 
-    public void btnExportData(View view) {
-        Intent intent = new Intent(AllActivity.this, ExportActivity.class);
-        startActivity(intent);
-    }
+
 }

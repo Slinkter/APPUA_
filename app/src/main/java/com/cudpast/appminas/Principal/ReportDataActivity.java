@@ -14,18 +14,16 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.graphics.pdf.PdfDocument;
-import android.net.Uri;
-import android.nfc.Tag;
 import android.os.Bundle;
 import android.os.Environment;
 import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.cudpast.appminas.Activities.RegisterActivity;
 import com.cudpast.appminas.Common.Common;
 import com.cudpast.appminas.Model.MetricasPersonal;
 import com.cudpast.appminas.Model.Personal;
@@ -51,9 +49,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
 
-public class ExportActivity extends AppCompatActivity {
+public class ReportDataActivity extends AppCompatActivity {
 
-    public static final String TAG = ExportActivity.class.getSimpleName();
+    public static final String TAG = ReportDataActivity.class.getSimpleName();
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
 
     private DatabaseReference ref_datos_paciente;
@@ -75,6 +73,8 @@ public class ExportActivity extends AppCompatActivity {
     List<String> listTemperatura;
     List<Integer> listSaturacion;
     List<Integer> listPulso;
+    //
+    private ImageView img_reportdatepdf, img_reportmailpdf, img_reportworkpdf, img_reportworkgmail, img_reportexampdf, img_reportexamemail;
 
 
     @Override
@@ -86,162 +86,156 @@ public class ExportActivity extends AppCompatActivity {
         //Solicitar permisos
         ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, PackageManager.PERMISSION_GRANTED);
         //
-        btn_selectDate = findViewById(R.id.btn_selectDate);
-        btn_viewPdf = findViewById(R.id.btn_viewPdf);
-        btn_viewPdfDni = findViewById(R.id.btn_viewPdfDni);
+        img_reportdatepdf = findViewById(R.id.img_reportdatepdf);
+        img_reportmailpdf = findViewById(R.id.img_reportmailpdf);
+        img_reportworkpdf = findViewById(R.id.img_reportworkpdf);
+        img_reportworkgmail = findViewById(R.id.img_reportworkgmail);
+        img_reportexampdf = findViewById(R.id.img_reportexampdf);
+        img_reportexamemail = findViewById(R.id.img_reportexamemail);
         //
-        dni_metrica_layout = findViewById(R.id.dni_metrica_layout);
-        dni_metrica = findViewById(R.id.dni_metrica);
+        img_reportdatepdf.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(ReportDataActivity.this, "1", Toast.LENGTH_SHORT).show();
+                selectDate();
+            }
+        });
+        img_reportmailpdf.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(ReportDataActivity.this, "2", Toast.LENGTH_SHORT).show();
+            }
+        });
         //
+        img_reportworkpdf.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(ReportDataActivity.this, "3", Toast.LENGTH_SHORT).show();
+            }
+        });
+        img_reportworkgmail.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(ReportDataActivity.this, "4", Toast.LENGTH_SHORT).show();
+            }
+        });
+        img_reportexampdf.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(ReportDataActivity.this, "5", Toast.LENGTH_SHORT).show();
+            }
+        });
+        img_reportexamemail.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(ReportDataActivity.this, "6 ", Toast.LENGTH_SHORT).show();
+            }
+        });
 
-        tv_show_date = findViewById(R.id.tv_show_date);
-        show_dni_metricas = findViewById(R.id.show_dni_metricas);
-        //
+
+    }
+
+    private void selectDate() {
         dialogCalendar = MaterialDatePicker.Builder.datePicker();
         dialogCalendar.setTitleText("Seleccionar Fecha");
         materialDatePicker = dialogCalendar.build();
+        materialDatePicker.show(getSupportFragmentManager(), "DATE_PICKER");
+        materialDatePicker.addOnPositiveButtonClickListener((MaterialPickerOnPositiveButtonClickListener<Long>) dateSelected -> {
 
-        // Button 1
-        btn_selectDate.setOnClickListener(v -> materialDatePicker.show(getSupportFragmentManager(), "DATE_PICKER"));
+            // Fecha escogida
+            seletedDate = timestampToString(dateSelected);
+            // inicializar lista vacias para guardar datos
+            listaMetricasPersonales = new ArrayList<>();
+            listaPersonal = new ArrayList<>();
+            // Conexion con la base de datos
+            ref_datos_paciente = FirebaseDatabase.getInstance().getReference(Common.db_mina_personal_data).child(Common.unidadTrabajoSelected.getNameUT());
+            ref_datos_paciente.keepSynced(true);
+            ref_datos_paciente.orderByKey();
+            ref_datos_paciente.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    for (DataSnapshot snapshotDatosPersonales : dataSnapshot.getChildren()) {
+                        // --> DNI del Personal
+                        String dniPersonal = snapshotDatosPersonales.getKey();
+                        Log.e(TAG, "dniPersonal : " + dniPersonal);
+                        if (dniPersonal.isEmpty()) {
+                            Log.e(TAG, "campo vacio  : " + null);
+                        } else {
+                            // --> Lista de snapshotDatosPersonales
+                            for (DataSnapshot item : snapshotDatosPersonales.getChildren()) {
+                                MetricasPersonal metricasPersonal = item.getValue(MetricasPersonal.class);
+                                if (metricasPersonal != null) {
+                                    String dateRegister = metricasPersonal.getDateRegister().substring(0, 10).trim();
+                                    Log.e(TAG, "120 dateRegister = " + dateRegister);
+                                    //Buscar dateRegister q coincide
+                                    if (dateRegister.equalsIgnoreCase(seletedDate)) {
+                                        // enlistar datos
+                                        listaMetricasPersonales.add(metricasPersonal);
+                                        // Buscar datos
+                                        DatabaseReference ref_db_mina_personal = database.getReference(Common.db_mina_personal);
+                                        DatabaseReference ref_mina = ref_db_mina_personal.child(Common.unidadTrabajoSelected.getNameUT());
+                                        ref_mina.child(dniPersonal).addListenerForSingleValueEvent(new ValueEventListener() {
+                                            @Override
+                                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                Personal personal = dataSnapshot.getValue(Personal.class);
+                                                if (personal != null) {
+                                                    listaPersonal.add(personal);
+                                                    Log.e(TAG, listaPersonal.size() + " personal : " + personal.getName());
+                                                    Log.e(TAG, "tamaño de  metricas  : " + listaMetricasPersonales.size());
+                                                    Log.e(TAG, "tamaño de  personal  : " + listaPersonal.size());
 
-        materialDatePicker.addOnPositiveButtonClickListener(
-                (MaterialPickerOnPositiveButtonClickListener<Long>) dateSelected -> {
+                                                    if (listaMetricasPersonales.size() == listaPersonal.size()) {
 
-                    mDialog = new ProgressDialog(ExportActivity.this);
-                    mDialog.setMessage("Obteniendo datos ...");
-                    mDialog.show();
+                                                        generarListaporFechaPdf(listaMetricasPersonales, listaPersonal, seletedDate);
 
-                    tv_show_date.setVisibility(View.VISIBLE);
-                    tv_show_date.setText("Fecha Selecionada :  " + timestampToString(dateSelected));
-                    btn_viewPdf.setVisibility(View.VISIBLE);
-
-                    seletedDate = timestampToString(dateSelected);
-
-                    listaMetricasPersonales = new ArrayList<>();
-                    listaPersonal = new ArrayList<>();
-
-                    ref_datos_paciente = FirebaseDatabase.getInstance().getReference(Common.db_mina_personal_data).child(Common.unidadTrabajoSelected.getNameUT());
-                    ref_datos_paciente.keepSynced(true);
-                    ref_datos_paciente.orderByKey();
-                    ref_datos_paciente
-                            .addListenerForSingleValueEvent(new ValueEventListener() {
-                                @Override
-                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                    for (DataSnapshot snapshotDatosPersonales : dataSnapshot.getChildren()) {
-                                        // --> DNI del Personal
-                                        String dniPersonal = snapshotDatosPersonales.getKey();
-                                        Log.e(TAG, "dniPersonal : " + dniPersonal);
-                                        if (dniPersonal.isEmpty()) {
-
-                                        } else {
-                                            // --> Lista de snapshotDatosPersonales
-                                            for (DataSnapshot item : snapshotDatosPersonales.getChildren()) {
-                                                MetricasPersonal metricasPersonal = item.getValue(MetricasPersonal.class);
-                                                if (metricasPersonal != null) {
-                                                    String dateRegister = metricasPersonal.getDateRegister().substring(0, 10).trim();
-                                                    Log.e(TAG, "120 dateRegister = " + dateRegister);
-                                                    //Buscar dateRegister q coincide
-                                                    if (dateRegister.equalsIgnoreCase(seletedDate)) {
-                                                        // enlistar datos
-                                                        listaMetricasPersonales.add(metricasPersonal);
-                                                        // Buscar datos
-                                                        DatabaseReference ref_db_mina_personal = database.getReference(Common.db_mina_personal);
-                                                        DatabaseReference ref_mina = ref_db_mina_personal.child(Common.unidadTrabajoSelected.getNameUT());
-                                                        ref_mina.child(dniPersonal).addListenerForSingleValueEvent(new ValueEventListener() {
-                                                            @Override
-                                                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                                                mDialog.dismiss();
-                                                                Personal personal = dataSnapshot.getValue(Personal.class);
-                                                                if (personal != null) {
-                                                                    listaPersonal.add(personal);
-                                                                    Log.e(TAG, listaPersonal.size() + " personal : " + personal.getName());
-                                                                    //  Log.e(TAG, "tamaño personal : " + listaPersonal.size());
-                                                                }
-                                                            }
-
-                                                            @Override
-                                                            public void onCancelled(@NonNull DatabaseError databaseError) {
-                                                                Log.e(TAG, "error : " + databaseError.getMessage());
-                                                                mDialog.dismiss();
-                                                            }
-                                                        });
-
-                                                    }
-
-                                                    if (listaMetricasPersonales.size() != 0) {
-                                                        mDialog.dismiss();
-                                                        Log.e(TAG, "Lista ");
-                                                        btn_viewPdf.setVisibility(View.VISIBLE);
-                                                        tv_show_date.setText("Fecha Selecionada " + timestampToString(dateSelected));
-                                                        tv_show_date.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorPrimary));
+                                                        Log.e(TAG, "se genero la lista pdf");
                                                     } else {
-                                                        // Al no tener fecha no se debe visulizar boton de generar pdf
-                                                        // en el textView mostrar lista vacia
-                                                        btn_viewPdf.setVisibility(View.INVISIBLE);
-                                                        tv_show_date.setText("Lista vacia , seleciona otra fecha");
-                                                        tv_show_date.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.rango_inadecuado));
-                                                        Log.e(TAG, "no existe fecha : lista vacia");
-                                                        mDialog.dismiss();
+                                                        Log.e(TAG, "todavia no se  genero la lista pdf");
                                                     }
 
-                                                } else {
-                                                    Log.e(TAG, "metricasPersonal : lista vacia");
-                                                    mDialog.dismiss();
 
                                                 }
                                             }
 
+                                            @Override
+                                            public void onCancelled(@NonNull DatabaseError databaseError) {
+                                                Log.e(TAG, "error : " + databaseError.getMessage());
 
-                                        }
+                                            }
+                                        });
 
-
-                                    }
-                                }
-
-                                @Override
-                                public void onCancelled(@NonNull DatabaseError databaseError) {
-                                    Log.e(TAG, "error : " + databaseError.getMessage());
-                                    mDialog.dismiss();
-                                }
-
-                            });
-
-                    btn_viewPdf.setOnClickListener(
-                            v -> {
-                                try {
-                                    if (listaMetricasPersonales.size() != 0) {
-                                        generarListaporFechaPdf(listaMetricasPersonales, listaPersonal, seletedDate);
-                                        mDialog.dismiss();
-                                        Intent intent = new Intent(ExportActivity.this, ShowPdfActivity.class);
-                                        startActivity(intent);
-                                        Toast.makeText(this, "Documento Generado", Toast.LENGTH_SHORT).show();
-                                    } else {
-                                        mDialog.dismiss();
-                                        Toast.makeText(this, "Lista vacia", Toast.LENGTH_SHORT).show();
                                     }
 
 
-                                } catch (Exception e) {
-                                    Toast.makeText(this, "Lista Vacio", Toast.LENGTH_SHORT).show();
-                                    Log.e(TAG, "Lista vacia  " + e.getMessage());
-                                    mDialog.dismiss();
+                                } else {
+                                    Log.e(TAG, "metricasPersonal : lista vacia");
                                 }
-                            });
+                            }
 
-                });
 
-        // Button 2
-        btn_viewPdfDni.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                consultarDatosPaciente();
-            }
+                            //generarListaporFechaPdf(listaMetricasPersonales, listaPersonal, seletedDate);
+
+
+                        }
+
+
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                    Log.e(TAG, "error : " + databaseError.getMessage());
+                }
+            });
         });
+
+
     }
 
 
     private void generarListaporFechaPdf(List<MetricasPersonal> listMetricasPersonal, List<Personal> listPersonal, String seletedDate) {
         //
+        Log.e(TAG, "-----> generarListaporFechaPdf");
         Log.e(TAG, "listMetricasPersonal.size() : " + listMetricasPersonal.size());
         Log.e(TAG, "listPersonal.size() : " + listPersonal.size());
         int pageWidth = 1200;
@@ -486,6 +480,9 @@ public class ExportActivity extends AppCompatActivity {
             Log.e(TAG, "ERROR problemas de index");
         }
 
+        Intent intent = new Intent(ReportDataActivity.this, ShowPdfActivity.class);
+        startActivity(intent);
+
 
     }
 
@@ -661,8 +658,8 @@ public class ExportActivity extends AppCompatActivity {
 
         //
 
-        mDialog.dismiss();
-        Intent intent = new Intent(ExportActivity.this, ShowPdfActivity.class);
+
+        Intent intent = new Intent(ReportDataActivity.this, ShowPdfActivity.class);
         startActivity(intent);
     }
 
@@ -670,7 +667,7 @@ public class ExportActivity extends AppCompatActivity {
         Log.e(TAG, "---> consultarDatosPaciente");
         final String dni = dni_metrica.getText().toString();
         if (!dni.toString().isEmpty()) {
-            mDialog = new ProgressDialog(ExportActivity.this);
+            mDialog = new ProgressDialog(ReportDataActivity.this);
             mDialog.setMessage("Obteniendo datos ...");
             mDialog.show();
 
@@ -746,10 +743,9 @@ public class ExportActivity extends AppCompatActivity {
 
                 try {
                     generarListaporPersonalPdf(nombre);
-                }catch (Exception e){
-                    Toast.makeText(ExportActivity.this, "Error al Generar PDF ", Toast.LENGTH_SHORT).show();
+                } catch (Exception e) {
+                    Toast.makeText(ReportDataActivity.this, "Error al Generar PDF ", Toast.LENGTH_SHORT).show();
                 }
-   
 
 
             }

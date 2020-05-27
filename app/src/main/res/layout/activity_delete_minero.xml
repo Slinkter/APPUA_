@@ -6,7 +6,7 @@
     android:layout_height="fill_parent"
     android:layout_gravity="center"
     android:fitsSystemWindows="false"
-    tools:context=".Principal.DeletePersonalActivity">
+    tools:context=".Principal.DeleteWorkerActivity">
 
 
     <LinearLayout
