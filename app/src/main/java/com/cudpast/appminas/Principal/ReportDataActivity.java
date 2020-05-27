@@ -14,6 +14,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.graphics.pdf.PdfDocument;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.text.format.DateFormat;
@@ -97,13 +98,15 @@ public class ReportDataActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Toast.makeText(ReportDataActivity.this, "1", Toast.LENGTH_SHORT).show();
-                selectDate();
+                selectDate("pdf");
             }
         });
         img_reportmailpdf.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Toast.makeText(ReportDataActivity.this, "2", Toast.LENGTH_SHORT).show();
+                selectDate("email");
+              //  sendEmail();
             }
         });
         //
@@ -135,12 +138,16 @@ public class ReportDataActivity extends AppCompatActivity {
 
     }
 
-    private void selectDate() {
+    private void selectDate(String metodo) {
         dialogCalendar = MaterialDatePicker.Builder.datePicker();
         dialogCalendar.setTitleText("Seleccionar Fecha");
         materialDatePicker = dialogCalendar.build();
         materialDatePicker.show(getSupportFragmentManager(), "DATE_PICKER");
         materialDatePicker.addOnPositiveButtonClickListener((MaterialPickerOnPositiveButtonClickListener<Long>) dateSelected -> {
+            //
+            mDialog = new ProgressDialog(ReportDataActivity.this);
+            mDialog.setMessage("Obteniendo datos ...");
+            mDialog.show();
 
             // Fecha escogida
             seletedDate = timestampToString(dateSelected);
@@ -183,17 +190,17 @@ public class ReportDataActivity extends AppCompatActivity {
                                                     Log.e(TAG, listaPersonal.size() + " personal : " + personal.getName());
                                                     Log.e(TAG, "tamaño de  metricas  : " + listaMetricasPersonales.size());
                                                     Log.e(TAG, "tamaño de  personal  : " + listaPersonal.size());
-
+                                                    Log.e(TAG, "metodo : " + metodo);
                                                     if (listaMetricasPersonales.size() == listaPersonal.size()) {
 
-                                                        generarListaporFechaPdf(listaMetricasPersonales, listaPersonal, seletedDate);
 
+
+
+                                                        generarListaporFechaPdf(listaMetricasPersonales, listaPersonal, seletedDate , metodo);
                                                         Log.e(TAG, "se genero la lista pdf");
                                                     } else {
                                                         Log.e(TAG, "todavia no se  genero la lista pdf");
                                                     }
-
-
                                                 }
                                             }
 
@@ -211,14 +218,7 @@ public class ReportDataActivity extends AppCompatActivity {
                                     Log.e(TAG, "metricasPersonal : lista vacia");
                                 }
                             }
-
-
-                            //generarListaporFechaPdf(listaMetricasPersonales, listaPersonal, seletedDate);
-
-
                         }
-
-
                     }
                 }
 
@@ -233,7 +233,7 @@ public class ReportDataActivity extends AppCompatActivity {
     }
 
 
-    private void generarListaporFechaPdf(List<MetricasPersonal> listMetricasPersonal, List<Personal> listPersonal, String seletedDate) {
+    private void generarListaporFechaPdf(List<MetricasPersonal> listMetricasPersonal, List<Personal> listPersonal, String seletedDate, String metodo) {
         //
         Log.e(TAG, "-----> generarListaporFechaPdf");
         Log.e(TAG, "listMetricasPersonal.size() : " + listMetricasPersonal.size());
@@ -480,8 +480,18 @@ public class ReportDataActivity extends AppCompatActivity {
             Log.e(TAG, "ERROR problemas de index");
         }
 
-        Intent intent = new Intent(ReportDataActivity.this, ShowPdfActivity.class);
-        startActivity(intent);
+
+        if (metodo.equalsIgnoreCase("pdf")){
+            Log.e(TAG, " metodo pdf ");
+            Intent intent = new Intent(ReportDataActivity.this, ShowPdfActivity.class);
+            startActivity(intent);
+            mDialog.dismiss();
+        }else{
+            Log.e(TAG, " metodo sendEmail ");
+            sendEmail();
+            mDialog.dismiss();
+        }
+
 
 
     }
@@ -764,6 +774,28 @@ public class ReportDataActivity extends AppCompatActivity {
         calendar.setTimeInMillis(time);
         String date = DateFormat.format("yyyy-MM-dd", calendar).toString();
         return date;
+    }
+
+
+
+
+
+    private void sendEmail() {
+        Log.e(TAG, "sendEmail()  2 ");
+        File root = Environment.getExternalStorageDirectory();
+        String filelocation = root.getAbsolutePath() + "/arsi21.pdf";
+        Intent intent = new Intent(Intent.ACTION_SENDTO);
+        intent.setType("text/plain");
+        String message = "Documento Generado por " + Common.currentUser.getReg_name();
+        intent.putExtra(Intent.EXTRA_SUBJECT, "Unidades ARSI : " + Common.unidadTrabajoSelected.getAliasUT() + "\n Saludos");
+        intent.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://" + filelocation));
+        intent.putExtra(Intent.EXTRA_TEXT, message);
+        String currentusermail = Common.currentUser.getReg_email();
+        Log.e(TAG,"currentusermail  : "+currentusermail);
+        intent.setData(Uri.parse("mailto:"+currentusermail));
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        Log.e(TAG, "sendEmail 2  -->  filelocation " + filelocation);
+        startActivity(intent);
     }
 
 }

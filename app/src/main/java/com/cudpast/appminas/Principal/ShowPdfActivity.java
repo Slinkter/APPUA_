@@ -32,8 +32,8 @@ public class ShowPdfActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_show_pdf);
         pdfView = findViewById(R.id.pdfView);
-        //   init();
-      //  initApp();
+        init();
+        //  initApp();
     }
 
     private void init() {
@@ -48,7 +48,7 @@ public class ShowPdfActivity extends AppCompatActivity {
                     .load();
 
 
-            sendEmail2();
+            //    sendEmail2();
 
         } catch (Exception e) {
             e.printStackTrace();
