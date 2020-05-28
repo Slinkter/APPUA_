@@ -3,7 +3,6 @@ package com.cudpast.appminas.Principal;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 
 import android.Manifest;
 import android.app.AlertDialog;
@@ -32,8 +31,6 @@ import com.cudpast.appminas.Common.Common;
 import com.cudpast.appminas.Model.MetricasPersonal;
 import com.cudpast.appminas.Model.Personal;
 import com.cudpast.appminas.R;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 import com.google.android.material.textfield.TextInputEditText;
@@ -119,7 +116,7 @@ public class ReportDataActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Toast.makeText(ReportDataActivity.this, "3", Toast.LENGTH_SHORT).show();
-                showDiaglo();
+                showPdfDialog();
 
             }
         });
@@ -586,8 +583,6 @@ public class ReportDataActivity extends AppCompatActivity {
         Paint pulse = new Paint();
         pulse.setTextSize(25f);
         //
-
-
         //-------------------------------------------------------------------------------
         //---> Pagina 01 Pagina 01 : [0-28]
         //metricas
@@ -649,7 +644,6 @@ public class ReportDataActivity extends AppCompatActivity {
         promedioSatura = sumaSatura / listTemperatura.size();
         promedioPulse = sumaPulse / listTemperatura.size();
 
-
         String cadTemp = String.valueOf(promedioTemp);
         String cadSatura = String.valueOf(promedioSatura);
         String cadPulse = String.valueOf(promedioPulse);
@@ -669,54 +663,14 @@ public class ReportDataActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         pdfDocument.close();
-
         //
-
-
         Intent intent = new Intent(ReportDataActivity.this, ShowPdfActivity.class);
         startActivity(intent);
     }
 
-    private void consultarDatosPaciente() {
-        Log.e(TAG, "---> consultarDatosPaciente");
-        final String dni = dni_metrica.getText().toString();
-        if (!dni.toString().isEmpty()) {
-            mDialog = new ProgressDialog(ReportDataActivity.this);
-            mDialog.setMessage("Obteniendo datos ...");
-            mDialog.show();
+    private void consultarDatosPaciente(String dni) {
 
-            Log.e(TAG, "---> dni : " + dni);
-            DatabaseReference ref_db_mina_personal = database.getReference(Common.db_mina_personal);
-            DatabaseReference ref_mina = ref_db_mina_personal.child(Common.unidadTrabajoSelected.getNameUT());
-            ref_mina.child(dni).addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    Personal personal = dataSnapshot.getValue(Personal.class);
-                    if (personal != null) {
-                        Log.e(TAG, "---> personal.getName() : " + personal.getName());
-                        dni_metrica_layout.setError(null);
-                        if (personal.getLast() == null) {
-                            personal.setLast(" ");
-                        }
-                        show_dni_metricas.setText("Trabajador : " + personal.getName() + " " + personal.getLast());
-                        String fullname = personal.getName() + " " + personal.getLast();
-                        getDataFromFirebase(dni, fullname);
 
-                    } else {
-                        Log.e(TAG, "---> personal.getName() : null ");
-                        dni_metrica_layout.setError("El trabajador no exsite en la base de datos");
-                        show_dni_metricas.setText("");
-                    }
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
-                    Log.e(TAG, "error : " + databaseError.getMessage());
-                }
-            });
-        } else {
-            Log.e(TAG, "---> dni :  vacio");
-        }
     }
 
     private void getDataFromFirebase(String dni, String nombre) {
@@ -802,7 +756,7 @@ public class ReportDataActivity extends AppCompatActivity {
 
     /////////
 
-    public void showDiaglo() {
+    public void showPdfDialog() {
 
         android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(ReportDataActivity.this);
         LayoutInflater inflater = getLayoutInflater();
@@ -818,49 +772,125 @@ public class ReportDataActivity extends AppCompatActivity {
         Button btn_report_dni_close = view.findViewById(R.id.btn_report_dni_close);
         Button btn_report_dni = view.findViewById(R.id.btn_report_dni);
 
-        Button btn_report_dni_generar = view.findViewById(R.id.btn_report_dni_generar);
 
-        btn_report_dni.setOnClickListener( v -> {
-
+        btn_report_dni.setOnClickListener(v -> {
+            String dni = report_dni.getText().toString();
             if (report_dni.getText().toString().trim().isEmpty()) {
                 report_dni_layout.setError("Ingrese su DNI");
+                dialog.dismiss();
             } else {
-                btn_report_dni.setText("Generar");
                 report_dni_layout.setError(null);
+                mDialog = new ProgressDialog(view.getContext());
+                mDialog.setMessage("Obteniendo datos ...");
+                mDialog.show();
+                //
+                Log.e(TAG, "-----> funcion  : consultarDatosPaciente");
+                Log.e(TAG, " dni : " + dni);
+                //
+                DatabaseReference ref_db_mina_personal = database.getReference(Common.db_mina_personal);
+                DatabaseReference ref_mina = ref_db_mina_personal.child(Common.unidadTrabajoSelected.getNameUT());
 
-            }
+                ref_mina.child(dni).addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        Personal personal = dataSnapshot.getValue(Personal.class);
+                        if (personal != null) {
+                            if (personal.getLast() == null) {
+                                personal.setLast(" ");
+                            }
+                            Log.e(TAG, " personal.getName() : " + personal.getName());
+                            report_dni_layout.setError(null);
+                            String fullname = personal.getName() + " " + personal.getLast();
+                            getDataFromFirebase(dni, fullname);
+                        } else {
+                            Log.e(TAG, " personal.getName() : null ");
+                            mDialog.dismiss();
+                            report_dni_layout.setError("El trabajador no exsite en la base de datos");
+                        }
+                    }
 
-
-
-            if (btn_report_dni.getText().toString().equalsIgnoreCase("Generar")){
-                btn_report_dni.setVisibility(View.GONE);
-                btn_report_dni_generar.setVisibility(View.VISIBLE);
-
-            }
-            
-            btn_report_dni_generar.setOnClickListener( v1 -> {
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                        mDialog.dismiss();
+                        Log.e(TAG, "error : " + databaseError.getMessage());
+                    }
+                });
                 Toast.makeText(this, "Documento generado", Toast.LENGTH_SHORT).show();
-            });
-
-
-
-
+            }
         });
-
 
         btn_report_dni_close.setOnClickListener(v -> dialog.dismiss());
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        //
-
         dialog.show();
     }
 
+    public void showEmailoDialog() {
 
-    //Validacion
+        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(ReportDataActivity.this);
+        LayoutInflater inflater = getLayoutInflater();
+        View view = inflater.inflate(R.layout.pop_up_report_dni, null);
+        builder.setView(view);
+        builder.setCancelable(false);
+        view.setKeepScreenOn(true);
+        final AlertDialog dialog = builder.create();
+
+        TextInputLayout report_dni_layout = view.findViewById(R.id.report_dni_layout);
+        TextInputEditText report_dni = view.findViewById(R.id.report_dni);
+
+        Button btn_report_dni_close = view.findViewById(R.id.btn_report_dni_close);
+        Button btn_report_dni = view.findViewById(R.id.btn_report_dni);
 
 
+        btn_report_dni.setOnClickListener(v -> {
+            String dni = report_dni.getText().toString();
+            if (report_dni.getText().toString().trim().isEmpty()) {
+                report_dni_layout.setError("Ingrese su DNI");
+                dialog.dismiss();
+            } else {
+                report_dni_layout.setError(null);
+                mDialog = new ProgressDialog(view.getContext());
+                mDialog.setMessage("Obteniendo datos ...");
+                mDialog.show();
+                //
+                Log.e(TAG, "-----> funcion  : consultarDatosPaciente");
+                Log.e(TAG, " dni : " + dni);
+                //
+                DatabaseReference ref_db_mina_personal = database.getReference(Common.db_mina_personal);
+                DatabaseReference ref_mina = ref_db_mina_personal.child(Common.unidadTrabajoSelected.getNameUT());
 
+                ref_mina.child(dni).addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        Personal personal = dataSnapshot.getValue(Personal.class);
+                        if (personal != null) {
+                            if (personal.getLast() == null) {
+                                personal.setLast(" ");
+                            }
+                            Log.e(TAG, " personal.getName() : " + personal.getName());
+                            report_dni_layout.setError(null);
+                            String fullname = personal.getName() + " " + personal.getLast();
+                            getDataFromFirebase(dni, fullname);
+                        } else {
+                            Log.e(TAG, " personal.getName() : null ");
+                            mDialog.dismiss();
+                            report_dni_layout.setError("El trabajador no exsite en la base de datos");
+                        }
+                    }
 
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                        mDialog.dismiss();
+                        Log.e(TAG, "error : " + databaseError.getMessage());
+                    }
+                });
+                Toast.makeText(this, "Documento generado", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        btn_report_dni_close.setOnClickListener(v -> dialog.dismiss());
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.show();
+    }
 
 
 }

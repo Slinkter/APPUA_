@@ -56,17 +56,6 @@
                 android:weightSum="2">
 
                 <Button
-                    style="?attr/materialButtonOutlinedStyle"
-                    android:id="@+id/btn_report_dni_generar"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_margin="6dp"
-                    android:layout_weight="1"
-                    android:text="PDF"
-                    android:visibility="gone" />
-
-                <Button
                     android:id="@+id/btn_report_dni"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -84,7 +73,8 @@
                     android:layout_gravity="center"
                     android:layout_margin="6dp"
                     android:layout_weight="1"
-                    android:text="Salir" />
+                    android:text="Salir"
+                    android:visibility="visible" />
 
             </LinearLayout>
 
