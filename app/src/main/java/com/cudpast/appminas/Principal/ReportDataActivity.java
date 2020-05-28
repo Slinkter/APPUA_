@@ -123,6 +123,7 @@ public class ReportDataActivity extends AppCompatActivity {
         img_reportworkgmail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                showEmailoDialog();
                 Toast.makeText(ReportDataActivity.this, "4", Toast.LENGTH_SHORT).show();
             }
         });
@@ -497,13 +498,15 @@ public class ReportDataActivity extends AppCompatActivity {
 
     }
 
-    private void generarListaporPersonalPdf(String nombre) {
+    private void generarListaporPersonalPdf(String nombre, String metodo) {
 
         Log.e(TAG, "---> generarListaporPersonalPdf()  ");
-        Log.e(TAG, " listDate : " + listDate.size());
-        Log.e(TAG, " listTemperatura : " + listTemperatura.size());
-        Log.e(TAG, " listSaturacion : " + listSaturacion.size());
-        Log.e(TAG, " listPulso : " + listPulso.size());
+        Log.e(TAG, "tamaño  listDate : " + listDate.size());
+        Log.e(TAG, "tamaño listTemperatura : " + listTemperatura.size());
+        Log.e(TAG, "tamaño listSaturacion : " + listSaturacion.size());
+        Log.e(TAG, "tamaño listPulso : " + listPulso.size());
+
+
         int pageWidth = 1200;
         Date currentDate = new Date();
         //
@@ -572,9 +575,9 @@ public class ReportDataActivity extends AppCompatActivity {
 
         //
         int ytext = 400;
-        int ysum = 100;
+        int ysum = 50;
         int ytextname = 400;
-        int ysumname = 100;
+        int ysumname = 50;
         //
 
         Paint temp = new Paint();
@@ -595,16 +598,27 @@ public class ReportDataActivity extends AppCompatActivity {
 
         double sumaPulse = 0;
         double promedioPulse = 0.0f;
+        //-------------------------------------------------------------------------------
 
+        // info trabajador
 
         for (int i = 0; i < listDate.size(); i++) {
+            ysumname = ysumname + 50;
+            cansas01.drawText(listDate.get(i), 170, ytextname + ysumname, myPaint);
+        }
+
+
+        for (int i = 0; i < listTemperatura.size(); i++) {
+            ysum = ysum + 50;
             // Nro
             cansas01.drawText(i + 1 + " ", 80, ytext + ysum, myPaint);
             // Temperatura
             cansas01.drawText(listTemperatura.get(i).toString(), 490, ytext + ysum, myPaint);
             sumaTemp = sumaTemp + Double.parseDouble(listTemperatura.get(i).toString());
+
             // Saturacion
             int valueSatura = Integer.parseInt(listSaturacion.get(i).toString());
+
             sumaSatura = sumaSatura + valueSatura;
             if (valueSatura >= 95 && valueSatura <= 99) {
                 so.setColor(Color.rgb(17, 230, 165));
@@ -618,6 +632,7 @@ public class ReportDataActivity extends AppCompatActivity {
             cansas01.drawText(listSaturacion.get(i).toString(), 720, ytext + ysum, so);
             // Pulse
             int valuePulso = Integer.parseInt(listPulso.get(i).toString());
+
             sumaPulse = sumaPulse + valuePulso;
 
             if (valuePulso >= 86) {
@@ -631,15 +646,11 @@ public class ReportDataActivity extends AppCompatActivity {
             }
             cansas01.drawText(listPulso.get(i).toString(), 970, ytext + ysum, pulse);
             //
-            ysum = ysum + 50;
-        }
-        // info trabajador
 
-        for (int i = 0; i < listDate.size(); i++) {
-            cansas01.drawText(listDate.get(i), 170, ytextname + ysumname, myPaint);
-            ysumname = ysumname + 50;
+
         }
 
+        /*
         promedioTemp = sumaTemp / listTemperatura.size();
         promedioSatura = sumaSatura / listTemperatura.size();
         promedioPulse = sumaPulse / listTemperatura.size();
@@ -652,6 +663,8 @@ public class ReportDataActivity extends AppCompatActivity {
         cansas01.drawText("Promedio temperatura : " + cadTemp.substring(0, 5), 35, 1650, myPaint);
         cansas01.drawText("Promedio saturación  : " + cadSatura.substring(0, 5), 35, 1700, myPaint);
         cansas01.drawText("Promedio pulso : " + cadPulse.substring(0, 5), 35, 1750, myPaint);
+        */
+
         //-------------------------------------------------------------------------------
 
         pdfDocument.finishPage(myPage01);
@@ -659,21 +672,29 @@ public class ReportDataActivity extends AppCompatActivity {
         File file = new File(Environment.getExternalStorageDirectory(), "/arsi21.pdf");
         try {
             pdfDocument.writeTo(new FileOutputStream(file));
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            Log.e(TAG, "TRY-CATH : " + e.getMessage());
         }
         pdfDocument.close();
         //
-        Intent intent = new Intent(ReportDataActivity.this, ShowPdfActivity.class);
-        startActivity(intent);
+
+
+        if (metodo.equalsIgnoreCase("pdf")) {
+            Log.e(TAG, " metodo pdf ");
+            Intent intent = new Intent(ReportDataActivity.this, ShowPdfActivity.class);
+            startActivity(intent);
+            mDialog.dismiss();
+        } else if (metodo.equalsIgnoreCase("email")) {
+            Log.e(TAG, " metodo sendEmail ");
+            sendEmail();
+            mDialog.dismiss();
+        }
+
+
     }
 
-    private void consultarDatosPaciente(String dni) {
 
-
-    }
-
-    private void getDataFromFirebase(String dni, String nombre) {
+    private void getDataFromFirebase(String dni, String nombre, String metodo) {
         Log.e(TAG, "-----> funcion  : getDataFromFirebase");
         listDate = new ArrayList<String>();
         listTemperatura = new ArrayList<>();
@@ -710,17 +731,18 @@ public class ReportDataActivity extends AppCompatActivity {
                 Log.e(TAG, "---> listPulso : " + listPulso.size());
 
                 try {
-                    generarListaporPersonalPdf(nombre);
+                    generarListaporPersonalPdf(nombre, metodo);
                 } catch (Exception e) {
+                    Log.e(TAG, "ERROR --> getDataFromFirebase : " + e.getMessage());
                     Toast.makeText(ReportDataActivity.this, "Error al Generar PDF ", Toast.LENGTH_SHORT).show();
+                    mDialog.dismiss();
                 }
-
-
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
                 Log.e(TAG, "error" + " : " + databaseError.getMessage());
+                mDialog.dismiss();
             }
         });
 
@@ -757,7 +779,7 @@ public class ReportDataActivity extends AppCompatActivity {
     /////////
 
     public void showPdfDialog() {
-
+        String metodo = "pdf";
         android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(ReportDataActivity.this);
         LayoutInflater inflater = getLayoutInflater();
         View view = inflater.inflate(R.layout.pop_up_report_dni, null);
@@ -801,7 +823,7 @@ public class ReportDataActivity extends AppCompatActivity {
                             Log.e(TAG, " personal.getName() : " + personal.getName());
                             report_dni_layout.setError(null);
                             String fullname = personal.getName() + " " + personal.getLast();
-                            getDataFromFirebase(dni, fullname);
+                            getDataFromFirebase(dni, fullname, metodo);
                         } else {
                             Log.e(TAG, " personal.getName() : null ");
                             mDialog.dismiss();
@@ -825,7 +847,7 @@ public class ReportDataActivity extends AppCompatActivity {
     }
 
     public void showEmailoDialog() {
-
+        String metodo = "email";
         android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(ReportDataActivity.this);
         LayoutInflater inflater = getLayoutInflater();
         View view = inflater.inflate(R.layout.pop_up_report_dni, null);
@@ -869,7 +891,7 @@ public class ReportDataActivity extends AppCompatActivity {
                             Log.e(TAG, " personal.getName() : " + personal.getName());
                             report_dni_layout.setError(null);
                             String fullname = personal.getName() + " " + personal.getLast();
-                            getDataFromFirebase(dni, fullname);
+                            getDataFromFirebase(dni, fullname, metodo);
                         } else {
                             Log.e(TAG, " personal.getName() : null ");
                             mDialog.dismiss();
