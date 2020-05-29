@@ -99,14 +99,14 @@ public class ReportDataActivity extends AppCompatActivity {
         img_reportdatepdf.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(ReportDataActivity.this, "1", Toast.LENGTH_SHORT).show();
+
                 selectDate("pdf");
             }
         });
         img_reportmailpdf.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(ReportDataActivity.this, "2", Toast.LENGTH_SHORT).show();
+
                 selectDate("email");
 
             }
@@ -115,7 +115,7 @@ public class ReportDataActivity extends AppCompatActivity {
         img_reportworkpdf.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(ReportDataActivity.this, "3", Toast.LENGTH_SHORT).show();
+
                 showPdfDialog();
 
             }
@@ -124,7 +124,7 @@ public class ReportDataActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 showEmailoDialog();
-                Toast.makeText(ReportDataActivity.this, "4", Toast.LENGTH_SHORT).show();
+
             }
         });
         img_reportexampdf.setOnClickListener(new View.OnClickListener() {
@@ -178,11 +178,13 @@ public class ReportDataActivity extends AppCompatActivity {
                                 MetricasPersonal metricasPersonal = item.getValue(MetricasPersonal.class);
                                 if (metricasPersonal != null) {
                                     String dateRegister = metricasPersonal.getDateRegister().substring(0, 10).trim();
-                                    Log.e(TAG, "120 dateRegister = " + dateRegister);
+                                    Log.e(TAG, " dateRegister = " + dateRegister);
                                     //Buscar dateRegister q coincide
                                     if (dateRegister.equalsIgnoreCase(seletedDate)) {
                                         // enlistar datos
                                         listaMetricasPersonales.add(metricasPersonal);
+
+
                                         // Buscar datos
                                         DatabaseReference ref_db_mina_personal = database.getReference(Common.db_mina_personal);
                                         DatabaseReference ref_mina = ref_db_mina_personal.child(Common.unidadTrabajoSelected.getNameUT());
@@ -197,13 +199,14 @@ public class ReportDataActivity extends AppCompatActivity {
                                                     Log.e(TAG, "tamaño de  personal  : " + listaPersonal.size());
                                                     Log.e(TAG, "metodo : " + metodo);
                                                     if (listaMetricasPersonales.size() == listaPersonal.size()) {
-
-
                                                         generarListaporFechaPdf(listaMetricasPersonales, listaPersonal, seletedDate, metodo);
                                                         Log.e(TAG, "se genero la lista pdf");
                                                     } else {
                                                         Log.e(TAG, "todavia no se  genero la lista pdf");
                                                     }
+
+
+
                                                 }
                                             }
 
@@ -214,10 +217,14 @@ public class ReportDataActivity extends AppCompatActivity {
                                             }
                                         });
 
+                                    } else {
+                                        mDialog.dismiss();
                                     }
 
 
                                 } else {
+                                    mDialog.dismiss();
+                                    Toast.makeText(ReportDataActivity.this, "No hay registro para esta fecha", Toast.LENGTH_SHORT).show();
                                     Log.e(TAG, "metricasPersonal : lista vacia");
                                 }
                             }
@@ -506,7 +513,6 @@ public class ReportDataActivity extends AppCompatActivity {
         Log.e(TAG, "tamaño listSaturacion : " + listSaturacion.size());
         Log.e(TAG, "tamaño listPulso : " + listPulso.size());
 
-
         int pageWidth = 1200;
         Date currentDate = new Date();
         //
@@ -775,9 +781,6 @@ public class ReportDataActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-
-    /////////
-
     public void showPdfDialog() {
         String metodo = "pdf";
         android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(ReportDataActivity.this);
@@ -820,6 +823,7 @@ public class ReportDataActivity extends AppCompatActivity {
                             if (personal.getLast() == null) {
                                 personal.setLast(" ");
                             }
+
                             Log.e(TAG, " personal.getName() : " + personal.getName());
                             report_dni_layout.setError(null);
                             String fullname = personal.getName() + " " + personal.getLast();
@@ -837,7 +841,7 @@ public class ReportDataActivity extends AppCompatActivity {
                         Log.e(TAG, "error : " + databaseError.getMessage());
                     }
                 });
-                Toast.makeText(this, "Documento generado", Toast.LENGTH_SHORT).show();
+
             }
         });
 
