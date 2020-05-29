@@ -96,51 +96,12 @@ public class ReportDataActivity extends AppCompatActivity {
         img_reportexampdf = findViewById(R.id.img_reportexampdf);
         img_reportexamemail = findViewById(R.id.img_reportexamemail);
         //
-        img_reportdatepdf.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                selectDate("pdf");
-            }
-        });
-        img_reportmailpdf.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                selectDate("email");
-
-            }
-        });
-        //
-        img_reportworkpdf.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                showPdfDialog();
-
-            }
-        });
-        img_reportworkgmail.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showEmailoDialog();
-
-            }
-        });
-        img_reportexampdf.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(ReportDataActivity.this, "5", Toast.LENGTH_SHORT).show();
-            }
-        });
-        img_reportexamemail.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(ReportDataActivity.this, "6 ", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-
+        img_reportdatepdf.setOnClickListener(v -> selectDate("pdf"));
+        img_reportmailpdf.setOnClickListener(v -> selectDate("email"));
+        img_reportworkpdf.setOnClickListener(v -> showPdfDialog());
+        img_reportworkgmail.setOnClickListener(v -> showEmailoDialog());
+        img_reportexampdf.setOnClickListener(v -> Toast.makeText(ReportDataActivity.this, "5", Toast.LENGTH_SHORT).show());
+        img_reportexamemail.setOnClickListener(v -> Toast.makeText(ReportDataActivity.this, "6 ", Toast.LENGTH_SHORT).show());
     }
 
     private void selectDate(String metodo) {
@@ -204,7 +165,6 @@ public class ReportDataActivity extends AppCompatActivity {
                                                     } else {
                                                         Log.e(TAG, "todavia no se  genero la lista pdf");
                                                     }
-
 
 
                                                 }
@@ -605,16 +565,16 @@ public class ReportDataActivity extends AppCompatActivity {
         double sumaPulse = 0;
         double promedioPulse = 0.0f;
         //-------------------------------------------------------------------------------
-
+        int size = listDate.size();
         // info trabajador
 
-        for (int i = 0; i < listDate.size(); i++) {
+        for (int i = 0; i < size; i++) {
             ysumname = ysumname + 50;
             cansas01.drawText(listDate.get(i), 170, ytextname + ysumname, myPaint);
         }
 
 
-        for (int i = 0; i < listTemperatura.size(); i++) {
+        for (int i = 0; i < size; i++) {
             ysum = ysum + 50;
             // Nro
             cansas01.drawText(i + 1 + " ", 80, ytext + ysum, myPaint);
@@ -626,6 +586,7 @@ public class ReportDataActivity extends AppCompatActivity {
             int valueSatura = Integer.parseInt(listSaturacion.get(i).toString());
 
             sumaSatura = sumaSatura + valueSatura;
+
             if (valueSatura >= 95 && valueSatura <= 99) {
                 so.setColor(Color.rgb(17, 230, 165));
             } else if (valueSatura >= 91 && valueSatura <= 94) {
@@ -652,26 +613,33 @@ public class ReportDataActivity extends AppCompatActivity {
             }
             cansas01.drawText(listPulso.get(i).toString(), 970, ytext + ysum, pulse);
             //
-
-
         }
 
-        /*
-        promedioTemp = sumaTemp / listTemperatura.size();
-        promedioSatura = sumaSatura / listTemperatura.size();
-        promedioPulse = sumaPulse / listTemperatura.size();
+        try {
+            promedioTemp = sumaTemp / size;
+            promedioSatura = sumaSatura / size;
+            promedioPulse = sumaPulse / size;
 
-        String cadTemp = String.valueOf(promedioTemp);
-        String cadSatura = String.valueOf(promedioSatura);
-        String cadPulse = String.valueOf(promedioPulse);
+            Log.e(TAG, "promedioTemp : " + promedioTemp);
+            Log.e(TAG, "promedioSatura : " + promedioSatura);
+            Log.e(TAG, "promedioPulse : " + promedioPulse);
 
-        cansas01.drawText("Promedio de los ultimos 15 días", 35, 1600, myPaint);
-        cansas01.drawText("Promedio temperatura : " + cadTemp.substring(0, 5), 35, 1650, myPaint);
-        cansas01.drawText("Promedio saturación  : " + cadSatura.substring(0, 5), 35, 1700, myPaint);
-        cansas01.drawText("Promedio pulso : " + cadPulse.substring(0, 5), 35, 1750, myPaint);
-        */
+            String cadTemp = String.valueOf(promedioTemp);
+            String cadSa = String.valueOf(promedioSatura);
+            String cadPulse = String.valueOf(promedioPulse);
 
-        //-------------------------------------------------------------------------------
+            Log.e(TAG, "cadTemp : " + cadTemp);
+            Log.e(TAG, "cadSa : " + cadSa);
+            Log.e(TAG, "cadPulse : " + cadPulse);
+            cansas01.drawText("Promedio de los ultimos " + size + " días", 35, 1600, myPaint);
+            cansas01.drawText("Promedio temperatura : " + cadTemp.substring(0, 4), 35, 1650, myPaint);
+            cansas01.drawText("Promedio SO2  : " + cadSa.substring(0, 4), 35, 1700, myPaint);
+            cansas01.drawText("Promedio pulso : " + cadPulse.substring(0, 4), 35, 1750, myPaint);
+            //-------------------------------------------------------------------------------
+        } catch (Exception e) {
+            Log.e("error promedio  :  ", " --> " + e.getMessage());
+        }
+
 
         pdfDocument.finishPage(myPage01);
         //---> Cierre
