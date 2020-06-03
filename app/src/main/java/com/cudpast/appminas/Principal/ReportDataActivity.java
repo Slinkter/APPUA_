@@ -24,7 +24,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cudpast.appminas.Common.Common;
@@ -55,30 +54,23 @@ import java.util.TimeZone;
 public class ReportDataActivity extends AppCompatActivity {
 
     public static final String TAG = ReportDataActivity.class.getSimpleName();
+    //
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
-
     private DatabaseReference ref_datos_paciente;
     private List<MetricasPersonal> listaMetricasPersonales;
     private List<Personal> listaPersonal;
-    private Button btn_selectDate, btn_viewPdf, btn_viewPdfDni;
-    private TextView tv_show_date;
-    private MaterialDatePicker.Builder dialogCalendar;
-    private MaterialDatePicker materialDatePicker;
+    private MaterialDatePicker mdp;
+    private MaterialDatePicker.Builder builder;
+    //
     private String seletedDate;
     private ProgressDialog mDialog;
-
-    private TextInputLayout dni_metrica_layout;
-    private TextInputEditText dni_metrica;
-    private TextView show_dni_metricas;
-
-
+    private ImageView img_reportdatepdf, img_reportmailpdf, img_reportworkpdf, img_reportworkgmail, img_reportexampdf, img_reportexamemail;
+    //
     List<String> listDate;
     List<String> listTemperatura;
     List<Integer> listSaturacion;
     List<Integer> listPulso;
     //
-    private ImageView img_reportdatepdf, img_reportmailpdf, img_reportworkpdf, img_reportworkgmail, img_reportexampdf, img_reportexamemail;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,6 +90,7 @@ public class ReportDataActivity extends AppCompatActivity {
         //
         img_reportdatepdf.setOnClickListener(v -> selectDate("pdf"));
         img_reportmailpdf.setOnClickListener(v -> selectDate("email"));
+        //
         img_reportworkpdf.setOnClickListener(v -> showPdfDialog());
         img_reportworkgmail.setOnClickListener(v -> showEmailoDialog());
         img_reportexampdf.setOnClickListener(v -> Toast.makeText(ReportDataActivity.this, "5", Toast.LENGTH_SHORT).show());
@@ -105,103 +98,98 @@ public class ReportDataActivity extends AppCompatActivity {
     }
 
     private void selectDate(String metodo) {
-        dialogCalendar = MaterialDatePicker.Builder.datePicker();
-        dialogCalendar.setTitleText("Seleccionar Fecha");
-        materialDatePicker = dialogCalendar.build();
-        materialDatePicker.show(getSupportFragmentManager(), "DATE_PICKER");
-        materialDatePicker.addOnPositiveButtonClickListener((MaterialPickerOnPositiveButtonClickListener<Long>) dateSelected -> {
-            //
-            mDialog = new ProgressDialog(ReportDataActivity.this);
-            mDialog.setMessage("Obteniendo datos ...");
-            mDialog.show();
-
-            // Fecha escogida
-            seletedDate = timestampToString(dateSelected);
-            // inicializar lista vacias para guardar datos
-            listaMetricasPersonales = new ArrayList<>();
-            listaPersonal = new ArrayList<>();
-            // Conexion con la base de datos
-            ref_datos_paciente = FirebaseDatabase.getInstance().getReference(Common.db_mina_personal_data).child(Common.unidadTrabajoSelected.getNameUT());
-            ref_datos_paciente.keepSynced(true);
-            ref_datos_paciente.orderByKey();
-            ref_datos_paciente.addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    for (DataSnapshot snapshotDatosPersonales : dataSnapshot.getChildren()) {
-                        // --> DNI del Personal
-                        String dniPersonal = snapshotDatosPersonales.getKey();
-                        Log.e(TAG, "dniPersonal : " + dniPersonal);
-                        if (dniPersonal.isEmpty()) {
-                            Log.e(TAG, "campo vacio  : " + null);
-                        } else {
-                            // --> Lista de snapshotDatosPersonales
-                            for (DataSnapshot item : snapshotDatosPersonales.getChildren()) {
-                                MetricasPersonal metricasPersonal = item.getValue(MetricasPersonal.class);
-                                if (metricasPersonal != null) {
-                                    String dateRegister = metricasPersonal.getDateRegister().substring(0, 10).trim();
-                                    Log.e(TAG, " dateRegister = " + dateRegister);
-                                    //Buscar dateRegister q coincide
-                                    if (dateRegister.equalsIgnoreCase(seletedDate)) {
-                                        // enlistar datos
-                                        listaMetricasPersonales.add(metricasPersonal);
-
-
-                                        // Buscar datos
-                                        DatabaseReference ref_db_mina_personal = database.getReference(Common.db_mina_personal);
-                                        DatabaseReference ref_mina = ref_db_mina_personal.child(Common.unidadTrabajoSelected.getNameUT());
-                                        ref_mina.child(dniPersonal).addListenerForSingleValueEvent(new ValueEventListener() {
-                                            @Override
-                                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                                Personal personal = dataSnapshot.getValue(Personal.class);
-                                                if (personal != null) {
-                                                    listaPersonal.add(personal);
-                                                    Log.e(TAG, listaPersonal.size() + " personal : " + personal.getName());
-                                                    Log.e(TAG, "tamaño de  metricas  : " + listaMetricasPersonales.size());
-                                                    Log.e(TAG, "tamaño de  personal  : " + listaPersonal.size());
-                                                    Log.e(TAG, "metodo : " + metodo);
-                                                    if (listaMetricasPersonales.size() == listaPersonal.size()) {
-                                                        generarListaporFechaPdf(listaMetricasPersonales, listaPersonal, seletedDate, metodo);
-                                                        Log.e(TAG, "se genero la lista pdf");
-                                                    } else {
-                                                        Log.e(TAG, "todavia no se  genero la lista pdf");
+        // todo : cuando no hay registro debe mostrar un mensaje q no hay datos
+        builder = MaterialDatePicker.Builder.datePicker();
+        builder.setTitleText("Seleccionar Fecha");
+        mdp = builder.build();
+        mdp.show(getSupportFragmentManager(), "DATE_PICKER");
+        mdp.addOnPositiveButtonClickListener(
+                (MaterialPickerOnPositiveButtonClickListener<Long>) dateSelected -> {
+                    //
+                    mDialog = new ProgressDialog(ReportDataActivity.this);
+                    mDialog.setMessage("Obteniendo datos ...");
+                    mDialog.show();
+                    // Fecha escogida
+                    seletedDate = timeStampToString(dateSelected);
+                    // inicializar lista vacias para guardar datos
+                    listaMetricasPersonales = new ArrayList<>();
+                    listaPersonal = new ArrayList<>();
+                    // Conexion con la base de datos
+                    ref_datos_paciente = FirebaseDatabase.getInstance().getReference(Common.db_mina_personal_data).child(Common.unidadTrabajoSelected.getNameUT());
+                    ref_datos_paciente.keepSynced(true);
+                    ref_datos_paciente.orderByKey();
+                    ref_datos_paciente.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            for (DataSnapshot snapshotDatosPersonales : dataSnapshot.getChildren()) {
+                                // --> DNI del Personal
+                                String dniPersonal = snapshotDatosPersonales.getKey();
+                                Log.e(TAG, "dniPersonal : " + dniPersonal);
+                                //
+                                if (dniPersonal != null) {
+                                    // --> Lista de DatosPersonales
+                                    for (DataSnapshot item : snapshotDatosPersonales.getChildren()) {
+                                        String posiblefecha = item.getKey();
+                                        Log.e(TAG, " posiblefecha = " + posiblefecha);
+                                        MetricasPersonal metricasPersonal = item.getValue(MetricasPersonal.class);
+                                        if (metricasPersonal != null) {
+                                            String dateRegister = metricasPersonal.getDateRegister().substring(0, 10).trim();
+                                            Log.e(TAG, " dateRegister = " + dateRegister);
+                                            //Buscar dateRegister q coincide
+                                            if (dateRegister.equalsIgnoreCase(seletedDate)) {
+                                                // enlistar datos
+                                                listaMetricasPersonales.add(metricasPersonal);
+                                                // Buscar datos
+                                                DatabaseReference ref_db_mina_personal = database.getReference(Common.db_mina_personal);
+                                                DatabaseReference ref_mina = ref_db_mina_personal.child(Common.unidadTrabajoSelected.getNameUT());
+                                                ref_mina.child(dniPersonal).addListenerForSingleValueEvent(new ValueEventListener() {
+                                                    @Override
+                                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                        Personal personal = dataSnapshot.getValue(Personal.class);
+                                                        if (personal != null) {
+                                                            listaPersonal.add(personal);
+                                                            Log.e(TAG, listaPersonal.size() + " personal : " + personal.getName());
+                                                            Log.e(TAG, "tamaño de  metricas  : " + listaMetricasPersonales.size());
+                                                            Log.e(TAG, "tamaño de  personal  : " + listaPersonal.size());
+                                                            Log.e(TAG, "metodo : " + metodo);
+                                                            if (listaMetricasPersonales.size() == listaPersonal.size()) {
+                                                                generarListaporFechaPdf(listaMetricasPersonales, listaPersonal, seletedDate, metodo);
+                                                                Log.e(TAG, "se genero la lista pdf");
+                                                            } else {
+                                                                Log.e(TAG, "todavia no se  genero la lista pdf");
+                                                            }
+                                                        }
                                                     }
 
+                                                    @Override
+                                                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                                                        Log.e(TAG, "error : " + databaseError.getMessage());
+                                                    }
+                                                });
 
-                                                }
+                                            } else {
+                                                mDialog.dismiss();
                                             }
-
-                                            @Override
-                                            public void onCancelled(@NonNull DatabaseError databaseError) {
-                                                Log.e(TAG, "error : " + databaseError.getMessage());
-
-                                            }
-                                        });
-
-                                    } else {
-                                        mDialog.dismiss();
+                                        } else {
+                                            mDialog.dismiss();
+                                            Toast.makeText(ReportDataActivity.this, "No hay registro para esta fecha", Toast.LENGTH_SHORT).show();
+                                            Log.e(TAG, "metricasPersonal : lista vacia");
+                                        }
                                     }
-
-
                                 } else {
-                                    mDialog.dismiss();
-                                    Toast.makeText(ReportDataActivity.this, "No hay registro para esta fecha", Toast.LENGTH_SHORT).show();
-                                    Log.e(TAG, "metricasPersonal : lista vacia");
+                                    Log.e(TAG, " dni es " + null);
                                 }
+
                             }
                         }
-                    }
-                }
 
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
-                    Log.e(TAG, "error : " + databaseError.getMessage());
-                }
-            });
-        });
-
-
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+                            Log.e(TAG, "error : " + databaseError.getMessage());
+                        }
+                    });
+                });
     }
-
 
     private void generarListaporFechaPdf(List<MetricasPersonal> listMetricasPersonal, List<Personal> listPersonal, String seletedDate, String metodo) {
         //
@@ -667,7 +655,6 @@ public class ReportDataActivity extends AppCompatActivity {
 
     }
 
-
     private void getDataFromFirebase(String dni, String nombre, String metodo) {
         Log.e(TAG, "-----> funcion  : getDataFromFirebase");
         listDate = new ArrayList<String>();
@@ -723,13 +710,12 @@ public class ReportDataActivity extends AppCompatActivity {
 
     }
 
-    private String timestampToString(long time) {
+    private String timeStampToString(long time) {
         Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
         calendar.setTimeInMillis(time);
         String date = DateFormat.format("yyyy-MM-dd", calendar).toString();
         return date;
     }
-
 
     private void sendEmail() {
         Log.e(TAG, "sendEmail()  2 ");
