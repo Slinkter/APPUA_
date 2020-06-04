@@ -287,7 +287,6 @@ public class ReportDataActivity extends AppCompatActivity {
             //metricas
             for (int i = 0; i < listMetricasPersonal.size(); i++) {
                 cansas01.drawText(i + 1 + ".", 50, ytext + ysum, myPaint);
-
                 cansas01.drawText(listMetricasPersonal.get(i).getTempurature().toString(), 760, ytext + ysum, myPaint);
 
                 int valueSatura = Integer.parseInt(listMetricasPersonal.get(i).getSo2().toString());
@@ -333,7 +332,7 @@ public class ReportDataActivity extends AppCompatActivity {
             }
             pdfDocument.close();
             //-------------------------------------------------------------------------------
-        } else if (listMetricasPersonal.size() >= 27) {
+        } else if (listMetricasPersonal.size() >= 27  && listMetricasPersonal.size() <= 65) {
             Toast.makeText(this, "pagina 2", Toast.LENGTH_SHORT).show();
             //-------------------------------------------------------------------------------
             //---> Pagina 01 : [0-30]
@@ -424,8 +423,7 @@ public class ReportDataActivity extends AppCompatActivity {
                 canvas2.drawText(listPersonal.get(i).getName().toString(), 340, 30 + x2sum, myPaint);
                 x2sum = x2sum + 50;
             }
-
-
+            //
             pdfDocument.finishPage(myPage2);
             //---> Cierre
             File file = new File(Environment.getExternalStorageDirectory(), "/arsi21.pdf");
@@ -434,10 +432,16 @@ public class ReportDataActivity extends AppCompatActivity {
 
             } catch (IOException e) {
                 e.printStackTrace();
-
             }
-
             pdfDocument.close();
+        } else if (listMetricasPersonal.size() >= 66) {
+            //---> Pagina 03 : [28-70]
+
+
+
+
+
+
 
         } else {
             Log.e(TAG, "ERROR problemas de index");
