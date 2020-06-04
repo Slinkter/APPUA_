@@ -71,6 +71,7 @@ public class ReportDataActivity extends AppCompatActivity {
     List<Integer> listSaturacion;
     List<Integer> listPulso;
     //
+    int contador = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,6 +115,7 @@ public class ReportDataActivity extends AppCompatActivity {
             listaMetricasPersonales = new ArrayList<>();
             listaPersonal = new ArrayList<>();
             // Conexion con la base de datos
+
             ref_datos_paciente = FirebaseDatabase.getInstance().getReference(Common.db_mina_personal_data).child(Common.unidadTrabajoSelected.getNameUT());
             ref_datos_paciente.keepSynced(true);
             ref_datos_paciente.orderByKey();
@@ -127,33 +129,26 @@ public class ReportDataActivity extends AppCompatActivity {
                         //
                         if (dniPersonal != null) {
                             // --> Lista de DatosPersonales
+                            int contador = 0;
                             for (DataSnapshot item : snapshotDatosPersonales.getChildren()) {
                                 String posiblefecha = item.getKey().substring(0, 10).trim();
-
-
+                                // --> test de fechas
+                                Log.e(TAG, " ============");
                                 Log.e(TAG, " seletedDate = " + seletedDate); // yyyy-MM-dd <-- formato desde Calendar
-                                Log.e(TAG, " posiblefecha = " + posiblefecha);
-
+                                Log.e(TAG, " registerDate = " + posiblefecha);
                                 boolean checkdate = seletedDate.toString().equalsIgnoreCase(posiblefecha);
                                 boolean checkfecha = posiblefecha.toString().equalsIgnoreCase(seletedDate);
-
-
-                                Log.e(TAG, "test 1 = " + checkdate);
-                                Log.e(TAG, "test 2 = " + checkfecha);
-
-                                if (checkdate){
-
-                                }
-
-
-                                MetricasPersonal metricasPersonal = item.getValue(MetricasPersonal.class);
-                                if (metricasPersonal != null) {
-                                    String dateRegister = metricasPersonal.getDateRegister().substring(0, 10).trim();
-                                    Log.e(TAG, " dateRegister = " + dateRegister);
-                                    //Buscar dateRegister q coincide
-                                    if (dateRegister.equalsIgnoreCase(seletedDate)) {
-                                        // enlistar datos
-                                        listaMetricasPersonales.add(metricasPersonal);
+                                Log.e(TAG, " test 1 = " + checkdate);
+                                Log.e(TAG, " test 2 = " + checkfecha);
+                                //
+                                // SI - Coincide las fechas --> ejecutar
+                                if (checkdate) {
+                                    contador++;
+                                    Log.e(TAG, "contador = " + contador);
+                                    MetricasPersonal data = item.getValue(MetricasPersonal.class);
+                                    if (data != null) {
+                                        // Enlistar datos
+                                        listaMetricasPersonales.add(data);
                                         // Buscar datos
                                         DatabaseReference ref_db_mina_personal = database.getReference(Common.db_mina_personal);
                                         DatabaseReference ref_mina = ref_db_mina_personal.child(Common.unidadTrabajoSelected.getNameUT());
@@ -163,7 +158,7 @@ public class ReportDataActivity extends AppCompatActivity {
                                                 Personal personal = dataSnapshot.getValue(Personal.class);
                                                 if (personal != null) {
                                                     listaPersonal.add(personal);
-                                                    Log.e(TAG, listaPersonal.size() + " personal : " + personal.getName());
+                                                    Log.e(TAG, listaPersonal.size() + " . " + personal.getName());
                                                     Log.e(TAG, "tamaño de  metricas  : " + listaMetricasPersonales.size());
                                                     Log.e(TAG, "tamaño de  personal  : " + listaPersonal.size());
                                                     Log.e(TAG, "metodo : " + metodo);
@@ -181,20 +176,14 @@ public class ReportDataActivity extends AppCompatActivity {
                                                 Log.e(TAG, "error : " + databaseError.getMessage());
                                             }
                                         });
-
-                                    } else {
-                                        mDialog.dismiss();
                                     }
-                                } else {
-                                    mDialog.dismiss();
-                                    Toast.makeText(ReportDataActivity.this, "No hay registro para esta fecha", Toast.LENGTH_SHORT).show();
-                                    Log.e(TAG, "metricasPersonal : lista vacia");
                                 }
-                            }
-                        } else {
-                            Log.e(TAG, " dni es " + null);
-                        }
 
+
+                            }
+
+
+                        }
                     }
                 }
 
@@ -203,6 +192,8 @@ public class ReportDataActivity extends AppCompatActivity {
                     Log.e(TAG, "error : " + databaseError.getMessage());
                 }
             });
+            //
+
         });
     }
 
@@ -284,7 +275,6 @@ public class ReportDataActivity extends AppCompatActivity {
         int ytextname = 400;
         int ysumname = 100;
         //
-
         Paint temp = new Paint();
         Paint so = new Paint();
         so.setTextSize(25f);
@@ -403,7 +393,6 @@ public class ReportDataActivity extends AppCompatActivity {
                 canvas2.drawText(i + ".", 50, 30 + y2sum, myPaint);
 
                 canvas2.drawText(listMetricasPersonal.get(i).getTempurature().toString(), 760, 30 + y2sum, myPaint);
-
                 int valueSatura = Integer.parseInt(listMetricasPersonal.get(i).getSo2().toString());
                 if (valueSatura >= 95 && valueSatura <= 99) {
                     so.setColor(Color.rgb(17, 230, 165));
