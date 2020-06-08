@@ -71,7 +71,6 @@ public class ReportDataActivity extends AppCompatActivity {
     List<Integer> listSaturacion;
     List<Integer> listPulso;
     //
-    int contador = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,6 +93,7 @@ public class ReportDataActivity extends AppCompatActivity {
         //
         img_reportworkpdf.setOnClickListener(v -> showPdfDialog());
         img_reportworkgmail.setOnClickListener(v -> showEmailoDialog());
+        //
         img_reportexampdf.setOnClickListener(v -> Toast.makeText(ReportDataActivity.this, "5", Toast.LENGTH_SHORT).show());
         img_reportexamemail.setOnClickListener(v -> Toast.makeText(ReportDataActivity.this, "6 ", Toast.LENGTH_SHORT).show());
     }
@@ -1055,7 +1055,6 @@ public class ReportDataActivity extends AppCompatActivity {
 
 
     }
-
 
     //===============================================================================
 

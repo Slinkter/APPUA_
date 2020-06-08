@@ -8,7 +8,6 @@
     android:fitsSystemWindows="false"
     tools:context=".Principal.ReportDataActivity">
 
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -22,7 +21,7 @@
             android:layout_marginBottom="20dp"
             android:fontFamily="@font/headland_one"
             android:gravity="center"
-            android:text="Consultar datos "
+            android:text="Consultar Datos"
             android:textAllCaps="true"
             android:textSize="22sp"
             android:textStyle="bold" />
@@ -31,9 +30,10 @@
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:cardCornerRadius="25dp"
-            app:cardElevation="8dp"
-            app:cardUseCompatPadding="true">
+            android:layout_margin="10dp"
+            app:cardBackgroundColor="@color/bg_color_cardview"
+            app:cardCornerRadius="15dp"
+            app:cardElevation="8dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -51,9 +51,10 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="10dp"
                     android:layout_weight="3"
+                    android:fontFamily="@font/headland_one"
                     android:gravity="center"
-                    android:text="Reporte \npor fecha "
-                    android:textSize="15dp" />
+                    android:text="Consultar \npor fecha "
+                    android:textSize="13dp" />
 
                 <ImageView
                     android:id="@+id/img_reportdatepdf"
@@ -80,9 +81,10 @@
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:cardCornerRadius="25dp"
-            app:cardElevation="8dp"
-            app:cardUseCompatPadding="true">
+            android:layout_margin="10dp"
+            app:cardBackgroundColor="@color/bg_color_cardview"
+            app:cardCornerRadius="15dp"
+            app:cardElevation="8dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -100,9 +102,10 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="10dp"
                     android:layout_weight="3"
+                    android:fontFamily="@font/headland_one"
                     android:gravity="center"
-                    android:text="Reporte \npor trabajador "
-                    android:textSize="15dp" />
+                    android:text="Consultar \npor trabajador "
+                    android:textSize="13dp" />
 
                 <ImageView
                     android:id="@+id/img_reportworkpdf"
@@ -128,12 +131,12 @@
 
 
         <com.google.android.material.card.MaterialCardView
-            android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:cardCornerRadius="25dp"
-            app:cardElevation="8dp"
-            app:cardUseCompatPadding="true">
+            android:layout_margin="10dp"
+            app:cardBackgroundColor="@color/bg_color_cardview"
+            app:cardCornerRadius="15dp"
+            app:cardElevation="8dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -151,9 +154,10 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="10dp"
                     android:layout_weight="3"
+                    android:fontFamily="@font/headland_one"
                     android:gravity="center"
-                    android:text="Reporte \npor examen "
-                    android:textSize="15dp" />
+                    android:text="Consultar \npor prueba rápida "
+                    android:textSize="13dp" />
 
                 <ImageView
                     android:id="@+id/img_reportexampdf"

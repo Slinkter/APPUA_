@@ -23,4 +23,7 @@
     <color name="rango_inadecuado">#FF0000</color>
 
 
+    <color name="bg_color_cardview">#AAA8A8</color>
+
+
 </resources>
