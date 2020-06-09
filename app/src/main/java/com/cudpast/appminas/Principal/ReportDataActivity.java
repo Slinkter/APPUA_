@@ -94,7 +94,7 @@ public class ReportDataActivity extends AppCompatActivity {
         img_reportworkpdf.setOnClickListener(v -> showPdfDialog());
         img_reportworkgmail.setOnClickListener(v -> showEmailoDialog());
         //
-        img_reportexampdf.setOnClickListener(v -> Toast.makeText(ReportDataActivity.this, "5", Toast.LENGTH_SHORT).show());
+        img_reportexampdf.setOnClickListener(v -> showTestEmailDNI());
         img_reportexamemail.setOnClickListener(v -> Toast.makeText(ReportDataActivity.this, "6 ", Toast.LENGTH_SHORT).show());
     }
 
@@ -1475,6 +1475,13 @@ public class ReportDataActivity extends AppCompatActivity {
         btn_report_dni_close.setOnClickListener(v -> dialog.dismiss());
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.show();
+    }
+
+    //===============================================================================
+
+    public void showTestEmailDNI() {
+        // todo : falta hacer para ver las pruebas rapida
+        
     }
 
 
