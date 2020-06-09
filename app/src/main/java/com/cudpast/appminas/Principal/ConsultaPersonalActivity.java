@@ -125,7 +125,7 @@ public class ConsultaPersonalActivity extends AppCompatActivity {
                     MetricasPersonal metricasPersonal = snapshot.getValue(MetricasPersonal.class);
                     listtemp.add(metricasPersonal);
                 }
-                //todo : adapterRV
+
                 AdapterDatosPersonales adapter = new AdapterDatosPersonales(getApplicationContext(), listtemp);
                 adapter.setOnItemClickListener(new AdapterDatosPersonales.OnItemClickListener() {
                     @Override
