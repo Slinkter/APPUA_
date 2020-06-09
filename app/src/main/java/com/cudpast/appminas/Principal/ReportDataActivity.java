@@ -186,6 +186,12 @@ public class ReportDataActivity extends AppCompatActivity {
 
                             }
 
+                            // preguntar
+
+                            if (listaPersonal.size() <= 1) {
+                                mDialog.dismiss();
+                            }
+
 
                         }
                     }
