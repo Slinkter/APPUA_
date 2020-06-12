@@ -278,15 +278,15 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
                 myPaint.setTextAlign(Paint.Align.LEFT);
                 myPaint.setStyle(Paint.Style.FILL);
 
-                cansas01.drawText("Nro.", 40, 415, myPaint);
-                cansas01.drawText("DNI", 180, 415, myPaint);
-                cansas01.drawText("NOMBRE", 390, 415, myPaint);
+                cansas01.drawText("Nro.", 50, 415, myPaint);
+                cansas01.drawText("DNI", 200, 415, myPaint);
+                cansas01.drawText("NOMBRES Y APELLIDOS", 330, 415, myPaint);
                 cansas01.drawText("TEMPERATURA", 680, 415, myPaint);
                 cansas01.drawText("SO2.", 930, 415, myPaint);
                 cansas01.drawText("PULSO", 1070, 415, myPaint);
 
                 cansas01.drawLine(140, 380, 140, 430, myPaint);
-                cansas01.drawLine(340, 380, 340, 430, myPaint);
+                cansas01.drawLine(300, 380, 300, 430, myPaint);
                 cansas01.drawLine(660, 380, 660, 430, myPaint);
                 cansas01.drawLine(880, 380, 880, 430, myPaint);
                 cansas01.drawLine(1030, 380, 1030, 430, myPaint);
@@ -309,7 +309,7 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
 
                     for (int i = 0; i < listMetricasPersonal.size(); i++) {
                         //Numeracion
-                        cansas01.drawText(i + 1 + ".", 50, ytext + ysum, myPaint);
+                        cansas01.drawText(i + 1 + ".", 70, ytext + ysum, myPaint);
                         // temperatura
                         cansas01.drawText(listMetricasPersonal.get(i).getTempurature().toString(), 760, ytext + ysum, myPaint);
                         //Saturacion
@@ -342,7 +342,10 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
                     // info trabajador
                     for (int i = 0; i < listPersonal.size(); i++) {
                         cansas01.drawText(listPersonal.get(i).getDni().toString(), 170, ytextname + ysumname, myPaint);
-                        cansas01.drawText(listPersonal.get(i).getName().toString(), 340, ytextname + ysumname, myPaint);
+                        if (listPersonal.get(i).getLast() == null) {
+                            listPersonal.get(i).setLast("");
+                        }
+                        cansas01.drawText(listPersonal.get(i).getName().toString() + " " + listPersonal.get(i).getLast(), 340, ytextname + ysumname, myPaint);
                         ysumname = ysumname + 50;
                     }
                     //
