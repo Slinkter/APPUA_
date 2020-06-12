@@ -1,4 +1,4 @@
-package com.cudpast.appminas.Principal;
+package com.cudpast.appminas.Principal.Activities.Support;
 
 import androidx.appcompat.app.AppCompatActivity;
 

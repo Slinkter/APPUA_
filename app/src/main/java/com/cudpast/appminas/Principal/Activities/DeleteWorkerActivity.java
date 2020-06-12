@@ -1,4 +1,4 @@
-package com.cudpast.appminas.Principal;
+package com.cudpast.appminas.Principal.Activities;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,6 +19,7 @@ import android.widget.Toast;
 
 import com.cudpast.appminas.Common.Common;
 import com.cudpast.appminas.Model.Personal;
+import com.cudpast.appminas.Principal.AllActivity;
 import com.cudpast.appminas.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -47,7 +48,7 @@ public class DeleteWorkerActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         getSupportActionBar().setTitle("Dar de baja a  trabajador");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        setContentView(R.layout.activity_delete_minero);
+        setContentView(R.layout.activity_delete_worker);
 
 
         delete_personal_dni_layout = findViewById(R.id.delete_personal_dni_layout);

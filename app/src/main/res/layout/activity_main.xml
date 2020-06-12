@@ -29,20 +29,23 @@
             android:textStyle="bold" />
 
 
-
         <Spinner
-            android:background="@drawable/card_edge_spinner"
             android:id="@+id/spinner_unidadMinera"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-         />
+            android:background="@drawable/card_edge_data"
+            android:fontFamily="@font/headland_one" />
 
         <Button
-            android:layout_margin="20dp"
+
             android:id="@+id/btnContinuar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Continuar" />
+            android:layout_margin="20dp"
+            android:textSize="16dp"
+            android:fontFamily="@font/headland_one"
+            android:text="Aceptar"
+            android:textStyle="bold" />
     </LinearLayout>
 
 

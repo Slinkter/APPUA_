@@ -25,34 +25,34 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".Principal.ShowPdfActivity"
-            android:parentActivityName=".Principal.ReportDataActivity"
+            android:name=".Principal.Activities.Support.ShowPdfActivity"
+            android:parentActivityName=".Principal.Activities.ReportDataActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".Principal.ReportDataActivity"
+            android:name=".Principal.Activities.ReportDataActivity"
             android:parentActivityName=".Principal.AllActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".Principal.VisualActivity"
+            android:name=".Principal.Activities.VisualActivity"
             android:parentActivityName=".Principal.AllActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".Principal.AllActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".Principal.AddWorkerActivity"
+            android:name=".Principal.Activities.AddWorkerActivity"
             android:parentActivityName=".Principal.AllActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".Principal.InputDataPersonalActivity"
+            android:name=".Principal.Activities.InputDataPersonalActivity"
             android:parentActivityName=".Principal.AllActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".Principal.ConsultaPersonalActivity"
+            android:name=".Principal.Activities.ConsultaPersonalActivity"
             android:parentActivityName=".Principal.AllActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".Principal.DeleteWorkerActivity"
+            android:name=".Principal.Activities.DeleteWorkerActivity"
             android:parentActivityName=".Principal.AllActivity"
             android:screenOrientation="portrait" />
         <activity

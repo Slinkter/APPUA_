@@ -1,4 +1,4 @@
-package com.cudpast.appminas.Principal;
+package com.cudpast.appminas.Principal.Activities;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;

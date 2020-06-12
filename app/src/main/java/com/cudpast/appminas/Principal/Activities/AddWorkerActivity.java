@@ -1,4 +1,4 @@
-package com.cudpast.appminas.Principal;
+package com.cudpast.appminas.Principal.Activities;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import com.cudpast.appminas.Common.Common;
 import com.cudpast.appminas.Model.Personal;
+import com.cudpast.appminas.Principal.AllActivity;
 import com.cudpast.appminas.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -59,7 +60,7 @@ public class AddWorkerActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_minero);
-        getSupportActionBar().setTitle("Registra a un trabajador ");
+        getSupportActionBar().setTitle("Registrar  trabajador ");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         //
         mAuth = FirebaseAuth.getInstance();
@@ -134,7 +135,7 @@ public class AddWorkerActivity extends AppCompatActivity {
 
 
             mDialog = new ProgressDialog(AddWorkerActivity.this);
-            mDialog.setMessage("Registrando trabajador " + name.toString() + " " + last.toString());
+            mDialog.setMessage(" Registrando trabajador ");
             mDialog.show();
 
             ref_db_personal
@@ -144,9 +145,9 @@ public class AddWorkerActivity extends AppCompatActivity {
                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {
-                            Toast.makeText(AddWorkerActivity.this, "El trabajador " + name.toString() + " " + last.toString() + "  ha sido registrado", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(AddWorkerActivity.this, "El trabajador ha sido registrado ", Toast.LENGTH_SHORT).show();
                             gotoMAin();
-                            mDialog.dismiss();
+
                         }
                     })
                     .addOnFailureListener(new OnFailureListener() {
@@ -164,10 +165,12 @@ public class AddWorkerActivity extends AppCompatActivity {
     }
 
     private void gotoMAin() {
+        mDialog.dismiss();
         Intent intent = new Intent(AddWorkerActivity.this, AllActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
         finish();
+
     }
 
     //Validacion

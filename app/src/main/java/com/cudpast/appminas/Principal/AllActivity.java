@@ -9,6 +9,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cudpast.appminas.Common.Common;
+import com.cudpast.appminas.Principal.Activities.AddWorkerActivity;
+import com.cudpast.appminas.Principal.Activities.DeleteWorkerActivity;
+import com.cudpast.appminas.Principal.Activities.InputDataPersonalActivity;
+import com.cudpast.appminas.Principal.Activities.ReportDataActivity;
 import com.cudpast.appminas.R;
 
 public class AllActivity extends AppCompatActivity {
@@ -22,11 +26,8 @@ public class AllActivity extends AppCompatActivity {
         setContentView(R.layout.activity_all);
         tv_selectedunidadminera = findViewById(R.id.tv_selectedunidadminera);
         tv_selectedunidadminera.setText(Common.unidadTrabajoSelected.getAliasUT());
-
         currentuser = findViewById(R.id.currentuser);
         currentuser.setText(Common.currentUser.getReg_name());
-
-
     }
 
     @Override

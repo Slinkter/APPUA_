@@ -43,6 +43,7 @@
                     android:id="@+id/report_dni"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:fontFamily="@font/headland_one"
                     android:inputType="number"
                     android:maxLength="8" />
 
@@ -62,7 +63,8 @@
                     android:layout_gravity="center"
                     android:layout_margin="6dp"
                     android:layout_weight="1"
-                    android:text="Consultar"
+                    android:fontFamily="@font/headland_one"
+                    android:text="Buscar"
                     android:visibility="visible" />
 
                 <Button
@@ -73,6 +75,7 @@
                     android:layout_gravity="center"
                     android:layout_margin="6dp"
                     android:layout_weight="1"
+                    android:fontFamily="@font/headland_one"
                     android:text="Salir"
                     android:visibility="visible" />
 

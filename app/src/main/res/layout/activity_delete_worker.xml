@@ -6,7 +6,7 @@
     android:layout_height="fill_parent"
     android:layout_gravity="center"
     android:fitsSystemWindows="false"
-    tools:context=".Principal.DeleteWorkerActivity">
+    tools:context=".Principal.Activities.DeleteWorkerActivity">
 
 
     <LinearLayout
@@ -52,6 +52,7 @@
                     android:id="@+id/delete_personal_dni"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:fontFamily="@font/headland_one"
                     android:inputType="number"
                     android:maxLength="8" />
 
@@ -63,12 +64,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:fontFamily="@font/headland_one"
                 android:text="consultar" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
+                android:fontFamily="@font/headland_one"
                 android:text="Datos del trabajador "
                 android:textStyle="bold" />
 
@@ -77,6 +80,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
+                android:fontFamily="@font/headland_one"
                 android:text="nombre del trabajador" />
 
 

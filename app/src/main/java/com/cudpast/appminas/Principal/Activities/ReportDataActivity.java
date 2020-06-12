@@ -1,4 +1,4 @@
-package com.cudpast.appminas.Principal;
+package com.cudpast.appminas.Principal.Activities;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -24,13 +24,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.QuickContactBadge;
 import android.widget.Toast;
 
-import com.cudpast.appminas.Adapter.AdapterDatosPersonales;
 import com.cudpast.appminas.Common.Common;
 import com.cudpast.appminas.Model.MetricasPersonal;
 import com.cudpast.appminas.Model.Personal;
+import com.cudpast.appminas.Principal.Activities.Support.ShowPdfActivity;
 import com.cudpast.appminas.R;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;

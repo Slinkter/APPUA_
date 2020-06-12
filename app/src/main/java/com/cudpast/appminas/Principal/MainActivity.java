@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
 
         UnidadTrabajo e0 = new UnidadTrabajo();
         e0.setNameUT("SeleccioneUnidad");
-        e0.setAliasUT("Seleccione Unidad");
+        e0.setAliasUT("Buscar Unidad");
 
         UnidadTrabajo e1 = new UnidadTrabajo();
         e1.setNameUT("COPE");

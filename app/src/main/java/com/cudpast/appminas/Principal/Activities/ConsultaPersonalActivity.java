@@ -1,4 +1,4 @@
-package com.cudpast.appminas.Principal;
+package com.cudpast.appminas.Principal.Activities;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -52,7 +52,7 @@ public class ConsultaPersonalActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         getSupportActionBar().setTitle("Consulta Datos");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        setContentView(R.layout.activity_consulta_minero);
+        setContentView(R.layout.activity_query_worker);
         //
         consulta_dni_layout = findViewById(R.id.consulta_dni_layout);
         consulta_dni = findViewById(R.id.consulta_dni);

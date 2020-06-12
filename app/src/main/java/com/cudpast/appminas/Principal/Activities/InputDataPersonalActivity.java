@@ -1,4 +1,4 @@
-package com.cudpast.appminas.Principal;
+package com.cudpast.appminas.Principal.Activities;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,6 +18,7 @@ import android.widget.Toast;
 import com.cudpast.appminas.Common.Common;
 import com.cudpast.appminas.Model.MetricasPersonal;
 import com.cudpast.appminas.Model.Personal;
+import com.cudpast.appminas.Principal.AllActivity;
 import com.cudpast.appminas.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;

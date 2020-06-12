@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Principal.InputDataPersonalActivity">
+    tools:context=".Principal.Activities.InputDataPersonalActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -36,6 +36,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/mb_input"
+
                 android:hint="DNI"
                 app:counterEnabled="true"
                 app:counterMaxLength="8"
@@ -47,6 +48,7 @@
                     android:id="@+id/input_dni"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:fontFamily="@font/headland_one"
                     android:inputType="number"
                     android:maxLength="8" />
 
@@ -57,7 +59,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
-                android:text="Consulta" />
+                android:fontFamily="@font/headland_one"
+                android:text="Buscar" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/show_consulta_nombre_layout"
@@ -74,6 +77,7 @@
                     android:id="@+id/show_consulta_nombre"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:fontFamily="@font/headland_one"
                     android:inputType="number" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -93,6 +97,7 @@
                     android:id="@+id/show_consulta_edad"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:fontFamily="@font/headland_one"
                     android:inputType="number" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -112,6 +117,7 @@
                     android:id="@+id/input_temperatura"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:fontFamily="@font/headland_one"
                     android:inputType="numberDecimal"
                     android:maxLength="5" />
 
@@ -132,6 +138,7 @@
                     android:id="@+id/input_saturacion"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:fontFamily="@font/headland_one"
                     android:inputType="number"
                     android:maxLength="3" />
 
@@ -153,6 +160,7 @@
                     android:id="@+id/input_pulso"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:fontFamily="@font/headland_one"
                     android:inputType="number"
                     android:maxLength="3" />
 
@@ -167,20 +175,25 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:fontFamily="@font/headland_one"
                     android:text="Prueba Rápida " />
 
                 <CheckBox
                     android:id="@+id/input_test_yes"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:fontFamily="@font/headland_one"
                     android:text="SI"
+                    android:textColor="@color/border_color_edge"
                     app:useMaterialThemeColors="false" />
 
                 <CheckBox
                     android:id="@+id/input_test_no"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:fontFamily="@font/headland_one"
                     android:text="NO"
+                    android:textColor="@color/border_color_edge"
                     app:useMaterialThemeColors="false" />
 
             </LinearLayout>
@@ -192,8 +205,10 @@
                 android:layout_gravity="start"
                 android:layout_marginTop="5dp"
                 android:layout_marginBottom="5dp"
+                android:fontFamily="@font/headland_one"
                 android:gravity="start"
-                android:text="SINTOMAS " />
+                android:text="SINTOMAS "
+                android:textStyle="bold" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/input_sintomas_layout"
@@ -208,6 +223,7 @@
                     android:id="@+id/input_sintomas"
                     android:layout_width="match_parent"
                     android:layout_height="150dp"
+                    android:fontFamily="@font/headland_one"
                     android:gravity="top"
                     android:inputType="textMultiLine"
                     android:overScrollMode="always"
@@ -232,6 +248,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginRight="10dp"
                 android:layout_weight="1"
+                android:fontFamily="@font/headland_one"
                 android:text="Ingresar" />
 
             <Button
@@ -241,6 +258,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:layout_weight="1"
+                android:fontFamily="@font/headland_one"
                 android:text="Regresar" />
         </LinearLayout>
 
