@@ -33,7 +33,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class InputDataPersonalActivity extends AppCompatActivity {
+public class InputDataWorkerActivity extends AppCompatActivity {
 
     private TextView show_consulta_nombre, show_consulta_edad;
     private TextInputLayout show_consulta_nombre_layout, show_consulta_edad_layout;
@@ -45,7 +45,7 @@ public class InputDataPersonalActivity extends AppCompatActivity {
     private CheckBox input_test_yes, input_test_no;
     private boolean testfastcovid;
 
-    public static final String TAG = InputDataPersonalActivity.class.getSimpleName();
+    public static final String TAG = InputDataWorkerActivity.class.getSimpleName();
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
 
     private Personal personal;
@@ -109,7 +109,7 @@ public class InputDataPersonalActivity extends AppCompatActivity {
         btn_input_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(InputDataPersonalActivity.this, AllActivity.class);
+                Intent intent = new Intent(InputDataWorkerActivity.this, AllActivity.class);
                 startActivity(intent);
                 finish();
             }
@@ -203,14 +203,14 @@ public class InputDataPersonalActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(Void aVoid) {
                         Log.e(TAG, "datos registrado");
-                        Toast.makeText(InputDataPersonalActivity.this, "Datos registrados correctamente", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(InputDataWorkerActivity.this, "Datos registrados correctamente", Toast.LENGTH_SHORT).show();
                         gotoMAin();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(InputDataPersonalActivity.this, "Error al ingresar los datos", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(InputDataWorkerActivity.this, "Error al ingresar los datos", Toast.LENGTH_SHORT).show();
                         Log.e(TAG, "datos no registrado");
 
                     }
@@ -219,7 +219,7 @@ public class InputDataPersonalActivity extends AppCompatActivity {
     }
 
     private void gotoMAin() {
-        Intent intent = new Intent(InputDataPersonalActivity.this, AllActivity.class);
+        Intent intent = new Intent(InputDataWorkerActivity.this, AllActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
         finish();

@@ -31,7 +31,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ConsultaPersonalActivity extends AppCompatActivity {
+public class QueryActivity extends AppCompatActivity {
 
     private TextInputLayout consulta_dni_layout;
     private TextInputEditText consulta_dni;
@@ -45,7 +45,7 @@ public class ConsultaPersonalActivity extends AppCompatActivity {
     private List<MetricasPersonal> listtemp;
     private Personal personal;
 
-    public static final String TAG = ConsultaPersonalActivity.class.getSimpleName();
+    public static final String TAG = QueryActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -173,7 +173,7 @@ public class ConsultaPersonalActivity extends AppCompatActivity {
 
         Log.e(TAG, "esto es el menjaje " + msn);
 
-        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(ConsultaPersonalActivity.this);
+        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(QueryActivity.this);
         LayoutInflater inflater = getLayoutInflater();
         View view = inflater.inflate(R.layout.pop_up_sintomas, null);
         builder.setView(view);

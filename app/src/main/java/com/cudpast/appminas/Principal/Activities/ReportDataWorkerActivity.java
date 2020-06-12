@@ -52,9 +52,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
 
-public class ReportDataActivity extends AppCompatActivity {
+public class ReportDataWorkerActivity extends AppCompatActivity {
 
-    public static final String TAG = ReportDataActivity.class.getSimpleName();
+    public static final String TAG = ReportDataWorkerActivity.class.getSimpleName();
     //
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
     private DatabaseReference ref_datos_paciente;
@@ -109,7 +109,7 @@ public class ReportDataActivity extends AppCompatActivity {
         mdp.show(getSupportFragmentManager(), "DATE_PICKER");
         mdp.addOnPositiveButtonClickListener((MaterialPickerOnPositiveButtonClickListener<Long>) dateSelected -> {
             //
-            mDialog = new ProgressDialog(ReportDataActivity.this);
+            mDialog = new ProgressDialog(ReportDataWorkerActivity.this);
             mDialog.setMessage("Obteniendo datos ...");
             mDialog.show();
             // Fecha escogida
@@ -1053,7 +1053,7 @@ public class ReportDataActivity extends AppCompatActivity {
 
         if (metodo.equalsIgnoreCase("pdf")) {
             Log.e(TAG, " metodo pdf ");
-            Intent intent = new Intent(ReportDataActivity.this, ShowPdfActivity.class);
+            Intent intent = new Intent(ReportDataWorkerActivity.this, ShowPdfActivity.class);
             startActivity(intent);
             mDialog.dismiss();
         } else {
@@ -1257,7 +1257,7 @@ public class ReportDataActivity extends AppCompatActivity {
 
         if (metodo.equalsIgnoreCase("pdf")) {
             Log.e(TAG, " metodo pdf ");
-            Intent intent = new Intent(ReportDataActivity.this, ShowPdfActivity.class);
+            Intent intent = new Intent(ReportDataWorkerActivity.this, ShowPdfActivity.class);
             startActivity(intent);
             mDialog.dismiss();
         } else if (metodo.equalsIgnoreCase("email")) {
@@ -1309,7 +1309,7 @@ public class ReportDataActivity extends AppCompatActivity {
                     generarListaporPersonalPdf(nombre, metodo);
                 } catch (Exception e) {
                     Log.e(TAG, "ERROR --> getDataFromFirebase : " + e.getMessage());
-                    Toast.makeText(ReportDataActivity.this, "Error al Generar PDF ", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ReportDataWorkerActivity.this, "Error al Generar PDF ", Toast.LENGTH_SHORT).show();
                     mDialog.dismiss();
                 }
             }
@@ -1351,7 +1351,7 @@ public class ReportDataActivity extends AppCompatActivity {
 
     public void showPdfDialog() {
         String metodo = "pdf";
-        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(ReportDataActivity.this);
+        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(ReportDataWorkerActivity.this);
         LayoutInflater inflater = getLayoutInflater();
         View view = inflater.inflate(R.layout.pop_up_report_dni, null);
         builder.setView(view);
@@ -1419,7 +1419,7 @@ public class ReportDataActivity extends AppCompatActivity {
 
     public void showEmailoDialog() {
         String metodo = "email";
-        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(ReportDataActivity.this);
+        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(ReportDataWorkerActivity.this);
         LayoutInflater inflater = getLayoutInflater();
         View view = inflater.inflate(R.layout.pop_up_report_dni, null);
         builder.setView(view);
@@ -1490,7 +1490,7 @@ public class ReportDataActivity extends AppCompatActivity {
     public void showTestEmailDNI(final String metodo) {
         // todo : falta hacer para ver las pruebas rapida
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(ReportDataActivity.this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(ReportDataWorkerActivity.this);
         LayoutInflater inflater = getLayoutInflater();
         View view = inflater.inflate(R.layout.pop_up_test_fast, null);
         builder.setView(view);
@@ -1717,7 +1717,7 @@ public class ReportDataActivity extends AppCompatActivity {
 
         if (metodo.equalsIgnoreCase("pdf")) {
             Log.e(TAG, " metodo pdf ");
-            Intent intent = new Intent(ReportDataActivity.this, ShowPdfActivity.class);
+            Intent intent = new Intent(ReportDataWorkerActivity.this, ShowPdfActivity.class);
             startActivity(intent);
             mDialog.dismiss();
         } else if (metodo.equalsIgnoreCase("email")) {

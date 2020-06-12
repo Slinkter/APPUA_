@@ -26,10 +26,10 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".Principal.Activities.Support.ShowPdfActivity"
-            android:parentActivityName=".Principal.Activities.ReportDataActivity"
+            android:parentActivityName=".Principal.Activities.ReportDataWorkerActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".Principal.Activities.ReportDataActivity"
+            android:name=".Principal.Activities.ReportDataWorkerActivity"
             android:parentActivityName=".Principal.AllActivity"
             android:screenOrientation="portrait" />
         <activity
@@ -44,11 +44,11 @@
             android:parentActivityName=".Principal.AllActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".Principal.Activities.InputDataPersonalActivity"
+            android:name=".Principal.Activities.InputDataWorkerActivity"
             android:parentActivityName=".Principal.AllActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".Principal.Activities.ConsultaPersonalActivity"
+            android:name=".Principal.Activities.QueryActivity"
             android:parentActivityName=".Principal.AllActivity"
             android:screenOrientation="portrait" />
         <activity
