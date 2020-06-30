@@ -112,7 +112,7 @@ public class AddWorkerActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
-        //  personal_dni_layout.setEnabled(false);
+
 
     }
 

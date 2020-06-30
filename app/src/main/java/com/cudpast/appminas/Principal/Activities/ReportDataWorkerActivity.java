@@ -127,8 +127,6 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     if (dataSnapshot != null) {
                         metodoone(dataSnapshot, metodo);
-
-
                     } else {
                         Log.e(TAG, "no existe unidad minera");
                     }
@@ -149,7 +147,6 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
     private void metodoone(DataSnapshot dataAll, String metodo) {
 
         ArrayList<String> arrayListDni = new ArrayList<String>();
-
         for (DataSnapshot snapshot : dataAll.getChildren()) { //<--- Toda la DATA
             // Get key = dni worker
             String dni = snapshot.getKey();
@@ -1410,7 +1407,6 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
                             if (personal.getLast() == null) {
                                 personal.setLast(" ");
                             }
-
                             Log.e(TAG, " personal.getName() : " + personal.getName());
                             report_dni_layout.setError(null);
                             String fullname = personal.getName() + " " + personal.getLast();
@@ -1456,6 +1452,7 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
 
         btn_report_dni.setOnClickListener(v -> {
             String dni = report_dni.getText().toString();
+
             if (report_dni.getText().toString().trim().isEmpty()) {
                 report_dni_layout.setError("Ingrese su DNI");
                 dialog.dismiss();
@@ -1467,7 +1464,7 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
                 //
                 Log.e(TAG, "-----> funcion  : consultarDatosPaciente");
                 Log.e(TAG, " dni : " + dni);
-                //
+                //CreateUT
                 DatabaseReference ref_db_mina_personal = database.getReference(Common.db_mina_personal);
                 DatabaseReference ref_mina = ref_db_mina_personal.child(Common.unidadTrabajoSelected.getNameUT());
 

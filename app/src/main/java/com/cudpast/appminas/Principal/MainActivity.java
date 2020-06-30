@@ -33,7 +33,6 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().hide();
 
         listaUnidadMinera = new ArrayList<>();
-
         listaUT = new ArrayList<>();
 
         UnidadTrabajo e0 = new UnidadTrabajo();
@@ -72,20 +71,10 @@ public class MainActivity extends AppCompatActivity {
         listaUT.add(e5);
         listaUT.add(e6);
 
-        // carga
         for (int i = 0; i < listaUT.size(); i++) {
             listaUnidadMinera.add(listaUT.get(i).getAliasUT().toString());
         }
 
-        //Cargar Spinner Unidad Minera
-         /*
-        listaUnidadMinera.add("COPE");
-        listaUnidadMinera.add("Chavincha");
-        listaUnidadMinera.add("Sonaje");
-        listaUnidadMinera.add("oficinaLima");
-        listaUnidadMinera.add("of.Arequipa");
-        listaUnidadMinera.add("of.Huaraz");
-        */
 
         spinner_unidadMinera = (Spinner) findViewById(R.id.spinner_unidadMinera);
         ArrayAdapter<CharSequence> adapter_spinner_um = new ArrayAdapter(this, R.layout.spinner_adapter_unidad_minera, listaUnidadMinera);
@@ -97,7 +86,6 @@ public class MainActivity extends AppCompatActivity {
                     if (listaUnidadMinera.get(position).equalsIgnoreCase("Seleccione Unidad")) {
                         btnContinuar.setVisibility(View.INVISIBLE);
                     } else {
-
                         Common.unidadMineraSelected = listaUnidadMinera.get(position);
                         Common.unidadTrabajoSelected = listaUT.get(position);
                         Log.e("main", " Common.unidadMineraSelected = " + Common.unidadMineraSelected);
@@ -114,6 +102,9 @@ public class MainActivity extends AppCompatActivity {
             public void onNothingSelected(AdapterView<?> parent) {
 
             }
+
+
+
         });
 
 

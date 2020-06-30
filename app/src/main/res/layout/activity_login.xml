@@ -20,10 +20,10 @@
             android:orientation="vertical">
 
             <ImageView
-                android:layout_marginBottom="20dp"
-                android:src="@drawable/ic_app_mina3"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                android:src="@drawable/ic_app_mina3" />
 
 
             <com.google.android.material.textfield.TextInputLayout
@@ -38,10 +38,10 @@
                 app:startIconDrawable="@drawable/ic_email">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:fontFamily="@font/headland_one"
                     android:id="@+id/log_email"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:fontFamily="@font/headland_one"
                     android:inputType="textEmailAddress" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -68,10 +68,10 @@
 
             <CheckBox
                 android:id="@+id/checkbox_rem"
-                android:fontFamily="@font/headland_one"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start"
+                android:fontFamily="@font/headland_one"
                 android:text="Recordar" />
 
 
@@ -85,24 +85,24 @@
             android:weightSum="2">
 
             <Button
-                android:fontFamily="@font/headland_one"
                 android:id="@+id/btnLogin"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="5dp"
                 android:layout_weight="1"
                 android:elevation="5dp"
+                android:fontFamily="@font/headland_one"
                 android:text="Ingresar"
                 android:textAllCaps="false" />
 
             <Button
-                android:fontFamily="@font/headland_one"
                 android:id="@+id/btnRegister"
                 style="?attr/materialButtonOutlinedStyle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:layout_weight="1"
+                android:fontFamily="@font/headland_one"
                 android:text="Registrase" />
         </LinearLayout>
     </LinearLayout>
