@@ -190,6 +190,8 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private boolean submitForm() {
+
+
         if (!checkEmail()) {
             return false;
         }
