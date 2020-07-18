@@ -43,8 +43,9 @@ public class AllActivity extends AppCompatActivity {
     }
 
     public void btnDeleteWorker(View view) {
-        Intent intent = new Intent(AllActivity.this, DeleteWorkerActivity.class);
-        startActivity(intent);
+        Toast.makeText(this, "Solo admin", Toast.LENGTH_SHORT).show();
+        //  Intent intent = new Intent(AllActivity.this, DeleteWorkerActivity.class);
+        //  startActivity(intent);
     }
 
     public void btnInputData(View view) {
