@@ -95,6 +95,7 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
         img_reportdatepdf.setOnClickListener(v -> showSelectDate("pdf"));
         img_reportmailpdf.setOnClickListener(v -> showSelectDate("email"));
         // Report 2
+        // todo : falta diseño de formato pdf
         img_reportworkpdf.setOnClickListener(v -> showPdfDialog("pdf"));
         img_reportworkgmail.setOnClickListener(v -> showEmailoDialog("email"));
         // Report 3
@@ -292,10 +293,7 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
                     //---> Pagina 01 Pagina 01 : [0-28]
                     //metricas
                     for (int i = 0; i < listMetricasPersonal.size(); i++) {
-                        //Numeracion
-                        cansas01.drawText(i + 1 + ".", 60, ytext + ysum, myPaint);
-
-                        //Saturacion
+                        //Saturacion  color
                         int valueSatura = Integer.parseInt(listMetricasPersonal.get(i).getSo2());
                         if (valueSatura >= 95 && valueSatura <= 99) {
                             so.setColor(Color.rgb(17, 230, 165));
@@ -306,8 +304,7 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
                         } else {
                             so.setColor(Color.rgb(255, 38, 38));
                         }
-
-                        //Pulso
+                        //Pulso color
                         int valuePulso = Integer.parseInt(listMetricasPersonal.get(i).getPulse());
                         if (valuePulso >= 86) {
                             pulse.setColor(Color.rgb(17, 230, 165));
@@ -319,7 +316,7 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
                             pulse.setColor(Color.rgb(255, 38, 38));
                         }
 
-
+                        cansas01.drawText(i + 1 + ".", 60, ytext + ysum, myPaint);
                         cansas01.drawText(listMetricasPersonal.get(i).getTempurature(), 830, ytext + ysum, myPaint);
                         cansas01.drawText(listMetricasPersonal.get(i).getSo2(), 1000, ytext + ysum, so);
                         cansas01.drawText(listMetricasPersonal.get(i).getPulse(), 1105, ytext + ysum, pulse);
@@ -354,41 +351,40 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
                     //---> Pagina 01-02 : [0-28]
                     for (int i = 0; i <= 28; i++) {
                         Log.e(TAG, "pagina 01 " + i);
-                        cansas01.drawText(i + 1 + ".", 60, ytext + ysum, myPaint);
-                        cansas01.drawText(listMetricasPersonal.get(i).getTempurature(), 760, ytext + ysum, myPaint);
-
-
-                        int valueSatura = Integer.parseInt(listMetricasPersonal.get(i).getSo2());
-                        if (valueSatura >= 95 && valueSatura <= 99) {
+                        //
+                        int value_Satura = Integer.parseInt(listMetricasPersonal.get(i).getSo2());
+                        int value_Pulso = Integer.parseInt(listMetricasPersonal.get(i).getPulse());
+                        //
+                        if (value_Satura >= 95 && value_Satura <= 99) {
                             so.setColor(Color.rgb(17, 230, 165));
-                        } else if (valueSatura >= 91 && valueSatura <= 94) {
+                        } else if (value_Satura >= 91 && value_Satura <= 94) {
                             so.setColor(Color.rgb(255, 235, 59));
-                        } else if (valueSatura >= 86 && valueSatura <= 90) {
+                        } else if (value_Satura >= 86 && value_Satura <= 90) {
                             so.setColor(Color.rgb(255, 38, 38));
                         } else {
                             so.setColor(Color.rgb(255, 38, 38));
                         }
-
-                        cansas01.drawText(listMetricasPersonal.get(i).getSo2(), 940, ytext + ysum, so);
-
-                        int valuePulso = Integer.parseInt(listMetricasPersonal.get(i).getPulse());
-                        if (valuePulso >= 86) {
+                        //
+                        if (value_Pulso >= 86) {
                             pulse.setColor(Color.rgb(17, 230, 165));
-                        } else if (valuePulso >= 70 && valuePulso <= 84) {
+                        } else if (value_Pulso >= 70 && value_Pulso <= 84) {
                             pulse.setColor(Color.rgb(255, 235, 59));
-                        } else if (valuePulso >= 62 && valuePulso <= 68) {
+                        } else if (value_Pulso >= 62 && value_Pulso <= 68) {
                             pulse.setColor(Color.rgb(255, 38, 38));
                         } else {
                             pulse.setColor(Color.rgb(255, 38, 38));
                         }
-
-                        cansas01.drawText(listMetricasPersonal.get(i).getPulse(), 1090, ytext + ysum, pulse);
+                        //
+                        cansas01.drawText(i + 1 + ".", 60, ytext + ysum, myPaint);
+                        cansas01.drawText(listMetricasPersonal.get(i).getTempurature(), 830, ytext + ysum, myPaint);
+                        cansas01.drawText(listMetricasPersonal.get(i).getSo2(), 1000, ytext + ysum, so);
+                        cansas01.drawText(listMetricasPersonal.get(i).getPulse(), 1105, ytext + ysum, pulse);
                         ysum = ysum + 55;
                     }
                     //
                     for (int i = 0; i <= 28; i++) {
-                        cansas01.drawText(listPersonal.get(i).getDni(), 170, ytextname + ysumname, myPaint);
-                        cansas01.drawText(listPersonal.get(i).getLast() + " " + listPersonal.get(i).getName(), 340, ytextname + ysumname, myPaint);
+                        cansas01.drawText(listPersonal.get(i).getDni(), 140, ytextname + ysumname, myPaint);
+                        cansas01.drawText(listPersonal.get(i).getLast() + " " + listPersonal.get(i).getName(), 300, ytextname + ysumname, myPaint);
                         ysumname = ysumname + 55;
                     }
                     //
@@ -405,10 +401,10 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
                     int list2b = listPersonal.size();
                     for (int i = 29; i < list2a; i++) {
                         Log.e(TAG, "pagina 02  position " + i);
-                        canvas2.drawText(i + ".", 50, 30 + y2sum, myPaint);
-
-                        canvas2.drawText(listMetricasPersonal.get(i).getTempurature(), 760, 30 + y2sum, myPaint);
+                        //
                         int valueSatura = Integer.parseInt(listMetricasPersonal.get(i).getSo2());
+                        int valuePulso = Integer.parseInt(listMetricasPersonal.get(i).getPulse());
+                        //
                         if (valueSatura >= 95 && valueSatura <= 99) {
                             so.setColor(Color.rgb(17, 230, 165));
                         } else if (valueSatura >= 91 && valueSatura <= 94) {
@@ -418,9 +414,7 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
                         } else {
                             so.setColor(Color.rgb(255, 38, 38));
                         }
-                        canvas2.drawText(listMetricasPersonal.get(i).getSo2(), 940, 30 + y2sum, so);
-
-                        int valuePulso = Integer.parseInt(listMetricasPersonal.get(i).getPulse());
+                        //
                         if (valuePulso >= 86) {
                             pulse.setColor(Color.rgb(17, 230, 165));
                         } else if (valuePulso >= 70 && valuePulso <= 84) {
@@ -430,13 +424,17 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
                         } else {
                             pulse.setColor(Color.rgb(255, 38, 38));
                         }
-                        canvas2.drawText(listMetricasPersonal.get(i).getPulse(), 1090, 30 + y2sum, pulse);
+
+                        canvas2.drawText(i + ".", 60, 30 + y2sum, myPaint);
+                        canvas2.drawText(listMetricasPersonal.get(i).getTempurature(), 830, 30 + y2sum, myPaint);
+                        canvas2.drawText(listMetricasPersonal.get(i).getSo2(), 1000, 30 + y2sum, so);
+                        canvas2.drawText(listMetricasPersonal.get(i).getPulse(), 1105, 30 + y2sum, pulse);
                         y2sum = y2sum + 50;
                     }
                     //
                     for (int i = 29; i < list2b; i++) {
-                        canvas2.drawText(listPersonal.get(i).getDni(), 170, 30 + x2sum, myPaint);
-                        canvas2.drawText(listPersonal.get(i).getLast() + " " + listPersonal.get(i).getName() , 340, 30 + x2sum, myPaint);
+                        canvas2.drawText(listPersonal.get(i).getDni(), 140, 30 + x2sum, myPaint);
+                        canvas2.drawText(listPersonal.get(i).getLast() + " " + listPersonal.get(i).getName(), 300, 30 + x2sum, myPaint);
                         x2sum = x2sum + 50;
                     }
                     //
