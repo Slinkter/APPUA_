@@ -45,19 +45,19 @@ import com.google.firebase.database.ValueEventListener;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.TimeZone;
 
 public class ReportDataWorkerActivity extends AppCompatActivity {
 
     public static final String TAG = ReportDataWorkerActivity.class.getSimpleName();
     //
-    private FirebaseDatabase database = FirebaseDatabase.getInstance();
+    private FirebaseDatabase database;
     private DatabaseReference ref_datos_paciente;
     private List<MetricasPersonal> listaMetricasPersonales;
     private List<Personal> listaPersonal;
@@ -92,135 +92,125 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
         img_reportexampdf = findViewById(R.id.img_reportexampdf);
         img_reportexamemail = findViewById(R.id.img_reportexamemail);
         // Report 1
-        img_reportdatepdf.setOnClickListener(v -> selectDate("pdf"));
-        img_reportmailpdf.setOnClickListener(v -> selectDate("email"));
+        img_reportdatepdf.setOnClickListener(v -> showSelectDate("pdf"));
+        img_reportmailpdf.setOnClickListener(v -> showSelectDate("email"));
         // Report 2
-        img_reportworkpdf.setOnClickListener(v -> showPdfDialog());
-        img_reportworkgmail.setOnClickListener(v -> showEmailoDialog());
+        img_reportworkpdf.setOnClickListener(v -> showPdfDialog("pdf"));
+        img_reportworkgmail.setOnClickListener(v -> showEmailoDialog("email"));
         // Report 3
         img_reportexampdf.setOnClickListener(v -> showTestEmailDNI("pdf"));
         img_reportexamemail.setOnClickListener(v -> showTestEmailDNI("email"));
+        //Firebaase
+
+        database = FirebaseDatabase.getInstance();
+
     }
 
-    private void selectDate(String metodo) {
-        // todo : cuando no hay registro debe mostrar un mensaje q no hay datos
+    // Bloque 1
+    private void showSelectDate(String metodo) {
+
         builder = MaterialDatePicker.Builder.datePicker();
         builder.setTitleText("Seleccionar Fecha");
         mdp = builder.build();
         mdp.show(getSupportFragmentManager(), "DATE_PICKER");
-        mdp.addOnPositiveButtonClickListener((MaterialPickerOnPositiveButtonClickListener<Long>) dateSelected -> {
-            // Show Dialog-waiting
+        mdp.addOnPositiveButtonClickListener((MaterialPickerOnPositiveButtonClickListener<Long>) input_dateSelected -> {
+            //
             mDialog = new ProgressDialog(ReportDataWorkerActivity.this);
             mDialog.setMessage("Obteniendo datos ...");
             mDialog.show();
-            // Transform date selected
-            seletedDate = timeStampToString(dateSelected);
             // Init arrays
             listaMetricasPersonales = new ArrayList<>();
             listaPersonal = new ArrayList<>();
+            // Transform date selected
+            seletedDate = timeStampToString(input_dateSelected);
             // Get Data From Firebase and init reference
-            ref_datos_paciente = FirebaseDatabase.getInstance().getReference(Common.db_mina_personal_data).child(Common.unidadTrabajoSelected.getNameUT());
+            ref_datos_paciente = database.getReference(Common.db_mina_personal_data).child(Common.unidadTrabajoSelected.getNameUT());
             ref_datos_paciente.keepSynced(true);
             ref_datos_paciente.orderByKey();
             ref_datos_paciente.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    if (dataSnapshot != null) {
-                        metodoone(dataSnapshot, metodo);
-                    } else {
-                        Log.e(TAG, "no existe unidad minera");
-                    }
+                    filtrarFecha(dataSnapshot, metodo);
                 }
 
                 @Override
                 public void onCancelled(@NonNull DatabaseError databaseError) {
-                    Log.e(TAG, "error : " + databaseError.getMessage());
+                    Log.e(TAG, "[showSelectDate ] error : " + databaseError.getMessage());
                     mDialog.dismiss();
                 }
             });
 
-
-            //
         });
     }
 
-    private void metodoone(DataSnapshot dataAll, String metodo) {
+    private void filtrarFecha(DataSnapshot dataAll, String metodo) {
 
-        ArrayList<String> arrayListDni = new ArrayList<String>();
-        for (DataSnapshot snapshot : dataAll.getChildren()) { //<--- Toda la DATA
-            // Get key = dni worker
-            String dni = snapshot.getKey();
-            Log.e(TAG, "[onDataChange] dni = " + dni);
-            if (dni != null) {
-                //  Array
-                for (DataSnapshot itemDate : snapshot.getChildren()) {  // <-- Todas la metricas por fechas de 1 persona
-                    if (itemDate != null) {
-                        // Check Date
-                        String registerDate = itemDate.getKey().substring(0, 10).trim();
-                        boolean checkdate = seletedDate.toString().equalsIgnoreCase(registerDate);
-                        //
+        ArrayList<String> listDNI = new ArrayList<>();
+        //
+        for (DataSnapshot snapshot : dataAll.getChildren()) { //<--- all data
+            if (snapshot != null) {
+                String dni = snapshot.getKey();// <-- Get key ( dni worker)
+                for (DataSnapshot item_date : snapshot.getChildren()) {  // <-- Todas la metricas por fechas de 1 persona
+                    if (item_date != null) {
+                        // Check Date , si coincide la fecha guardar data metrica y dni
+                        String registerDate = Objects.requireNonNull(item_date.getKey()).substring(0, 10).trim();
+                        boolean checkdate = seletedDate.equalsIgnoreCase(registerDate);
                         if (checkdate) {
-                            // Enlistar datos
-                            MetricasPersonal data = itemDate.getValue(MetricasPersonal.class);
+                            MetricasPersonal data = item_date.getValue(MetricasPersonal.class);
                             listaMetricasPersonales.add(data);
-                            arrayListDni.add(dni);
-
-                            Log.e(TAG, "tamaño de  listaMetricasPersonales  : " + listaMetricasPersonales.size());
-                            // Buscar datos
-
+                            listDNI.add(dni);
                         }
-
                     }
-
                 }
+                Log.e(TAG, "[onDataChange] dni = " + dni);
+            } else {
+                Log.e(TAG, "no hay snaphot = " + snapshot);
             }
         }
-        if (arrayListDni.size() == 0) {
+        Log.e(TAG, "[onDataChange] listaMetricasPersonales.size() = " + listaMetricasPersonales.size());
+        if (listDNI.size() == 0) {
             mDialog.dismiss();
             Log.e(TAG, " No hay datos para esta fecha");
             Toast.makeText(this, "No hay datos para esta fecha", Toast.LENGTH_SHORT).show();
         }
 
-        for (int i = 0; i < arrayListDni.size(); i++) {
-            Log.e(TAG, arrayListDni.get(i).toString());
-            String dni = arrayListDni.get(i);
-            DatabaseReference ref_mina = database.getReference(Common.db_mina_personal).child(Common.unidadTrabajoSelected.getNameUT());
-            ref_mina.child(dni).addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    Personal personal = dataSnapshot.getValue(Personal.class);
-                    if (personal != null) {
-                        listaPersonal.add(personal);
-                        Log.e(TAG, "tamaño de  listaPersonal  : " + listaPersonal.size());
-                    }
-                    if (listaPersonal.size() == arrayListDni.size()) {
-                        generarListaporFechaPdf(listaMetricasPersonales, listaPersonal, seletedDate, metodo);
-                    }
-                }
+        for (int i = 0; i < listDNI.size(); i++) {
 
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
-                    Log.e(TAG, "error : " + databaseError.getMessage());
-                }
-            });
+            String dni = listDNI.get(i);
+            DatabaseReference ref_mina = database.getReference(Common.db_mina_personal).child(Common.unidadTrabajoSelected.getNameUT()).child(dni);
+            ref_mina
+                    .addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            Personal personal = dataSnapshot.getValue(Personal.class);
+                            if (personal != null) {
+                                listaPersonal.add(personal);
+                            }
+                            if (listaPersonal.size() == listDNI.size()) {
+                                generarListaporFechaPdf(listaMetricasPersonales, listaPersonal, seletedDate, metodo);
+                            }
+                            //
+                            Log.e(TAG, "[filtrarFecha]-onDataChange  listaPersonal.size()  : " + listaPersonal.size());
+                            Log.e(TAG, "[filtrarFecha]-onDataChange  listDNI.size()  : " + listDNI.size());
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+                            Log.e(TAG, "[filtrarFecha]-onCancelled databaseError : " + databaseError.getMessage());
+                        }
+                    });
+
         }
-
-
-        Log.e(TAG, ".....arrayListDni ..->" + arrayListDni.size());
-        Log.e(TAG, ".....listaMetricasPersonales ..->" + listaMetricasPersonales.size());
-
-
+        Log.e(TAG, "[filtrarFecha] listDNI = " + listDNI.size());
+        Log.e(TAG, "[filtrarFecha] listaMetricasPersonales =" + listaMetricasPersonales.size());
     }
 
     private void generarListaporFechaPdf(List<MetricasPersonal> listMetricasPersonal, List<Personal> listPersonal, String seletedDate, String metodo) {
-
-
+        Log.e(TAG, "[generarListaporFechaPdf]");
+        Log.e(TAG, "[generarListaporFechaPdf]-listMetricasPersonal.size() : " + listMetricasPersonal.size());
+        Log.e(TAG, "[generarListaporFechaPdf]-listPersonal.size() : " + listPersonal.size());
         if (listPersonal.size() >= 1) {
             if (listMetricasPersonal.size() == listPersonal.size()) {
-                //
-                Log.e(TAG, "-----> generarListaporFechaPdf");
-                Log.e(TAG, "listMetricasPersonal.size() : " + listMetricasPersonal.size());
-                Log.e(TAG, "listPersonal.size() : " + listPersonal.size());
                 int pageWidth = 1200;
                 Date currentDate = new Date();
                 //
@@ -234,21 +224,21 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
                 Canvas cansas01 = myPage01.getCanvas();
                 //
                 Paint title = new Paint();
-                title.setTextSize(70);
+                title.setTextSize(60);
+
                 title.setTextAlign(Paint.Align.CENTER);
                 title.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
                 title.setColor(Color.BLACK);
-                cansas01.drawText("UNIDADES ARSI ", pageWidth / 2, 80, title);
-
+                cansas01.drawText("UNIDAD DE TRABAJO", pageWidth / 2, 80, title);
+                cansas01.drawText(Common.unidadTrabajoSelected.getAliasUT(), pageWidth / 2, 150, title);
                 Paint fecha = new Paint();
                 fecha.setTextSize(25f);
                 fecha.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
                 fecha.setTextAlign(Paint.Align.RIGHT);
                 dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-                cansas01.drawText("FECHA DE CONSULTA ", pageWidth - 20, 60, fecha);
+                cansas01.drawText("FECHA DE REPORTE ", pageWidth - 10, 60, fecha);
                 fecha.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL));
                 cansas01.drawText("" + dateFormat.format(currentDate), pageWidth - 80, 90, fecha);
-                String fechapdf = dateFormat.format(currentDate);
 
                 dateFormat = new SimpleDateFormat("HH:mm:ss");
                 fecha.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
@@ -262,9 +252,8 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
                 info.setTextAlign(Paint.Align.LEFT);
                 info.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL));
                 info.setColor(Color.BLACK);
-                cansas01.drawText("Responsable : " + Common.currentUser.getReg_name(), 20, 200, info);
-                cansas01.drawText("Unidad de Trabajo : " + Common.unidadTrabajoSelected.getNameUT(), 20, 250, info);
-                cansas01.drawText("Fecha de medición : " + seletedDate, 20, 300, info);
+                cansas01.drawText("Responsable : " + Common.currentUser.getReg_name(), 20, 240, info);
+                cansas01.drawText("Fecha consulta : " + seletedDate, 20, 300, info);
 
                 // Encabezados
                 myPaint.setStyle(Paint.Style.STROKE);
@@ -284,7 +273,7 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
 
                 cansas01.drawLine(140, 380, 140, 430, myPaint);
                 cansas01.drawLine(300, 380, 300, 430, myPaint);
-                cansas01.drawLine(660, 380, 660, 430, myPaint);
+                cansas01.drawLine(650, 380, 650, 430, myPaint);
                 cansas01.drawLine(880, 380, 880, 430, myPaint);
                 cansas01.drawLine(1030, 380, 1030, 430, myPaint);
                 //
@@ -306,11 +295,11 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
 
                     for (int i = 0; i < listMetricasPersonal.size(); i++) {
                         //Numeracion
-                        cansas01.drawText(i + 1 + ".", 70, ytext + ysum, myPaint);
+                        cansas01.drawText(i + 1 + ".", 80, ytext + ysum, myPaint);
                         // temperatura
-                        cansas01.drawText(listMetricasPersonal.get(i).getTempurature().toString(), 760, ytext + ysum, myPaint);
+                        cansas01.drawText(listMetricasPersonal.get(i).getTempurature(), 760, ytext + ysum, myPaint);
                         //Saturacion
-                        int valueSatura = Integer.parseInt(listMetricasPersonal.get(i).getSo2().toString());
+                        int valueSatura = Integer.parseInt(listMetricasPersonal.get(i).getSo2());
                         if (valueSatura >= 95 && valueSatura <= 99) {
                             so.setColor(Color.rgb(17, 230, 165));
                         } else if (valueSatura >= 91 && valueSatura <= 94) {
@@ -320,9 +309,9 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
                         } else {
                             so.setColor(Color.rgb(255, 38, 38));
                         }
-                        cansas01.drawText(listMetricasPersonal.get(i).getSo2().toString(), 940, ytext + ysum, so);
+                        cansas01.drawText(listMetricasPersonal.get(i).getSo2(), 940, ytext + ysum, so);
                         //Pulso
-                        int valuePulso = Integer.parseInt(listMetricasPersonal.get(i).getPulse().toString());
+                        int valuePulso = Integer.parseInt(listMetricasPersonal.get(i).getPulse());
                         if (valuePulso >= 86) {
                             pulse.setColor(Color.rgb(17, 230, 165));
                         } else if (valuePulso >= 70 && valuePulso <= 84) {
@@ -332,17 +321,17 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
                         } else {
                             pulse.setColor(Color.rgb(255, 38, 38));
                         }
-                        cansas01.drawText(listMetricasPersonal.get(i).getPulse().toString(), 1090, ytext + ysum, pulse);
+                        cansas01.drawText(listMetricasPersonal.get(i).getPulse(), 1090, ytext + ysum, pulse);
                         //Aumentar
                         ysum = ysum + 50;
                     }
                     // info trabajador
                     for (int i = 0; i < listPersonal.size(); i++) {
-                        cansas01.drawText(listPersonal.get(i).getDni().toString(), 170, ytextname + ysumname, myPaint);
+                        cansas01.drawText(listPersonal.get(i).getDni(), 170, ytextname + ysumname, myPaint);
                         if (listPersonal.get(i).getLast() == null) {
                             listPersonal.get(i).setLast("");
                         }
-                        cansas01.drawText(listPersonal.get(i).getName().toString() + " " + listPersonal.get(i).getLast(), 340, ytextname + ysumname, myPaint);
+                        cansas01.drawText(listPersonal.get(i).getLast() + " " + listPersonal.get(i).getName(), 340, ytextname + ysumname, myPaint);
                         ysumname = ysumname + 50;
                     }
                     //
@@ -362,11 +351,11 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
                     //---> Pagina 01-02 : [0-28]
                     for (int i = 0; i <= 28; i++) {
                         Log.e(TAG, "pagina 01 " + i);
-                        cansas01.drawText(i + 1 + ".", 50, ytext + ysum, myPaint);
-                        cansas01.drawText(listMetricasPersonal.get(i).getTempurature().toString(), 760, ytext + ysum, myPaint);
+                        cansas01.drawText(i + 1 + ".", 60, ytext + ysum, myPaint);
+                        cansas01.drawText(listMetricasPersonal.get(i).getTempurature(), 760, ytext + ysum, myPaint);
 
 
-                        int valueSatura = Integer.parseInt(listMetricasPersonal.get(i).getSo2().toString());
+                        int valueSatura = Integer.parseInt(listMetricasPersonal.get(i).getSo2());
                         if (valueSatura >= 95 && valueSatura <= 99) {
                             so.setColor(Color.rgb(17, 230, 165));
                         } else if (valueSatura >= 91 && valueSatura <= 94) {
@@ -377,9 +366,9 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
                             so.setColor(Color.rgb(255, 38, 38));
                         }
 
-                        cansas01.drawText(listMetricasPersonal.get(i).getSo2().toString(), 940, ytext + ysum, so);
+                        cansas01.drawText(listMetricasPersonal.get(i).getSo2(), 940, ytext + ysum, so);
 
-                        int valuePulso = Integer.parseInt(listMetricasPersonal.get(i).getPulse().toString());
+                        int valuePulso = Integer.parseInt(listMetricasPersonal.get(i).getPulse());
                         if (valuePulso >= 86) {
                             pulse.setColor(Color.rgb(17, 230, 165));
                         } else if (valuePulso >= 70 && valuePulso <= 84) {
@@ -390,13 +379,13 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
                             pulse.setColor(Color.rgb(255, 38, 38));
                         }
 
-                        cansas01.drawText(listMetricasPersonal.get(i).getPulse().toString(), 1090, ytext + ysum, pulse);
+                        cansas01.drawText(listMetricasPersonal.get(i).getPulse(), 1090, ytext + ysum, pulse);
                         ysum = ysum + 55;
                     }
                     //
                     for (int i = 0; i <= 28; i++) {
-                        cansas01.drawText(listPersonal.get(i).getDni().toString(), 170, ytextname + ysumname, myPaint);
-                        cansas01.drawText(listPersonal.get(i).getName().toString(), 340, ytextname + ysumname, myPaint);
+                        cansas01.drawText(listPersonal.get(i).getDni(), 170, ytextname + ysumname, myPaint);
+                        cansas01.drawText(listPersonal.get(i).getLast() + " " + listPersonal.get(i).getName(), 340, ytextname + ysumname, myPaint);
                         ysumname = ysumname + 55;
                     }
                     //
@@ -412,11 +401,11 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
                     int list2a = listMetricasPersonal.size();
                     int list2b = listPersonal.size();
                     for (int i = 29; i < list2a; i++) {
-                        Log.e(TAG, "error lista  position " + i);
+                        Log.e(TAG, "pagina 02  position " + i);
                         canvas2.drawText(i + ".", 50, 30 + y2sum, myPaint);
 
-                        canvas2.drawText(listMetricasPersonal.get(i).getTempurature().toString(), 760, 30 + y2sum, myPaint);
-                        int valueSatura = Integer.parseInt(listMetricasPersonal.get(i).getSo2().toString());
+                        canvas2.drawText(listMetricasPersonal.get(i).getTempurature(), 760, 30 + y2sum, myPaint);
+                        int valueSatura = Integer.parseInt(listMetricasPersonal.get(i).getSo2());
                         if (valueSatura >= 95 && valueSatura <= 99) {
                             so.setColor(Color.rgb(17, 230, 165));
                         } else if (valueSatura >= 91 && valueSatura <= 94) {
@@ -426,9 +415,9 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
                         } else {
                             so.setColor(Color.rgb(255, 38, 38));
                         }
-                        canvas2.drawText(listMetricasPersonal.get(i).getSo2().toString(), 940, 30 + y2sum, so);
+                        canvas2.drawText(listMetricasPersonal.get(i).getSo2(), 940, 30 + y2sum, so);
 
-                        int valuePulso = Integer.parseInt(listMetricasPersonal.get(i).getPulse().toString());
+                        int valuePulso = Integer.parseInt(listMetricasPersonal.get(i).getPulse());
                         if (valuePulso >= 86) {
                             pulse.setColor(Color.rgb(17, 230, 165));
                         } else if (valuePulso >= 70 && valuePulso <= 84) {
@@ -438,13 +427,13 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
                         } else {
                             pulse.setColor(Color.rgb(255, 38, 38));
                         }
-                        canvas2.drawText(listMetricasPersonal.get(i).getPulse().toString(), 1090, 30 + y2sum, pulse);
+                        canvas2.drawText(listMetricasPersonal.get(i).getPulse(), 1090, 30 + y2sum, pulse);
                         y2sum = y2sum + 50;
                     }
                     //
                     for (int i = 29; i < list2b; i++) {
-                        canvas2.drawText(listPersonal.get(i).getDni().toString(), 170, 30 + x2sum, myPaint);
-                        canvas2.drawText(listPersonal.get(i).getName().toString(), 340, 30 + x2sum, myPaint);
+                        canvas2.drawText(listPersonal.get(i).getDni(), 170, 30 + x2sum, myPaint);
+                        canvas2.drawText(listPersonal.get(i).getLast() + " " + listPersonal.get(i).getName() , 340, 30 + x2sum, myPaint);
                         x2sum = x2sum + 50;
                     }
                     //
@@ -464,8 +453,8 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
                     for (int i = 0; i <= 28; i++) {
                         Log.e(TAG, "pagina 01 " + i);
                         cansas01.drawText(i + 1 + ".", 50, ytext + ysum, myPaint);
-                        cansas01.drawText(listMetricasPersonal.get(i).getTempurature().toString(), 760, ytext + ysum, myPaint);
-                        int valueSatura = Integer.parseInt(listMetricasPersonal.get(i).getSo2().toString());
+                        cansas01.drawText(listMetricasPersonal.get(i).getTempurature(), 760, ytext + ysum, myPaint);
+                        int valueSatura = Integer.parseInt(listMetricasPersonal.get(i).getSo2());
                         if (valueSatura >= 95 && valueSatura <= 99) {
                             so.setColor(Color.rgb(17, 230, 165));
                         } else if (valueSatura >= 91 && valueSatura <= 94) {
@@ -475,9 +464,9 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
                         } else {
                             so.setColor(Color.rgb(255, 38, 38));
                         }
-                        cansas01.drawText(listMetricasPersonal.get(i).getSo2().toString(), 940, ytext + ysum, so);
+                        cansas01.drawText(listMetricasPersonal.get(i).getSo2(), 940, ytext + ysum, so);
                         //
-                        int valuePulso = Integer.parseInt(listMetricasPersonal.get(i).getPulse().toString());
+                        int valuePulso = Integer.parseInt(listMetricasPersonal.get(i).getPulse());
                         if (valuePulso >= 86) {
                             pulse.setColor(Color.rgb(17, 230, 165));
                         } else if (valuePulso >= 70 && valuePulso <= 84) {
@@ -488,13 +477,13 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
                             pulse.setColor(Color.rgb(255, 38, 38));
                         }
 
-                        cansas01.drawText(listMetricasPersonal.get(i).getPulse().toString(), 1090, ytext + ysum, pulse);
+                        cansas01.drawText(listMetricasPersonal.get(i).getPulse(), 1090, ytext + ysum, pulse);
                         ysum = ysum + 55;
                     }
                     //
                     for (int i = 0; i <= 28; i++) {
-                        cansas01.drawText(listPersonal.get(i).getDni().toString(), 170, ytextname + ysumname, myPaint);
-                        cansas01.drawText(listPersonal.get(i).getName().toString(), 340, ytextname + ysumname, myPaint);
+                        cansas01.drawText(listPersonal.get(i).getDni(), 170, ytextname + ysumname, myPaint);
+                        cansas01.drawText(listPersonal.get(i).getName(), 340, ytextname + ysumname, myPaint);
                         ysumname = ysumname + 55;
                     }
                     //
@@ -514,9 +503,9 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
                         //
                         canvas2.drawText(i + ".", 50, 30 + y2sum, myPaint);
                         //
-                        canvas2.drawText(listMetricasPersonal.get(i).getTempurature().toString(), 760, 30 + y2sum, myPaint);
+                        canvas2.drawText(listMetricasPersonal.get(i).getTempurature(), 760, 30 + y2sum, myPaint);
                         //
-                        int valueSatura = Integer.parseInt(listMetricasPersonal.get(i).getSo2().toString());
+                        int valueSatura = Integer.parseInt(listMetricasPersonal.get(i).getSo2());
                         if (valueSatura >= 95 && valueSatura <= 99) {
                             so.setColor(Color.rgb(17, 230, 165));
                         } else if (valueSatura >= 91 && valueSatura <= 94) {
@@ -526,9 +515,9 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
                         } else {
                             so.setColor(Color.rgb(255, 38, 38));
                         }
-                        canvas2.drawText(listMetricasPersonal.get(i).getSo2().toString(), 940, 30 + y2sum, so);
+                        canvas2.drawText(listMetricasPersonal.get(i).getSo2(), 940, 30 + y2sum, so);
                         //
-                        int valuePulso = Integer.parseInt(listMetricasPersonal.get(i).getPulse().toString());
+                        int valuePulso = Integer.parseInt(listMetricasPersonal.get(i).getPulse());
                         if (valuePulso >= 86) {
                             pulse.setColor(Color.rgb(17, 230, 165));
                         } else if (valuePulso >= 70 && valuePulso <= 84) {
@@ -538,13 +527,13 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
                         } else {
                             pulse.setColor(Color.rgb(255, 38, 38));
                         }
-                        canvas2.drawText(listMetricasPersonal.get(i).getPulse().toString(), 1090, 30 + y2sum, pulse);
+                        canvas2.drawText(listMetricasPersonal.get(i).getPulse(), 1090, 30 + y2sum, pulse);
                         y2sum = y2sum + 50;
                     }
                     //
                     for (int i = 28; i < list2b; i++) {
-                        canvas2.drawText(listPersonal.get(i).getDni().toString(), 170, 30 + x2sum, myPaint);
-                        canvas2.drawText(listPersonal.get(i).getName().toString(), 340, 30 + x2sum, myPaint);
+                        canvas2.drawText(listPersonal.get(i).getDni(), 170, 30 + x2sum, myPaint);
+                        canvas2.drawText(listPersonal.get(i).getName(), 340, 30 + x2sum, myPaint);
                         x2sum = x2sum + 50;
                     }
                     //
@@ -564,9 +553,9 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
                         //numeracion
                         canvas3.drawText(i + ".", 50, 30 + y3sum, myPaint);
                         //temperatura
-                        canvas3.drawText(listMetricasPersonal.get(i).getTempurature().toString(), 760, 30 + y3sum, myPaint);
+                        canvas3.drawText(listMetricasPersonal.get(i).getTempurature(), 760, 30 + y3sum, myPaint);
                         //
-                        int valueSatura = Integer.parseInt(listMetricasPersonal.get(i).getSo2().toString());
+                        int valueSatura = Integer.parseInt(listMetricasPersonal.get(i).getSo2());
                         if (valueSatura >= 95 && valueSatura <= 99) {
                             so.setColor(Color.rgb(17, 230, 165));
                         } else if (valueSatura >= 91 && valueSatura <= 94) {
@@ -576,9 +565,9 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
                         } else {
                             so.setColor(Color.rgb(255, 38, 38));
                         }
-                        canvas3.drawText(listMetricasPersonal.get(i).getSo2().toString(), 940, 30 + y3sum, so);
+                        canvas3.drawText(listMetricasPersonal.get(i).getSo2(), 940, 30 + y3sum, so);
                         //
-                        int valuePulso = Integer.parseInt(listMetricasPersonal.get(i).getPulse().toString());
+                        int valuePulso = Integer.parseInt(listMetricasPersonal.get(i).getPulse());
                         if (valuePulso >= 86) {
                             pulse.setColor(Color.rgb(17, 230, 165));
                         } else if (valuePulso >= 70 && valuePulso <= 84) {
@@ -588,13 +577,13 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
                         } else {
                             pulse.setColor(Color.rgb(255, 38, 38));
                         }
-                        canvas3.drawText(listMetricasPersonal.get(i).getPulse().toString(), 1090, 30 + y3sum, pulse);
+                        canvas3.drawText(listMetricasPersonal.get(i).getPulse(), 1090, 30 + y3sum, pulse);
                         y3sum = y3sum + 50;
                     }
                     //
                     for (int i = 64; i < list3b; i++) {
-                        canvas3.drawText(listPersonal.get(i).getDni().toString(), 170, 30 + x3sum, myPaint);
-                        canvas3.drawText(listPersonal.get(i).getName().toString(), 340, 30 + x3sum, myPaint);
+                        canvas3.drawText(listPersonal.get(i).getDni(), 170, 30 + x3sum, myPaint);
+                        canvas3.drawText(listPersonal.get(i).getName(), 340, 30 + x3sum, myPaint);
                         x3sum = x3sum + 50;
                     }
                     //
@@ -615,8 +604,8 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
                     for (int i = 0; i <= 28; i++) {
                         Log.e(TAG, "pagina 01 " + i);
                         cansas01.drawText(i + 1 + ".", 50, ytext + ysum, myPaint);
-                        cansas01.drawText(listMetricasPersonal.get(i).getTempurature().toString(), 760, ytext + ysum, myPaint);
-                        int valueSatura = Integer.parseInt(listMetricasPersonal.get(i).getSo2().toString());
+                        cansas01.drawText(listMetricasPersonal.get(i).getTempurature(), 760, ytext + ysum, myPaint);
+                        int valueSatura = Integer.parseInt(listMetricasPersonal.get(i).getSo2());
                         if (valueSatura >= 95 && valueSatura <= 99) {
                             so.setColor(Color.rgb(17, 230, 165));
                         } else if (valueSatura >= 91 && valueSatura <= 94) {
@@ -626,9 +615,9 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
                         } else {
                             so.setColor(Color.rgb(255, 38, 38));
                         }
-                        cansas01.drawText(listMetricasPersonal.get(i).getSo2().toString(), 940, ytext + ysum, so);
+                        cansas01.drawText(listMetricasPersonal.get(i).getSo2(), 940, ytext + ysum, so);
                         //
-                        int valuePulso = Integer.parseInt(listMetricasPersonal.get(i).getPulse().toString());
+                        int valuePulso = Integer.parseInt(listMetricasPersonal.get(i).getPulse());
                         if (valuePulso >= 86) {
                             pulse.setColor(Color.rgb(17, 230, 165));
                         } else if (valuePulso >= 70 && valuePulso <= 84) {
@@ -639,13 +628,13 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
                             pulse.setColor(Color.rgb(255, 38, 38));
                         }
 
-                        cansas01.drawText(listMetricasPersonal.get(i).getPulse().toString(), 1090, ytext + ysum, pulse);
+                        cansas01.drawText(listMetricasPersonal.get(i).getPulse(), 1090, ytext + ysum, pulse);
                         ysum = ysum + 55;
                     }
                     //
                     for (int i = 0; i <= 28; i++) {
-                        cansas01.drawText(listPersonal.get(i).getDni().toString(), 170, ytextname + ysumname, myPaint);
-                        cansas01.drawText(listPersonal.get(i).getName().toString(), 340, ytextname + ysumname, myPaint);
+                        cansas01.drawText(listPersonal.get(i).getDni(), 170, ytextname + ysumname, myPaint);
+                        cansas01.drawText(listPersonal.get(i).getName(), 340, ytextname + ysumname, myPaint);
                         ysumname = ysumname + 55;
                     }
                     //
@@ -664,9 +653,9 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
                         //
                         canvas2.drawText(i + ".", 50, 30 + y2sum, myPaint);
                         //
-                        canvas2.drawText(listMetricasPersonal.get(i).getTempurature().toString(), 760, 30 + y2sum, myPaint);
+                        canvas2.drawText(listMetricasPersonal.get(i).getTempurature(), 760, 30 + y2sum, myPaint);
                         //
-                        int valueSatura = Integer.parseInt(listMetricasPersonal.get(i).getSo2().toString());
+                        int valueSatura = Integer.parseInt(listMetricasPersonal.get(i).getSo2());
                         if (valueSatura >= 95 && valueSatura <= 99) {
                             so.setColor(Color.rgb(17, 230, 165));
                         } else if (valueSatura >= 91 && valueSatura <= 94) {
@@ -676,9 +665,9 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
                         } else {
                             so.setColor(Color.rgb(255, 38, 38));
                         }
-                        canvas2.drawText(listMetricasPersonal.get(i).getSo2().toString(), 940, 30 + y2sum, so);
+                        canvas2.drawText(listMetricasPersonal.get(i).getSo2(), 940, 30 + y2sum, so);
                         //
-                        int valuePulso = Integer.parseInt(listMetricasPersonal.get(i).getPulse().toString());
+                        int valuePulso = Integer.parseInt(listMetricasPersonal.get(i).getPulse());
                         if (valuePulso >= 86) {
                             pulse.setColor(Color.rgb(17, 230, 165));
                         } else if (valuePulso >= 70 && valuePulso <= 84) {
@@ -688,13 +677,13 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
                         } else {
                             pulse.setColor(Color.rgb(255, 38, 38));
                         }
-                        canvas2.drawText(listMetricasPersonal.get(i).getPulse().toString(), 1090, 30 + y2sum, pulse);
+                        canvas2.drawText(listMetricasPersonal.get(i).getPulse(), 1090, 30 + y2sum, pulse);
                         y2sum = y2sum + 50;
                     }
                     //
                     for (int i = 29; i < list2b; i++) {
-                        canvas2.drawText(listPersonal.get(i).getDni().toString(), 170, 30 + x2sum, myPaint);
-                        canvas2.drawText(listPersonal.get(i).getName().toString(), 340, 30 + x2sum, myPaint);
+                        canvas2.drawText(listPersonal.get(i).getDni(), 170, 30 + x2sum, myPaint);
+                        canvas2.drawText(listPersonal.get(i).getName(), 340, 30 + x2sum, myPaint);
                         x2sum = x2sum + 50;
                     }
                     //
@@ -713,9 +702,9 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
                         //numeracion
                         canvas3.drawText(i + ".", 50, 30 + y3sum, myPaint);
                         //temperatura
-                        canvas3.drawText(listMetricasPersonal.get(i).getTempurature().toString(), 760, 30 + y3sum, myPaint);
+                        canvas3.drawText(listMetricasPersonal.get(i).getTempurature(), 760, 30 + y3sum, myPaint);
                         //
-                        int valueSatura = Integer.parseInt(listMetricasPersonal.get(i).getSo2().toString());
+                        int valueSatura = Integer.parseInt(listMetricasPersonal.get(i).getSo2());
                         if (valueSatura >= 95 && valueSatura <= 99) {
                             so.setColor(Color.rgb(17, 230, 165));
                         } else if (valueSatura >= 91 && valueSatura <= 94) {
@@ -725,9 +714,9 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
                         } else {
                             so.setColor(Color.rgb(255, 38, 38));
                         }
-                        canvas3.drawText(listMetricasPersonal.get(i).getSo2().toString(), 940, 30 + y3sum, so);
+                        canvas3.drawText(listMetricasPersonal.get(i).getSo2(), 940, 30 + y3sum, so);
                         //
-                        int valuePulso = Integer.parseInt(listMetricasPersonal.get(i).getPulse().toString());
+                        int valuePulso = Integer.parseInt(listMetricasPersonal.get(i).getPulse());
                         if (valuePulso >= 86) {
                             pulse.setColor(Color.rgb(17, 230, 165));
                         } else if (valuePulso >= 70 && valuePulso <= 84) {
@@ -737,13 +726,13 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
                         } else {
                             pulse.setColor(Color.rgb(255, 38, 38));
                         }
-                        canvas3.drawText(listMetricasPersonal.get(i).getPulse().toString(), 1090, 30 + y3sum, pulse);
+                        canvas3.drawText(listMetricasPersonal.get(i).getPulse(), 1090, 30 + y3sum, pulse);
                         y3sum = y3sum + 50;
                     }
                     //
                     for (int i = 64; i < list3b; i++) {
-                        canvas3.drawText(listPersonal.get(i).getDni().toString(), 170, 30 + x3sum, myPaint);
-                        canvas3.drawText(listPersonal.get(i).getName().toString(), 340, 30 + x3sum, myPaint);
+                        canvas3.drawText(listPersonal.get(i).getDni(), 170, 30 + x3sum, myPaint);
+                        canvas3.drawText(listPersonal.get(i).getName(), 340, 30 + x3sum, myPaint);
                         x3sum = x3sum + 50;
                     }
                     //
@@ -763,9 +752,9 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
                         //numeracion
                         canvas4.drawText(i + ".", 50, 30 + y4sum, myPaint);
                         //temperatura
-                        canvas4.drawText(listMetricasPersonal.get(i).getTempurature().toString(), 760, 30 + y4sum, myPaint);
+                        canvas4.drawText(listMetricasPersonal.get(i).getTempurature(), 760, 30 + y4sum, myPaint);
                         //
-                        int valueSatura = Integer.parseInt(listMetricasPersonal.get(i).getSo2().toString());
+                        int valueSatura = Integer.parseInt(listMetricasPersonal.get(i).getSo2());
                         if (valueSatura >= 95 && valueSatura <= 99) {
                             so.setColor(Color.rgb(17, 230, 165));
                         } else if (valueSatura >= 91 && valueSatura <= 94) {
@@ -775,9 +764,9 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
                         } else {
                             so.setColor(Color.rgb(255, 38, 38));
                         }
-                        canvas4.drawText(listMetricasPersonal.get(i).getSo2().toString(), 940, 30 + y4sum, so);
+                        canvas4.drawText(listMetricasPersonal.get(i).getSo2(), 940, 30 + y4sum, so);
                         //
-                        int valuePulso = Integer.parseInt(listMetricasPersonal.get(i).getPulse().toString());
+                        int valuePulso = Integer.parseInt(listMetricasPersonal.get(i).getPulse());
                         if (valuePulso >= 86) {
                             pulse.setColor(Color.rgb(17, 230, 165));
                         } else if (valuePulso >= 70 && valuePulso <= 84) {
@@ -787,13 +776,13 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
                         } else {
                             pulse.setColor(Color.rgb(255, 38, 38));
                         }
-                        canvas4.drawText(listMetricasPersonal.get(i).getPulse().toString(), 1090, 30 + y4sum, pulse);
+                        canvas4.drawText(listMetricasPersonal.get(i).getPulse(), 1090, 30 + y4sum, pulse);
                         y4sum = y4sum + 50;
                     }
                     //
                     for (int i = 99; i < list4b; i++) {
-                        canvas4.drawText(listPersonal.get(i).getDni().toString(), 170, 30 + x4sum, myPaint);
-                        canvas4.drawText(listPersonal.get(i).getName().toString(), 340, 30 + x4sum, myPaint);
+                        canvas4.drawText(listPersonal.get(i).getDni(), 170, 30 + x4sum, myPaint);
+                        canvas4.drawText(listPersonal.get(i).getName(), 340, 30 + x4sum, myPaint);
                         x4sum = x4sum + 50;
                     }
                     //
@@ -815,8 +804,8 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
                     for (int i = 0; i <= 28; i++) {
                         Log.e(TAG, "pagina 01 " + i);
                         cansas01.drawText(i + 1 + ".", 50, ytext + ysum, myPaint);
-                        cansas01.drawText(listMetricasPersonal.get(i).getTempurature().toString(), 760, ytext + ysum, myPaint);
-                        int valueSatura = Integer.parseInt(listMetricasPersonal.get(i).getSo2().toString());
+                        cansas01.drawText(listMetricasPersonal.get(i).getTempurature(), 760, ytext + ysum, myPaint);
+                        int valueSatura = Integer.parseInt(listMetricasPersonal.get(i).getSo2());
                         if (valueSatura >= 95 && valueSatura <= 99) {
                             so.setColor(Color.rgb(17, 230, 165));
                         } else if (valueSatura >= 91 && valueSatura <= 94) {
@@ -826,9 +815,9 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
                         } else {
                             so.setColor(Color.rgb(255, 38, 38));
                         }
-                        cansas01.drawText(listMetricasPersonal.get(i).getSo2().toString(), 940, ytext + ysum, so);
+                        cansas01.drawText(listMetricasPersonal.get(i).getSo2(), 940, ytext + ysum, so);
                         //
-                        int valuePulso = Integer.parseInt(listMetricasPersonal.get(i).getPulse().toString());
+                        int valuePulso = Integer.parseInt(listMetricasPersonal.get(i).getPulse());
                         if (valuePulso >= 86) {
                             pulse.setColor(Color.rgb(17, 230, 165));
                         } else if (valuePulso >= 70 && valuePulso <= 84) {
@@ -839,13 +828,13 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
                             pulse.setColor(Color.rgb(255, 38, 38));
                         }
 
-                        cansas01.drawText(listMetricasPersonal.get(i).getPulse().toString(), 1090, ytext + ysum, pulse);
+                        cansas01.drawText(listMetricasPersonal.get(i).getPulse(), 1090, ytext + ysum, pulse);
                         ysum = ysum + 55;
                     }
                     //
                     for (int i = 0; i <= 28; i++) {
-                        cansas01.drawText(listPersonal.get(i).getDni().toString(), 170, ytextname + ysumname, myPaint);
-                        cansas01.drawText(listPersonal.get(i).getName().toString(), 340, ytextname + ysumname, myPaint);
+                        cansas01.drawText(listPersonal.get(i).getDni(), 170, ytextname + ysumname, myPaint);
+                        cansas01.drawText(listPersonal.get(i).getName(), 340, ytextname + ysumname, myPaint);
                         ysumname = ysumname + 55;
                     }
                     //
@@ -864,9 +853,9 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
                         //
                         canvas2.drawText(i + ".", 50, 30 + y2sum, myPaint);
                         //
-                        canvas2.drawText(listMetricasPersonal.get(i).getTempurature().toString(), 760, 30 + y2sum, myPaint);
+                        canvas2.drawText(listMetricasPersonal.get(i).getTempurature(), 760, 30 + y2sum, myPaint);
                         //
-                        int valueSatura = Integer.parseInt(listMetricasPersonal.get(i).getSo2().toString());
+                        int valueSatura = Integer.parseInt(listMetricasPersonal.get(i).getSo2());
                         if (valueSatura >= 95 && valueSatura <= 99) {
                             so.setColor(Color.rgb(17, 230, 165));
                         } else if (valueSatura >= 91 && valueSatura <= 94) {
@@ -876,9 +865,9 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
                         } else {
                             so.setColor(Color.rgb(255, 38, 38));
                         }
-                        canvas2.drawText(listMetricasPersonal.get(i).getSo2().toString(), 940, 30 + y2sum, so);
+                        canvas2.drawText(listMetricasPersonal.get(i).getSo2(), 940, 30 + y2sum, so);
                         //
-                        int valuePulso = Integer.parseInt(listMetricasPersonal.get(i).getPulse().toString());
+                        int valuePulso = Integer.parseInt(listMetricasPersonal.get(i).getPulse());
                         if (valuePulso >= 86) {
                             pulse.setColor(Color.rgb(17, 230, 165));
                         } else if (valuePulso >= 70 && valuePulso <= 84) {
@@ -888,13 +877,13 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
                         } else {
                             pulse.setColor(Color.rgb(255, 38, 38));
                         }
-                        canvas2.drawText(listMetricasPersonal.get(i).getPulse().toString(), 1090, 30 + y2sum, pulse);
+                        canvas2.drawText(listMetricasPersonal.get(i).getPulse(), 1090, 30 + y2sum, pulse);
                         y2sum = y2sum + 50;
                     }
                     //
                     for (int i = 29; i < list2b; i++) {
-                        canvas2.drawText(listPersonal.get(i).getDni().toString(), 170, 30 + x2sum, myPaint);
-                        canvas2.drawText(listPersonal.get(i).getName().toString(), 340, 30 + x2sum, myPaint);
+                        canvas2.drawText(listPersonal.get(i).getDni(), 170, 30 + x2sum, myPaint);
+                        canvas2.drawText(listPersonal.get(i).getName(), 340, 30 + x2sum, myPaint);
                         x2sum = x2sum + 50;
                     }
                     //
@@ -913,9 +902,9 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
                         //numeracion
                         canvas3.drawText(i + ".", 50, 30 + y3sum, myPaint);
                         //temperatura
-                        canvas3.drawText(listMetricasPersonal.get(i).getTempurature().toString(), 760, 30 + y3sum, myPaint);
+                        canvas3.drawText(listMetricasPersonal.get(i).getTempurature(), 760, 30 + y3sum, myPaint);
                         //
-                        int valueSatura = Integer.parseInt(listMetricasPersonal.get(i).getSo2().toString());
+                        int valueSatura = Integer.parseInt(listMetricasPersonal.get(i).getSo2());
                         if (valueSatura >= 95 && valueSatura <= 99) {
                             so.setColor(Color.rgb(17, 230, 165));
                         } else if (valueSatura >= 91 && valueSatura <= 94) {
@@ -925,9 +914,9 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
                         } else {
                             so.setColor(Color.rgb(255, 38, 38));
                         }
-                        canvas3.drawText(listMetricasPersonal.get(i).getSo2().toString(), 940, 30 + y3sum, so);
+                        canvas3.drawText(listMetricasPersonal.get(i).getSo2(), 940, 30 + y3sum, so);
                         //
-                        int valuePulso = Integer.parseInt(listMetricasPersonal.get(i).getPulse().toString());
+                        int valuePulso = Integer.parseInt(listMetricasPersonal.get(i).getPulse());
                         if (valuePulso >= 86) {
                             pulse.setColor(Color.rgb(17, 230, 165));
                         } else if (valuePulso >= 70 && valuePulso <= 84) {
@@ -937,13 +926,13 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
                         } else {
                             pulse.setColor(Color.rgb(255, 38, 38));
                         }
-                        canvas3.drawText(listMetricasPersonal.get(i).getPulse().toString(), 1090, 30 + y3sum, pulse);
+                        canvas3.drawText(listMetricasPersonal.get(i).getPulse(), 1090, 30 + y3sum, pulse);
                         y3sum = y3sum + 50;
                     }
                     //
                     for (int i = 64; i < list3b; i++) {
-                        canvas3.drawText(listPersonal.get(i).getDni().toString(), 170, 30 + x3sum, myPaint);
-                        canvas3.drawText(listPersonal.get(i).getName().toString(), 340, 30 + x3sum, myPaint);
+                        canvas3.drawText(listPersonal.get(i).getDni(), 170, 30 + x3sum, myPaint);
+                        canvas3.drawText(listPersonal.get(i).getName(), 340, 30 + x3sum, myPaint);
                         x3sum = x3sum + 50;
                     }
                     //
@@ -963,9 +952,9 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
                         //numeracion
                         canvas4.drawText(i + ".", 50, 30 + y4sum, myPaint);
                         //temperatura
-                        canvas4.drawText(listMetricasPersonal.get(i).getTempurature().toString(), 760, 30 + y4sum, myPaint);
+                        canvas4.drawText(listMetricasPersonal.get(i).getTempurature(), 760, 30 + y4sum, myPaint);
                         //
-                        int valueSatura = Integer.parseInt(listMetricasPersonal.get(i).getSo2().toString());
+                        int valueSatura = Integer.parseInt(listMetricasPersonal.get(i).getSo2());
                         if (valueSatura >= 95 && valueSatura <= 99) {
                             so.setColor(Color.rgb(17, 230, 165));
                         } else if (valueSatura >= 91 && valueSatura <= 94) {
@@ -975,9 +964,9 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
                         } else {
                             so.setColor(Color.rgb(255, 38, 38));
                         }
-                        canvas4.drawText(listMetricasPersonal.get(i).getSo2().toString(), 940, 30 + y4sum, so);
+                        canvas4.drawText(listMetricasPersonal.get(i).getSo2(), 940, 30 + y4sum, so);
                         //
-                        int valuePulso = Integer.parseInt(listMetricasPersonal.get(i).getPulse().toString());
+                        int valuePulso = Integer.parseInt(listMetricasPersonal.get(i).getPulse());
                         if (valuePulso >= 86) {
                             pulse.setColor(Color.rgb(17, 230, 165));
                         } else if (valuePulso >= 70 && valuePulso <= 84) {
@@ -987,13 +976,13 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
                         } else {
                             pulse.setColor(Color.rgb(255, 38, 38));
                         }
-                        canvas4.drawText(listMetricasPersonal.get(i).getPulse().toString(), 1090, 30 + y4sum, pulse);
+                        canvas4.drawText(listMetricasPersonal.get(i).getPulse(), 1090, 30 + y4sum, pulse);
                         y4sum = y4sum + 50;
                     }
                     //
                     for (int i = 99; i < list4b; i++) {
-                        canvas4.drawText(listPersonal.get(i).getDni().toString(), 170, 30 + x4sum, myPaint);
-                        canvas4.drawText(listPersonal.get(i).getName().toString(), 340, 30 + x4sum, myPaint);
+                        canvas4.drawText(listPersonal.get(i).getDni(), 170, 30 + x4sum, myPaint);
+                        canvas4.drawText(listPersonal.get(i).getName(), 340, 30 + x4sum, myPaint);
                         x4sum = x4sum + 50;
                     }
                     //
@@ -1012,9 +1001,9 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
                         //numeracion
                         canvas5.drawText(i + ".", 50, 30 + y5sum, myPaint);
                         //temperatura
-                        canvas5.drawText(listMetricasPersonal.get(i).getTempurature().toString(), 760, 30 + y5sum, myPaint);
+                        canvas5.drawText(listMetricasPersonal.get(i).getTempurature(), 760, 30 + y5sum, myPaint);
                         //
-                        int valueSatura = Integer.parseInt(listMetricasPersonal.get(i).getSo2().toString());
+                        int valueSatura = Integer.parseInt(listMetricasPersonal.get(i).getSo2());
                         if (valueSatura >= 95 && valueSatura <= 99) {
                             so.setColor(Color.rgb(17, 230, 165));
                         } else if (valueSatura >= 91 && valueSatura <= 94) {
@@ -1024,9 +1013,9 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
                         } else {
                             so.setColor(Color.rgb(255, 38, 38));
                         }
-                        canvas5.drawText(listMetricasPersonal.get(i).getSo2().toString(), 940, 30 + y5sum, so);
+                        canvas5.drawText(listMetricasPersonal.get(i).getSo2(), 940, 30 + y5sum, so);
                         //
-                        int valuePulso = Integer.parseInt(listMetricasPersonal.get(i).getPulse().toString());
+                        int valuePulso = Integer.parseInt(listMetricasPersonal.get(i).getPulse());
                         if (valuePulso >= 86) {
                             pulse.setColor(Color.rgb(17, 230, 165));
                         } else if (valuePulso >= 70 && valuePulso <= 84) {
@@ -1036,13 +1025,13 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
                         } else {
                             pulse.setColor(Color.rgb(255, 38, 38));
                         }
-                        canvas5.drawText(listMetricasPersonal.get(i).getPulse().toString(), 1090, 30 + y5sum, pulse);
+                        canvas5.drawText(listMetricasPersonal.get(i).getPulse(), 1090, 30 + y5sum, pulse);
                         y5sum = y5sum + 50;
                     }
                     //
                     for (int i = 134; i < list5b; i++) {
-                        canvas5.drawText(listPersonal.get(i).getDni().toString(), 170, 30 + x5sum, myPaint);
-                        canvas5.drawText(listPersonal.get(i).getName().toString(), 340, 30 + x5sum, myPaint);
+                        canvas5.drawText(listPersonal.get(i).getDni(), 170, 30 + x5sum, myPaint);
+                        canvas5.drawText(listPersonal.get(i).getName(), 340, 30 + x5sum, myPaint);
                         x5sum = x5sum + 50;
                     }
                     //
@@ -1075,10 +1064,8 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
                 }
 
             }
-            mDialog.dismiss();
-        } else {
-            mDialog.dismiss();
         }
+        mDialog.dismiss();
 
     }
 
@@ -1135,7 +1122,7 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
         info.setColor(Color.BLACK);
         cansas01.drawText("Trabajador  : " + nombre, 20, 200, info);
         cansas01.drawText("Unidad de Trabajo : " + Common.unidadTrabajoSelected.getNameUT(), 20, 250, info);
-        cansas01.drawText("Responsable : " + Common.currentUser.getReg_name().toString(), 20, 300, info);
+        cansas01.drawText("Responsable : " + Common.currentUser.getReg_name(), 20, 300, info);
 
         // Encabezados
         myPaint.setStyle(Paint.Style.STROKE);
@@ -1198,8 +1185,8 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
             // Nro
             cansas01.drawText(i + 1 + " ", 80, ytext + ysum, myPaint);
             // Temperatura
-            cansas01.drawText(listTemperatura.get(i).toString(), 490, ytext + ysum, myPaint);
-            sumaTemp = sumaTemp + Double.parseDouble(listTemperatura.get(i).toString());
+            cansas01.drawText(listTemperatura.get(i), 490, ytext + ysum, myPaint);
+            sumaTemp = sumaTemp + Double.parseDouble(listTemperatura.get(i));
 
             // Saturacion
             int valueSatura = Integer.parseInt(listSaturacion.get(i).toString());
@@ -1306,7 +1293,7 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     MetricasPersonal metricasPersonal = snapshot.getValue(MetricasPersonal.class);
                     if (metricasPersonal != null) {
-                        listDate.add(metricasPersonal.getDateRegister().toString());
+                        listDate.add(metricasPersonal.getDateRegister());
                         listTemperatura.add((metricasPersonal.getTempurature()));
                         listSaturacion.add(Integer.parseInt(metricasPersonal.getSo2()));
                         listPulso.add(Integer.parseInt(metricasPersonal.getPulse()));
@@ -1366,8 +1353,8 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public void showPdfDialog() {
-        String metodo = "pdf";
+    public void showPdfDialog(String metodo) {
+
         android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(ReportDataWorkerActivity.this);
         LayoutInflater inflater = getLayoutInflater();
         View view = inflater.inflate(R.layout.pop_up_report_dni, null);
@@ -1433,8 +1420,8 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
         dialog.show();
     }
 
-    public void showEmailoDialog() {
-        String metodo = "email";
+    public void showEmailoDialog(String cadena) {
+        String metodo = cadena;
         android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(ReportDataWorkerActivity.this);
         LayoutInflater inflater = getLayoutInflater();
         View view = inflater.inflate(R.layout.pop_up_report_dni, null);
@@ -1656,7 +1643,7 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
         info.setColor(Color.BLACK);
 
         cansas01.drawText("Unidad       :  " + Common.unidadTrabajoSelected.getAliasUT(), 20, 200, info);
-        cansas01.drawText("Responsable  :  " + Common.currentUser.getReg_name().toString(), 20, 250, info);
+        cansas01.drawText("Responsable  :  " + Common.currentUser.getReg_name(), 20, 250, info);
         cansas01.drawText("Trabajador   :  " + nombre, 20, 300, info);
 
 
