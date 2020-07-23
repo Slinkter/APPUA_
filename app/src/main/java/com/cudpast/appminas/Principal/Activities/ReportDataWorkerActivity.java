@@ -175,7 +175,6 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
         }
 
         for (int i = 0; i < listDNI.size(); i++) {
-
             String dni = listDNI.get(i);
             DatabaseReference ref_mina = database.getReference(Common.db_mina_personal).child(Common.unidadTrabajoSelected.getNameUT()).child(dni);
             ref_mina
@@ -265,17 +264,17 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
                 myPaint.setStyle(Paint.Style.FILL);
 
                 cansas01.drawText("Nro.", 50, 415, myPaint);
-                cansas01.drawText("DNI", 200, 415, myPaint);
+                cansas01.drawText("DNI", 170, 415, myPaint);
                 cansas01.drawText("NOMBRES Y APELLIDOS", 330, 415, myPaint);
-                cansas01.drawText("TEMPERATURA", 680, 415, myPaint);
-                cansas01.drawText("SO2.", 930, 415, myPaint);
-                cansas01.drawText("PULSO", 1070, 415, myPaint);
+                cansas01.drawText("TEMPERATURA", 760, 415, myPaint);
+                cansas01.drawText("SO2.", 990, 415, myPaint);
+                cansas01.drawText("PULSO", 1090, 415, myPaint);
 
-                cansas01.drawLine(140, 380, 140, 430, myPaint);
-                cansas01.drawLine(300, 380, 300, 430, myPaint);
-                cansas01.drawLine(650, 380, 650, 430, myPaint);
-                cansas01.drawLine(880, 380, 880, 430, myPaint);
-                cansas01.drawLine(1030, 380, 1030, 430, myPaint);
+                cansas01.drawLine(120, 380, 120, 430, myPaint);
+                cansas01.drawLine(280, 380, 280, 430, myPaint);
+                cansas01.drawLine(730, 380, 730, 430, myPaint);
+                cansas01.drawLine(960, 380, 960, 430, myPaint);
+                cansas01.drawLine(1070, 380, 1070, 430, myPaint);
                 //
                 int ytext = 400;
                 int ysum = 100;
@@ -292,12 +291,10 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
                     //-------------------------------------------------------------------------------
                     //---> Pagina 01 Pagina 01 : [0-28]
                     //metricas
-
                     for (int i = 0; i < listMetricasPersonal.size(); i++) {
                         //Numeracion
-                        cansas01.drawText(i + 1 + ".", 80, ytext + ysum, myPaint);
-                        // temperatura
-                        cansas01.drawText(listMetricasPersonal.get(i).getTempurature(), 760, ytext + ysum, myPaint);
+                        cansas01.drawText(i + 1 + ".", 60, ytext + ysum, myPaint);
+
                         //Saturacion
                         int valueSatura = Integer.parseInt(listMetricasPersonal.get(i).getSo2());
                         if (valueSatura >= 95 && valueSatura <= 99) {
@@ -309,7 +306,7 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
                         } else {
                             so.setColor(Color.rgb(255, 38, 38));
                         }
-                        cansas01.drawText(listMetricasPersonal.get(i).getSo2(), 940, ytext + ysum, so);
+
                         //Pulso
                         int valuePulso = Integer.parseInt(listMetricasPersonal.get(i).getPulse());
                         if (valuePulso >= 86) {
@@ -321,17 +318,23 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
                         } else {
                             pulse.setColor(Color.rgb(255, 38, 38));
                         }
-                        cansas01.drawText(listMetricasPersonal.get(i).getPulse(), 1090, ytext + ysum, pulse);
+
+
+                        cansas01.drawText(listMetricasPersonal.get(i).getTempurature(), 830, ytext + ysum, myPaint);
+                        cansas01.drawText(listMetricasPersonal.get(i).getSo2(), 1000, ytext + ysum, so);
+                        cansas01.drawText(listMetricasPersonal.get(i).getPulse(), 1105, ytext + ysum, pulse);
                         //Aumentar
                         ysum = ysum + 50;
                     }
                     // info trabajador
                     for (int i = 0; i < listPersonal.size(); i++) {
-                        cansas01.drawText(listPersonal.get(i).getDni(), 170, ytextname + ysumname, myPaint);
+
                         if (listPersonal.get(i).getLast() == null) {
                             listPersonal.get(i).setLast("");
                         }
-                        cansas01.drawText(listPersonal.get(i).getLast() + " " + listPersonal.get(i).getName(), 340, ytextname + ysumname, myPaint);
+
+                        cansas01.drawText(listPersonal.get(i).getDni(), 140, ytextname + ysumname, myPaint);
+                        cansas01.drawText(listPersonal.get(i).getLast() + " " + listPersonal.get(i).getName(), 300, ytextname + ysumname, myPaint);
                         ysumname = ysumname + 50;
                     }
                     //
