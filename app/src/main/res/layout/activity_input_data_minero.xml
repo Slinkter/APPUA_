@@ -82,7 +82,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/mb_input"
-                android:hint="Nombre"
+                android:hint="Apellido"
                 app:endIconMode="custom"
                 app:errorEnabled="true"
                 app:startIconDrawable="@drawable/ic_account">
@@ -92,7 +92,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/headland_one"
-                    android:inputType="number" />
+                    android:inputType="text" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -102,17 +102,17 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/mb_input"
-                android:hint="Edad"
+                android:hint="Nombre"
                 app:endIconMode="custom"
                 app:errorEnabled="true"
-                app:startIconDrawable="@drawable/ic_age">
+                app:startIconDrawable="@drawable/ic_account">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/show_consulta_edad"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/headland_one"
-                    android:inputType="number" />
+                    android:inputType="text" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -125,7 +125,7 @@
                 android:layout_marginBottom="5dp"
                 android:fontFamily="@font/headland_one"
                 android:gravity="start"
-                android:text="Turno de Trabajo"
+                android:text="Control de Trabajo"
                 android:textColor="@color/colorPrimary"
                 android:textSize="20sp"
                 android:textStyle="bold" />
@@ -133,6 +133,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
                 android:orientation="horizontal">
 
                 <TextView
@@ -203,7 +204,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/mb_input"
-                android:hint="Saturación [85-100]"
+                android:hint="Sat. de oxigeno.[85-100]"
                 app:endIconMode="custom"
                 app:errorEnabled="true"
                 app:startIconDrawable="@drawable/ic_age">
@@ -245,7 +246,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start"
-                android:layout_marginTop="5dp"
+
                 android:layout_marginBottom="5dp"
                 android:fontFamily="@font/headland_one"
                 android:gravity="start"
@@ -258,6 +259,8 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
                 android:orientation="horizontal">
 
                 <TextView
@@ -286,12 +289,108 @@
 
             </LinearLayout>
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:layout_marginBottom="5dp"
+                android:fontFamily="@font/headland_one"
+                android:gravity="start"
+                android:text="Síntomas "
+                android:textColor="@color/colorPrimary"
+                android:textSize="20sp"
+                android:textStyle="bold" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start"
                 android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:fontFamily="@font/headland_one"
+                android:gravity="start"
+                android:text="*Nota : si no tiene síntomas dejar en uncheck "
+                android:textColor="@color/colorAccent"
+                android:textSize="12sp"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:id="@+id/input_new_sintomas_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:orientation="vertical">
+
+                <CheckBox
+                    android:id="@+id/s1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/headland_one"
+                    android:text="Tos"
+                    android:textColor="@color/border_color_edge"
+                    app:useMaterialThemeColors="false" />
+
+                <CheckBox
+                    android:id="@+id/s2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/headland_one"
+                    android:text="Dolor de garganta"
+                    android:textColor="@color/border_color_edge"
+                    app:useMaterialThemeColors="false" />
+
+                <CheckBox
+                    android:id="@+id/s3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/headland_one"
+                    android:text="Congestión nasal"
+                    android:textColor="@color/border_color_edge"
+                    app:useMaterialThemeColors="false" />
+
+                <CheckBox
+                    android:id="@+id/s4"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/headland_one"
+                    android:text="Fiebre"
+                    android:textColor="@color/border_color_edge"
+                    app:useMaterialThemeColors="false" />
+
+                <CheckBox
+                    android:id="@+id/s5"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/headland_one"
+                    android:text="Malestar general"
+                    android:textColor="@color/border_color_edge"
+                    app:useMaterialThemeColors="false" />
+
+                <CheckBox
+                    android:id="@+id/s6"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/headland_one"
+                    android:text="Dificultad respiratoria"
+                    android:textColor="@color/border_color_edge"
+                    app:useMaterialThemeColors="false" />
+
+                <CheckBox
+                    android:id="@+id/s7"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/headland_one"
+                    android:text="Diarrea"
+                    android:textColor="@color/border_color_edge"
+                    app:useMaterialThemeColors="false" />
+
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
                 android:layout_marginBottom="5dp"
                 android:fontFamily="@font/headland_one"
                 android:gravity="start"
@@ -302,7 +401,6 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/input_sintomas_layout"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="1dp"
@@ -312,11 +410,8 @@
                 <EditText
                     android:id="@+id/input_sintomas"
                     android:layout_width="match_parent"
-                    android:layout_height="150dp"
+                    android:layout_height="wrap_content"
                     android:fontFamily="@font/headland_one"
-                    android:gravity="top"
-                    android:inputType="textMultiLine"
-                    android:overScrollMode="always"
                     android:padding="15dp"
                     android:scrollbarStyle="insideInset"
                     android:scrollbars="vertical" />

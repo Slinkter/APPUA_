@@ -61,6 +61,11 @@ public class InputDataWorkerActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setContentView(R.layout.activity_input_data_minero);
 
+        // todo : control de trabjao
+        // todo : prueba rapida
+        // todo : sintomas check
+
+
         show_consulta_nombre = findViewById(R.id.show_consulta_nombre);
         show_consulta_edad = findViewById(R.id.show_consulta_edad);
 
@@ -252,8 +257,8 @@ public class InputDataWorkerActivity extends AppCompatActivity {
                     Log.e(TAG, "dni : " + personal.getDni());
                     Log.e(TAG, "dirección : " + personal.getAddress());
                     Log.e(TAG, "phone 1 : " + personal.getPhone1());
-                    show_consulta_nombre.setText(personal.getLast() + " " + personal.getName());
-                    show_consulta_edad.setText(personal.getAge() + " años");
+                    show_consulta_nombre.setText(personal.getLast());
+                    show_consulta_edad.setText(personal.getName());
                     show_consulta_nombre.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.color_error_null));
                     show_consulta_edad.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.color_error_null));
                     checkEnable();

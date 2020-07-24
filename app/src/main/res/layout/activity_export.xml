@@ -46,12 +46,13 @@
 
 
                 <LinearLayout
-                    android:onClick="btn_entrada_pdf"
-                    android:gravity="center"
-                    android:layout_gravity="center"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center"
                     android:layout_weight="1"
+                    android:clickable="true"
+                    android:gravity="center"
+                    android:onClick="btn_entrada_pdf"
                     android:orientation="vertical">
 
                     <ImageView
@@ -70,16 +71,16 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:onClick="btn_salida_pdf"
-                    android:gravity="center"
-                    android:layout_gravity="center"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center"
                     android:layout_weight="1"
+                    android:clickable="true"
+                    android:gravity="center"
+                    android:onClick="btn_salida_pdf"
                     android:orientation="vertical">
 
                     <ImageView
-
                         android:layout_width="65dp"
                         android:layout_height="65dp"
                         android:layout_margin="5dp"
@@ -94,11 +95,11 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:gravity="center"
-                    android:layout_gravity="center"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center"
                     android:layout_weight="1"
+                    android:gravity="center"
                     android:orientation="vertical">
 
                     <ImageView
@@ -109,6 +110,7 @@
                         android:layout_weight="1"
                         android:baselineAligned="false"
                         android:src="@drawable/ic_gmail" />
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"

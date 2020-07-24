@@ -1808,6 +1808,42 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
 
 
     public void btn_salida_pdf(View view) {
+        String metodo = "pdf";
+        Boolean horario = false;
+        builder = MaterialDatePicker.Builder.datePicker();
+        builder.setTitleText("Seleccionar Fecha");
+        mdp = builder.build();
+        mdp.show(getSupportFragmentManager(), "DATE_PICKER");
+        mdp.addOnPositiveButtonClickListener((MaterialPickerOnPositiveButtonClickListener<Long>) input_dateSelected -> {
+            //
+            mDialog = new ProgressDialog(ReportDataWorkerActivity.this);
+            mDialog.setMessage("Obteniendo datos ...");
+            mDialog.show();
+            // Init arrays
+            //Horario
+            listaMetricasPersonalesEntrada = new ArrayList<>();
+            listaPersonal = new ArrayList<>();
+            // Transform date selected
+            seletedDate = timeStampToString(input_dateSelected);
+            // Get Data From Firebase and init reference
+            ref_datos_paciente = database.getReference(Common.db_mina_personal_data).child(Common.unidadTrabajoSelected.getNameUT());
+            ref_datos_paciente.keepSynced(true);
+            ref_datos_paciente.orderByKey();
+            ref_datos_paciente.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    filtrarFecha(dataSnapshot, metodo, horario);
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                    Log.e(TAG, "[showSelectDate ] error : " + databaseError.getMessage());
+                    mDialog.dismiss();
+                }
+            });
+
+        });
+
     }
 
 }
