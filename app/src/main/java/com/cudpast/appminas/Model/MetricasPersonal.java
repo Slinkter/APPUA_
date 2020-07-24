@@ -9,6 +9,7 @@ public class MetricasPersonal {
     private String dateRegister;
     private String who_user_register;
     private Boolean testpruebarapida;
+    private Boolean horario;
 
     private String namepaciente;
 
@@ -79,5 +80,13 @@ public class MetricasPersonal {
 
     public void setTestpruebarapida(Boolean testpruebarapida) {
         this.testpruebarapida = testpruebarapida;
+    }
+
+    public Boolean getHorario() {
+        return horario;
+    }
+
+    public void setHorario(Boolean horario) {
+        this.horario = horario;
     }
 }

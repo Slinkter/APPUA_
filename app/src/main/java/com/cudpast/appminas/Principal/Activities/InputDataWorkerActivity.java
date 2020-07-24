@@ -42,8 +42,12 @@ public class InputDataWorkerActivity extends AppCompatActivity {
     private EditText input_sintomas;
     private Button btn_input_consulta, btn_input_data, btn_input_back;
 
+    private CheckBox input_entrada, input_salida;
     private CheckBox input_test_yes, input_test_no;
+
+    private boolean horario;
     private boolean testfastcovid;
+
 
     public static final String TAG = InputDataWorkerActivity.class.getSimpleName();
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -79,74 +83,80 @@ public class InputDataWorkerActivity extends AppCompatActivity {
         btn_input_consulta = findViewById(R.id.btn_input_consulta);
         btn_input_data = findViewById(R.id.btn_input_data);
         btn_input_back = findViewById(R.id.btn_input_back);
-
-
+        //
+        input_entrada = findViewById(R.id.input_entrada);
+        input_salida = findViewById(R.id.input_salida);
+        //
         input_test_yes = findViewById(R.id.input_test_yes);
         input_test_no = findViewById(R.id.input_test_no);
-
-
         //
+        toggleCheckHorario();
         toggleCheck();
+        //
+        btn_input_consulta.setOnClickListener(v -> {
+            String dni_personal = input_dni.getText().toString();
+            consultarDniPersonal(dni_personal);
+        });
 
-        btn_input_consulta.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String dni_personal = input_dni.getText().toString();
-                consultarDniPersonal(dni_personal);
+        btn_input_data.setOnClickListener(v -> {
+
+            if (submitForm()) {
+                savePersonalData();
             }
         });
 
-        btn_input_data.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                if (submitForm()) {
-                    savePersonalData();
-                }
-            }
-        });
-
-        btn_input_back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(InputDataWorkerActivity.this, AllActivity.class);
-                startActivity(intent);
-                finish();
-            }
+        btn_input_back.setOnClickListener(v -> {
+            Intent intent = new Intent(InputDataWorkerActivity.this, AllActivity.class);
+            startActivity(intent);
+            finish();
         });
 
 
     }
 
+
+    private void toggleCheckHorario() {
+
+        input_entrada.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked) {
+                input_salida.setEnabled(false);
+                horario = true;
+            } else {
+                input_salida.setEnabled(true);
+            }
+        });
+
+        input_salida.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked) {
+                input_entrada.setEnabled(false);
+                horario = false;
+            } else {
+                input_entrada.setEnabled(true);
+            }
+
+        });
+    }
+
+
     private void toggleCheck() {
 
-        input_test_yes.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    input_test_no.setEnabled(false);
-                    testfastcovid = true;
-                    //   Toast.makeText(InputDataPersonalActivity.this, "test_fast_covid : " + testfastcovid, Toast.LENGTH_SHORT).show();
-                } else {
-                    input_test_no.setEnabled(true);
-                }
+        input_test_yes.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked) {
+                input_test_no.setEnabled(false);
+                testfastcovid = true;
+            } else {
+                input_test_no.setEnabled(true);
             }
         });
 
-        input_test_no.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    input_test_yes.setEnabled(false);
-                    testfastcovid = false;
-                    // Toast.makeText(InputDataPersonalActivity.this, "test_fast_covid : " + testfastcovid, Toast.LENGTH_SHORT).show();
-                } else {
-                    input_test_yes.setEnabled(true);
-                }
-
+        input_test_no.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked) {
+                input_test_yes.setEnabled(false);
+                testfastcovid = false;
+            } else {
+                input_test_yes.setEnabled(true);
             }
         });
-
 
     }
 
@@ -193,6 +203,10 @@ public class InputDataWorkerActivity extends AppCompatActivity {
         metricasPersonal.setDateRegister(dateRegister);
         metricasPersonal.setWho_user_register(Common.currentUser.getUid()); // requerido
         metricasPersonal.setTestpruebarapida(testfastcovid);
+        // si es verdadero es turno entrada
+        // si es falso es turno salida
+        metricasPersonal.setHorario(horario);
+
 
         ref_db_mina_personal_data
                 .child(Common.unidadTrabajoSelected.getNameUT())
@@ -202,9 +216,10 @@ public class InputDataWorkerActivity extends AppCompatActivity {
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        Log.e(TAG, "datos registrado");
-                        Toast.makeText(InputDataWorkerActivity.this, "Datos registrados correctamente", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(InputDataWorkerActivity.this, "Excelente , datos registrados !!!!", Toast.LENGTH_SHORT).show();
                         gotoMAin();
+
+                        Log.e(TAG, "datos registrado");
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -237,7 +252,7 @@ public class InputDataWorkerActivity extends AppCompatActivity {
                     Log.e(TAG, "dni : " + personal.getDni());
                     Log.e(TAG, "dirección : " + personal.getAddress());
                     Log.e(TAG, "phone 1 : " + personal.getPhone1());
-                    show_consulta_nombre.setText(personal.getName());
+                    show_consulta_nombre.setText(personal.getLast() + " " + personal.getName());
                     show_consulta_edad.setText(personal.getAge() + " años");
                     show_consulta_nombre.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.color_error_null));
                     show_consulta_edad.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.color_error_null));
@@ -374,6 +389,13 @@ public class InputDataWorkerActivity extends AppCompatActivity {
             Toast.makeText(this, "falta  prueba rapida", Toast.LENGTH_SHORT).show();
             return false;
         }
+
+
+        if ((input_entrada.isChecked() || !input_salida.isChecked()) && (!input_entrada.isChecked() || input_salida.isChecked())) {
+            Toast.makeText(this, "Falta validar el horario de Entrada/Salida", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
 
         return true;
     }

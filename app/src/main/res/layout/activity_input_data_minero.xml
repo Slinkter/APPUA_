@@ -36,8 +36,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/mb_input"
-
                 android:hint="DNI"
+
                 app:counterEnabled="true"
                 app:counterMaxLength="8"
                 app:endIconMode="custom"
@@ -115,6 +115,52 @@
                     android:inputType="number" />
 
             </com.google.android.material.textfield.TextInputLayout>
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:fontFamily="@font/headland_one"
+                android:gravity="start"
+                android:text="Turno de Trabajo"
+                android:textColor="@color/colorPrimary"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/headland_one"
+                    android:text="Horario :" />
+
+                <CheckBox
+                    android:id="@+id/input_entrada"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/headland_one"
+                    android:text="Entrada"
+                    android:textColor="@color/border_color_edge"
+                    app:useMaterialThemeColors="false" />
+
+                <CheckBox
+                    android:id="@+id/input_salida"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/headland_one"
+                    android:text="Salida"
+                    android:textColor="@color/border_color_edge"
+                    app:useMaterialThemeColors="false" />
+
+            </LinearLayout>
+
 
             <TextView
                 android:layout_width="wrap_content"
@@ -218,7 +264,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/headland_one"
-                    android:text="Prueba Rápida " />
+                    android:text="Prueba Rápida :" />
 
                 <CheckBox
                     android:id="@+id/input_test_yes"
