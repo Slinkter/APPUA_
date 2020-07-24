@@ -171,7 +171,7 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
                                 if (data.getHorario() == null) {
                                     data.setHorario(false);
                                 }
-                                Log.e(TAG, "======================== " );
+                                Log.e(TAG, "======================== ");
                                 Log.e(TAG, "getDateRegister = " + data.getDateRegister());
                                 Log.e(TAG, "getHorario = " + data.getHorario());
                                 Log.e(TAG, "getPulse = " + data.getPulse());
@@ -181,8 +181,13 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
                                 Log.e(TAG, "getTestpruebarapida = " + data.getTestpruebarapida());
                                 Log.e(TAG, "getWho_user_register = " + data.getWho_user_register());
 
-                                listaMetricasPersonalesEntrada.add(data);
-                                listDNI.add(dni);
+                                if (data.getHorario() == horario) {
+                                    Log.e(TAG, "filtro horario = " + data.getHorario());
+                                    listaMetricasPersonalesEntrada.add(data);
+                                    listDNI.add(dni);
+                                }
+
+
                             } catch (Exception e) {
                                 Log.e(TAG, " error try - cath" + e.getMessage());
                             }
