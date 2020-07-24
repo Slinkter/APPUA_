@@ -6,6 +6,7 @@ import androidx.core.app.ActivityCompat;
 
 import android.Manifest;
 import android.app.AlertDialog;
+import android.app.DirectAction;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -60,6 +61,11 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
     private FirebaseDatabase database;
     private DatabaseReference ref_datos_paciente;
     private List<MetricasPersonal> listaMetricasPersonales;
+
+    private List<MetricasPersonal> listaMetricasPersonalesEntrada;
+    private List<MetricasPersonal> listaMetricasPersonalesSalida;
+
+
     private List<Personal> listaPersonal;
     private MaterialDatePicker mdp;
     private MaterialDatePicker.Builder builder;
@@ -92,8 +98,7 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
         img_reportexampdf = findViewById(R.id.img_reportexampdf);
         img_reportexamemail = findViewById(R.id.img_reportexamemail);
         // Report 1
-        img_reportdatepdf.setOnClickListener(v -> showSelectDate("pdf"));
-        img_reportmailpdf.setOnClickListener(v -> showSelectDate("email"));
+
         // Report 2
         // todo : falta diseño de formato pdf
         img_reportworkpdf.setOnClickListener(v -> showPdfDialog("pdf"));
@@ -121,6 +126,10 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
             mDialog.show();
             // Init arrays
             listaMetricasPersonales = new ArrayList<>();
+            //Horario
+            listaMetricasPersonalesEntrada = new ArrayList<>();
+            listaMetricasPersonalesSalida = new ArrayList<>();
+
             listaPersonal = new ArrayList<>();
             // Transform date selected
             seletedDate = timeStampToString(input_dateSelected);
@@ -131,7 +140,7 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
             ref_datos_paciente.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    filtrarFecha(dataSnapshot, metodo);
+                    // filtrarFecha(dataSnapshot, metodo);
                 }
 
                 @Override
@@ -144,10 +153,9 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
         });
     }
 
-    private void filtrarFecha(DataSnapshot dataAll, String metodo) {
+    private void filtrarFecha(DataSnapshot dataAll, String metodo, boolean horario) {
 
         ArrayList<String> listDNI = new ArrayList<>();
-        //
         for (DataSnapshot snapshot : dataAll.getChildren()) { //<--- all data
             if (snapshot != null) {
                 String dni = snapshot.getKey();// <-- Get key ( dni worker)
@@ -157,10 +165,30 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
                         String registerDate = Objects.requireNonNull(item_date.getKey()).substring(0, 10).trim();
                         boolean checkdate = seletedDate.equalsIgnoreCase(registerDate);
                         if (checkdate) {
-                            MetricasPersonal data = item_date.getValue(MetricasPersonal.class);
-                            listaMetricasPersonales.add(data);
-                            listDNI.add(dni);
+                            try {
+                                MetricasPersonal data = item_date.getValue(MetricasPersonal.class);
+
+                                if (data.getHorario() == null) {
+                                    data.setHorario(false);
+                                }
+                                Log.e(TAG, "======================== " );
+                                Log.e(TAG, "getDateRegister = " + data.getDateRegister());
+                                Log.e(TAG, "getHorario = " + data.getHorario());
+                                Log.e(TAG, "getPulse = " + data.getPulse());
+                                Log.e(TAG, "getSo2 = " + data.getSo2());
+                                Log.e(TAG, "getSymptoms = " + data.getSymptoms());
+                                Log.e(TAG, "getTempurature = " + data.getTempurature());
+                                Log.e(TAG, "getTestpruebarapida = " + data.getTestpruebarapida());
+                                Log.e(TAG, "getWho_user_register = " + data.getWho_user_register());
+
+                                listaMetricasPersonalesEntrada.add(data);
+                                listDNI.add(dni);
+                            } catch (Exception e) {
+                                Log.e(TAG, " error try - cath" + e.getMessage());
+                            }
                         }
+                    } else {
+                        Log.e(TAG, "no hay item_date = null");
                     }
                 }
                 Log.e(TAG, "[onDataChange] dni = " + dni);
@@ -168,7 +196,7 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
                 Log.e(TAG, "no hay snaphot = " + snapshot);
             }
         }
-        Log.e(TAG, "[onDataChange] listaMetricasPersonales.size() = " + listaMetricasPersonales.size());
+
         if (listDNI.size() == 0) {
             mDialog.dismiss();
             Log.e(TAG, " No hay datos para esta fecha");
@@ -178,31 +206,28 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
         for (int i = 0; i < listDNI.size(); i++) {
             String dni = listDNI.get(i);
             DatabaseReference ref_mina = database.getReference(Common.db_mina_personal).child(Common.unidadTrabajoSelected.getNameUT()).child(dni);
-            ref_mina
-                    .addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                            Personal personal = dataSnapshot.getValue(Personal.class);
-                            if (personal != null) {
-                                listaPersonal.add(personal);
-                            }
-                            if (listaPersonal.size() == listDNI.size()) {
-                                generarListaporFechaPdf(listaMetricasPersonales, listaPersonal, seletedDate, metodo);
-                            }
-                            //
-                            Log.e(TAG, "[filtrarFecha]-onDataChange  listaPersonal.size()  : " + listaPersonal.size());
-                            Log.e(TAG, "[filtrarFecha]-onDataChange  listDNI.size()  : " + listDNI.size());
-                        }
+            ref_mina.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    Personal personal = dataSnapshot.getValue(Personal.class);
+                    if (personal != null) {
+                        listaPersonal.add(personal);
+                    }
+                    if (listaPersonal.size() == listDNI.size()) {
+                        generarListaporFechaPdf(listaMetricasPersonalesEntrada, listaPersonal, seletedDate, metodo);
+                    }
+                    Log.e(TAG, "[filtrarFecha]-onDataChange  listaPersonal.size()  : " + listaPersonal.size());
+                    Log.e(TAG, "[filtrarFecha]-onDataChange  listDNI.size()  : " + listDNI.size());
+                }
 
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError databaseError) {
-                            Log.e(TAG, "[filtrarFecha]-onCancelled databaseError : " + databaseError.getMessage());
-                        }
-                    });
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                    Log.e(TAG, "[filtrarFecha]-onCancelled databaseError : " + databaseError.getMessage());
+                }
+            });
 
         }
-        Log.e(TAG, "[filtrarFecha] listDNI = " + listDNI.size());
-        Log.e(TAG, "[filtrarFecha] listaMetricasPersonales =" + listaMetricasPersonales.size());
+
     }
 
     private void generarListaporFechaPdf(List<MetricasPersonal> listMetricasPersonal, List<Personal> listPersonal, String seletedDate, String metodo) {
@@ -1734,5 +1759,50 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
 
     }
 
+
+    public void btn_entrada_pdf(View view) {
+
+        String metodo = "pdf";
+        Boolean horario = true;
+        builder = MaterialDatePicker.Builder.datePicker();
+        builder.setTitleText("Seleccionar Fecha");
+        mdp = builder.build();
+        mdp.show(getSupportFragmentManager(), "DATE_PICKER");
+        mdp.addOnPositiveButtonClickListener((MaterialPickerOnPositiveButtonClickListener<Long>) input_dateSelected -> {
+            //
+            mDialog = new ProgressDialog(ReportDataWorkerActivity.this);
+            mDialog.setMessage("Obteniendo datos ...");
+            mDialog.show();
+            // Init arrays
+            //Horario
+            listaMetricasPersonalesEntrada = new ArrayList<>();
+            listaPersonal = new ArrayList<>();
+            // Transform date selected
+            seletedDate = timeStampToString(input_dateSelected);
+            // Get Data From Firebase and init reference
+            ref_datos_paciente = database.getReference(Common.db_mina_personal_data).child(Common.unidadTrabajoSelected.getNameUT());
+            ref_datos_paciente.keepSynced(true);
+            ref_datos_paciente.orderByKey();
+            ref_datos_paciente.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    filtrarFecha(dataSnapshot, metodo, horario);
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                    Log.e(TAG, "[showSelectDate ] error : " + databaseError.getMessage());
+                    mDialog.dismiss();
+                }
+            });
+
+        });
+
+
+    }
+
+
+    public void btn_salida_pdf(View view) {
+    }
 
 }

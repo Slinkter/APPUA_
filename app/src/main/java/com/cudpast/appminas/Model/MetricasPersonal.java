@@ -11,19 +11,10 @@ public class MetricasPersonal {
     private Boolean testpruebarapida;
     private Boolean horario;
 
-    private String namepaciente;
-
     public MetricasPersonal() {
 
     }
 
-    public String getNamepaciente() {
-        return namepaciente;
-    }
-
-    public void setNamepaciente(String namepaciente) {
-        this.namepaciente = namepaciente;
-    }
 
     public String getDateRegister() {
         return dateRegister;
@@ -89,4 +80,6 @@ public class MetricasPersonal {
     public void setHorario(Boolean horario) {
         this.horario = horario;
     }
+
+
 }
