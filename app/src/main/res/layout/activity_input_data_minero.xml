@@ -37,7 +37,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/mb_input"
                 android:hint="DNI"
-
                 app:counterEnabled="true"
                 app:counterMaxLength="8"
                 app:endIconMode="custom"
@@ -82,7 +81,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/mb_input"
-                android:hint="Apellido"
+                android:hint="Apellidos"
                 app:endIconMode="custom"
                 app:errorEnabled="true"
                 app:startIconDrawable="@drawable/ic_account">
@@ -102,7 +101,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/mb_input"
-                android:hint="Nombre"
+                android:hint="Nombres"
                 app:endIconMode="custom"
                 app:errorEnabled="true"
                 app:startIconDrawable="@drawable/ic_account">
@@ -125,7 +124,7 @@
                 android:layout_marginBottom="5dp"
                 android:fontFamily="@font/headland_one"
                 android:gravity="start"
-                android:text="Control de Trabajo"
+                android:text="Control de horario"
                 android:textColor="@color/colorPrimary"
                 android:textSize="20sp"
                 android:textStyle="bold" />
@@ -204,7 +203,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/mb_input"
-                android:hint="Sat. de oxigeno.[85-100]"
+                android:hint="Sat. de oxigeno [85-100]"
                 app:endIconMode="custom"
                 app:errorEnabled="true"
                 app:startIconDrawable="@drawable/ic_age">

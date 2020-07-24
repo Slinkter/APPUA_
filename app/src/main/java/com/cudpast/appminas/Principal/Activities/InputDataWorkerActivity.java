@@ -47,6 +47,7 @@ public class InputDataWorkerActivity extends AppCompatActivity {
     private boolean testfastcovid;
 
     private CheckBox s1, s2, s3, s4, s5, s6, s7;
+    private Boolean sa1, sa2, sa3, sa4, sa5, sa6, sa7;
 
 
     public static final String TAG = InputDataWorkerActivity.class.getSimpleName();
@@ -57,14 +58,9 @@ public class InputDataWorkerActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getSupportActionBar().setTitle("Ingresar datos");
+        getSupportActionBar().setTitle("Registrar Síntomas");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setContentView(R.layout.activity_input_data_minero);
-
-        // todo : control de trabjao
-        // todo : prueba rapida
-        // todo : sintomas check ... ok
-
 
         show_consulta_lastname = findViewById(R.id.show_consulta_nombre);
         show_consulta_firstname = findViewById(R.id.show_consulta_edad);
@@ -102,10 +98,24 @@ public class InputDataWorkerActivity extends AppCompatActivity {
         s5 = findViewById(R.id.s5);
         s6 = findViewById(R.id.s6);
         s7 = findViewById(R.id.s7);
-
-
+        //default
+        s1.setText("Tos");
+        s2.setText("Dolor de Garganta");
+        s3.setText("Fiebre");
+        s4.setText("Dificultad respitoria");
+        s5.setText("Diarrea");
+        s6.setText("Dolor abdominal");
+        s7.setText("Dolor pecho");
+        sa1 = false;
+        sa2 = false;
+        sa3 = false;
+        sa4 = false;
+        sa5 = false;
+        sa6 = false;
+        sa7 = false;
+        //
         toggleCheckHorario();
-        toggleCheck();
+        toggleCheckTest();
         //
         btn_input_consulta.setOnClickListener(v -> {
             String dni_personal = input_dni.getText().toString();
@@ -113,7 +123,6 @@ public class InputDataWorkerActivity extends AppCompatActivity {
         });
 
         btn_input_data.setOnClickListener(v -> {
-
             if (submitForm()) {
                 savePersonalData();
             }
@@ -125,12 +134,47 @@ public class InputDataWorkerActivity extends AppCompatActivity {
             finish();
         });
 
+        // Capturando los valores de checkbox ...
+        s1.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            sa1 = isChecked;
+            Log.e(TAG, " s1  = " + sa1);
+        });
+
+        s2.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            sa2 = isChecked;
+            Log.e(TAG, " s2  = " + sa2);
+        });
+
+        s3.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            sa3 = isChecked;
+            Log.e(TAG, " s3  = " + sa3);
+        });
+
+        s4.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            sa4 = isChecked;
+            Log.e(TAG, " s4  = " + sa4);
+        });
+
+        s5.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            sa5 = isChecked;
+            Log.e(TAG, " s5  = " + sa5);
+        });
+
+        s6.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            sa6 = isChecked;
+            Log.e(TAG, " s6  = " + sa6);
+        });
+
+        s7.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            sa7 = isChecked;
+            Log.e(TAG, " s7  = " + sa7);
+        });
+
 
     }
 
 
     private void toggleCheckHorario() {
-
         input_entrada.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
                 input_salida.setEnabled(false);
@@ -139,7 +183,6 @@ public class InputDataWorkerActivity extends AppCompatActivity {
                 input_salida.setEnabled(true);
             }
         });
-
         input_salida.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
                 input_entrada.setEnabled(false);
@@ -147,12 +190,11 @@ public class InputDataWorkerActivity extends AppCompatActivity {
             } else {
                 input_entrada.setEnabled(true);
             }
-
         });
     }
 
 
-    private void toggleCheck() {
+    private void toggleCheckTest() {
 
         input_test_yes.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
@@ -202,7 +244,6 @@ public class InputDataWorkerActivity extends AppCompatActivity {
         s6.setEnabled(false);
         s7.setEnabled(false);
 
-
     }
 
     private void checkEnable() {
@@ -210,7 +251,6 @@ public class InputDataWorkerActivity extends AppCompatActivity {
         input_saturacion_layout.setEnabled(true);
         input_pulso_layout.setEnabled(true);
         input_sintomas_layout.setEnabled(true);
-
 
         input_entrada.setEnabled(true);
         input_salida.setEnabled(true);
@@ -238,7 +278,6 @@ public class InputDataWorkerActivity extends AppCompatActivity {
         String pulse = input_pulso.getText().toString();
         String symptoms = input_sintomas.getText().toString();
         String dateRegister = date_atention;
-
         //String tempurature, String so2, String pulse, String symptoms, String dateRegister
         MetricasPersonal metricasPersonal = new MetricasPersonal();
         metricasPersonal.setTempurature(tempurature);
@@ -248,6 +287,15 @@ public class InputDataWorkerActivity extends AppCompatActivity {
         metricasPersonal.setDateRegister(dateRegister);
         metricasPersonal.setWho_user_register(Common.currentUser.getUid()); // requerido
         metricasPersonal.setTestpruebarapida(testfastcovid);
+        //
+        metricasPersonal.setS1(sa1);
+        metricasPersonal.setS2(sa2);
+        metricasPersonal.setS3(sa3);
+        metricasPersonal.setS4(sa4);
+        metricasPersonal.setS5(sa5);
+        metricasPersonal.setS6(sa6);
+        metricasPersonal.setS7(sa7);
+
         // si es verdadero es turno entrada
         // si es falso es turno salida
         metricasPersonal.setHorario(horario);
@@ -293,10 +341,6 @@ public class InputDataWorkerActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 personal = dataSnapshot.getValue(Personal.class);
                 if (personal != null) {
-                    Log.e(TAG, "nombre : " + personal.getName());
-                    Log.e(TAG, "dni : " + personal.getDni());
-                    Log.e(TAG, "dirección : " + personal.getAddress());
-                    Log.e(TAG, "phone 1 : " + personal.getPhone1());
                     show_consulta_lastname.setText(personal.getLast());
                     show_consulta_firstname.setText(personal.getName());
                     show_consulta_lastname.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.color_error_null));
@@ -304,20 +348,17 @@ public class InputDataWorkerActivity extends AppCompatActivity {
                     checkEnable();
                     input_dni_layout.setError(null);
                 } else {
-                    Log.e(TAG, "el trabjador no existe en  ");
                     show_consulta_lastname.setText("");
                     show_consulta_lastname.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.color_error));
                     show_consulta_firstname.setText("");
                     notEnable();
                     input_dni_layout.setError("El trabajador no exsite en la base de datos");
-
                 }
-
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                Log.e(TAG, "error : " + databaseError.getMessage());
+                Log.e(TAG, " error : " + databaseError.getMessage());
             }
         });
 

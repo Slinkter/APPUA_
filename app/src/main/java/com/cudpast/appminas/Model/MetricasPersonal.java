@@ -10,13 +10,11 @@ public class MetricasPersonal {
     private String who_user_register;
     private Boolean testpruebarapida;
     private Boolean horario;
-
     private Boolean s1, s2, s3, s4, s5, s6, s7;
 
     public MetricasPersonal() {
 
     }
-
 
     public String getDateRegister() {
         return dateRegister;
