@@ -156,7 +156,7 @@ public class LoginActivity extends AppCompatActivity implements CompoundButton.O
     private void initLogin() {
         if (submitForm()) {
             mDialog = new ProgressDialog(LoginActivity.this);
-            mDialog.setMessage("Autenticado su usuario  ...");
+            mDialog.setMessage("Autenticado ...");
             mDialog.show();
             //
             String email = log_email.getText().toString();

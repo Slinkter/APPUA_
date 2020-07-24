@@ -7,10 +7,8 @@ import androidx.core.content.ContextCompat;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -35,7 +33,7 @@ import java.util.Date;
 
 public class InputDataWorkerActivity extends AppCompatActivity {
 
-    private TextView show_consulta_nombre, show_consulta_edad;
+    private TextView show_consulta_lastname, show_consulta_firstname;
     private TextInputLayout show_consulta_nombre_layout, show_consulta_edad_layout;
     private TextInputLayout input_dni_layout, input_temperatura_layout, input_saturacion_layout, input_pulso_layout, input_sintomas_layout;
     private TextInputEditText input_dni, input_temperatura, input_saturacion, input_pulso;
@@ -47,6 +45,8 @@ public class InputDataWorkerActivity extends AppCompatActivity {
 
     private boolean horario;
     private boolean testfastcovid;
+
+    private CheckBox s1, s2, s3, s4, s5, s6, s7;
 
 
     public static final String TAG = InputDataWorkerActivity.class.getSimpleName();
@@ -63,11 +63,11 @@ public class InputDataWorkerActivity extends AppCompatActivity {
 
         // todo : control de trabjao
         // todo : prueba rapida
-        // todo : sintomas check
+        // todo : sintomas check ... ok
 
 
-        show_consulta_nombre = findViewById(R.id.show_consulta_nombre);
-        show_consulta_edad = findViewById(R.id.show_consulta_edad);
+        show_consulta_lastname = findViewById(R.id.show_consulta_nombre);
+        show_consulta_firstname = findViewById(R.id.show_consulta_edad);
 
         show_consulta_nombre_layout = findViewById(R.id.show_consulta_nombre_layout);
         show_consulta_edad_layout = findViewById(R.id.show_consulta_edad_layout);
@@ -95,6 +95,15 @@ public class InputDataWorkerActivity extends AppCompatActivity {
         input_test_yes = findViewById(R.id.input_test_yes);
         input_test_no = findViewById(R.id.input_test_no);
         //
+        s1 = findViewById(R.id.s1);
+        s2 = findViewById(R.id.s2);
+        s3 = findViewById(R.id.s3);
+        s4 = findViewById(R.id.s4);
+        s5 = findViewById(R.id.s5);
+        s6 = findViewById(R.id.s6);
+        s7 = findViewById(R.id.s7);
+
+
         toggleCheckHorario();
         toggleCheck();
         //
@@ -178,6 +187,22 @@ public class InputDataWorkerActivity extends AppCompatActivity {
         input_sintomas_layout.setEnabled(false);
         show_consulta_nombre_layout.setEnabled(false);
         show_consulta_edad_layout.setEnabled(false);
+
+        input_entrada.setEnabled(false);
+        input_salida.setEnabled(false);
+
+        input_test_yes.setEnabled(false);
+        input_test_no.setEnabled(false);
+
+        s1.setEnabled(false);
+        s2.setEnabled(false);
+        s3.setEnabled(false);
+        s4.setEnabled(false);
+        s5.setEnabled(false);
+        s6.setEnabled(false);
+        s7.setEnabled(false);
+
+
     }
 
     private void checkEnable() {
@@ -185,6 +210,21 @@ public class InputDataWorkerActivity extends AppCompatActivity {
         input_saturacion_layout.setEnabled(true);
         input_pulso_layout.setEnabled(true);
         input_sintomas_layout.setEnabled(true);
+
+
+        input_entrada.setEnabled(true);
+        input_salida.setEnabled(true);
+
+        input_test_yes.setEnabled(true);
+        input_test_no.setEnabled(true);
+
+        s1.setEnabled(true);
+        s2.setEnabled(true);
+        s3.setEnabled(true);
+        s4.setEnabled(true);
+        s5.setEnabled(true);
+        s6.setEnabled(true);
+        s7.setEnabled(true);
     }
 
 
@@ -257,17 +297,17 @@ public class InputDataWorkerActivity extends AppCompatActivity {
                     Log.e(TAG, "dni : " + personal.getDni());
                     Log.e(TAG, "dirección : " + personal.getAddress());
                     Log.e(TAG, "phone 1 : " + personal.getPhone1());
-                    show_consulta_nombre.setText(personal.getLast());
-                    show_consulta_edad.setText(personal.getName());
-                    show_consulta_nombre.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.color_error_null));
-                    show_consulta_edad.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.color_error_null));
+                    show_consulta_lastname.setText(personal.getLast());
+                    show_consulta_firstname.setText(personal.getName());
+                    show_consulta_lastname.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.color_error_null));
+                    show_consulta_firstname.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.color_error_null));
                     checkEnable();
                     input_dni_layout.setError(null);
                 } else {
                     Log.e(TAG, "el trabjador no existe en  ");
-                    show_consulta_nombre.setText("");
-                    show_consulta_nombre.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.color_error));
-                    show_consulta_edad.setText("");
+                    show_consulta_lastname.setText("");
+                    show_consulta_lastname.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.color_error));
+                    show_consulta_firstname.setText("");
                     notEnable();
                     input_dni_layout.setError("El trabajador no exsite en la base de datos");
 
