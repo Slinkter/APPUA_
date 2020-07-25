@@ -24,7 +24,9 @@
             android:fontFamily="@font/headland_one"
             android:gravity="center"
             android:text="Seleccionar\nUnidad de Trabajo"
-            android:textSize="@dimen/text_size_h1"
+
+            android:textColor="@color/colorPrimary"
+            android:textSize="25dp"
             android:textStyle="bold" />
 
 
