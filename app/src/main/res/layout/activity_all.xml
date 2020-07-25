@@ -334,6 +334,10 @@
                 android:textSize="@dimen/text_size_h3"
                 android:textStyle="bold" />
 
+            336.39
+            91.40
+
+
         </LinearLayout>
 
     </LinearLayout>
