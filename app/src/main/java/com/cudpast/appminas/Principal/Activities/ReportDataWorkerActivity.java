@@ -1204,32 +1204,33 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
 
     //===============================================================================
 
-    private void generarListaporPersonalPdf(String nombre, String metodo) {
-
-        Log.e(TAG, "---> generarListaporPersonalPdf()  ");
+    private void generarListaporPersonalPdf(String nombre, String metodo, String dni) {
+        //
+        Log.e(TAG, "---> generarListaporPersonalPdf()");
+        Log.e(TAG, "===> Nombre : " + nombre);
+        Log.e(TAG, "===> DNI :  " + dni);
         Log.e(TAG, "tamaño  listDate : " + listDate.size());
         Log.e(TAG, "tamaño listTemperatura : " + listTemperatura.size());
         Log.e(TAG, "tamaño listSaturacion : " + listSaturacion.size());
         Log.e(TAG, "tamaño listPulso : " + listPulso.size());
-
+        //
         int pageWidth = 1200;
         Date currentDate = new Date();
-        //
         java.text.DateFormat dateFormat;
         //
         PdfDocument pdfDocument = new PdfDocument();
-        Paint myPaint = new Paint();
-        //
         PdfDocument.PageInfo myPageInfo01 = new PdfDocument.PageInfo.Builder(1200, 2010, 1).create();
         PdfDocument.Page myPage01 = pdfDocument.startPage(myPageInfo01);
+        Paint myPaint = new Paint();
         Canvas cansas01 = myPage01.getCanvas();
         //
         Paint title = new Paint();
-        title.setTextSize(70);
+        title.setTextSize(60);
         title.setTextAlign(Paint.Align.CENTER);
         title.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
         title.setColor(Color.BLACK);
-        cansas01.drawText("UNIDADES ARSI ", pageWidth / 2, 80, title);
+        cansas01.drawText("UNIDAD DE TRABAJO ", pageWidth / 2, 80, title);
+        cansas01.drawText(Common.unidadTrabajoSelected.getAliasUT(), pageWidth / 2, 160, title);
 
         Paint fecha = new Paint();
         fecha.setTextSize(25f);
@@ -1249,13 +1250,13 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
 
         //
         Paint info = new Paint();
-        info.setTextSize(35f);
+        info.setTextSize(30f);
         info.setTextAlign(Paint.Align.LEFT);
         info.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL));
         info.setColor(Color.BLACK);
-        cansas01.drawText("Trabajador  : " + nombre, 20, 200, info);
-        cansas01.drawText("Unidad de Trabajo : " + Common.unidadTrabajoSelected.getNameUT(), 20, 250, info);
-        cansas01.drawText("Responsable : " + Common.currentUser.getReg_name(), 20, 300, info);
+        cansas01.drawText("DNI  : " + dni, 20, 220, info);
+        cansas01.drawText("Trabajador  : " + nombre, 20, 270, info);
+        cansas01.drawText("Responsable : " + Common.currentUser.getReg_name(), 20, 320, info);
 
         // Encabezados
         myPaint.setStyle(Paint.Style.STROKE);
@@ -1266,18 +1267,18 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
         myPaint.setTextAlign(Paint.Align.LEFT);
         myPaint.setStyle(Paint.Style.FILL);
 
-        cansas01.drawText("Nro.", 35, 415, myPaint);
+        cansas01.drawText("Nro.", 55, 415, myPaint);
         cansas01.drawText("Fecha y hora", 200, 415, myPaint);
         cansas01.drawText("TEMPERATURA", 450, 415, myPaint);
-        cansas01.drawText("SO2", 700, 415, myPaint);
-        cansas01.drawText("PULSO.", 950, 415, myPaint);
-
+        cansas01.drawText("SO2", 680, 415, myPaint);
+        cansas01.drawText("Pulso", 780, 415, myPaint);
+        cansas01.drawText("Prueba Rápida.", 920, 415, myPaint);
 
         cansas01.drawLine(140, 380, 140, 430, myPaint);
         cansas01.drawLine(420, 380, 420, 430, myPaint);
-        cansas01.drawLine(660, 380, 660, 430, myPaint);
+        cansas01.drawLine(650, 380, 650, 430, myPaint);
+        cansas01.drawLine(750, 380, 750, 430, myPaint);
         cansas01.drawLine(880, 380, 880, 430, myPaint);
-
         //
         int ytext = 400;
         int ysum = 50;
@@ -1318,7 +1319,7 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
             // Nro
             cansas01.drawText(i + 1 + " ", 80, ytext + ysum, myPaint);
             // Temperatura
-            cansas01.drawText(listTemperatura.get(i), 490, ytext + ysum, myPaint);
+            cansas01.drawText(listTemperatura.get(i), 520, ytext + ysum, myPaint);
             sumaTemp = sumaTemp + Double.parseDouble(listTemperatura.get(i));
 
             // Saturacion
@@ -1335,7 +1336,7 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
             } else {
                 so.setColor(Color.rgb(255, 38, 38));
             }
-            cansas01.drawText(listSaturacion.get(i).toString(), 720, ytext + ysum, so);
+            cansas01.drawText(listSaturacion.get(i).toString(), 680, ytext + ysum, so);
             // Pulse
             int valuePulso = Integer.parseInt(listPulso.get(i).toString());
 
@@ -1350,7 +1351,7 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
             } else {
                 pulse.setColor(Color.rgb(255, 38, 38));
             }
-            cansas01.drawText(listPulso.get(i).toString(), 970, ytext + ysum, pulse);
+            cansas01.drawText(listPulso.get(i).toString(), 780, ytext + ysum, pulse);
             //
         }
 
@@ -1370,10 +1371,17 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
             Log.e(TAG, "cadTemp : " + cadTemp);
             Log.e(TAG, "cadSa : " + cadSa);
             Log.e(TAG, "cadPulse : " + cadPulse);
-            cansas01.drawText("Promedio de los ultimos " + size + " días", 35, 1600, myPaint);
-            cansas01.drawText("Promedio temperatura : " + cadTemp.substring(0, 4), 35, 1650, myPaint);
-            cansas01.drawText("Promedio SO2  : " + cadSa.substring(0, 4), 35, 1700, myPaint);
-            cansas01.drawText("Promedio pulso : " + cadPulse.substring(0, 4), 35, 1750, myPaint);
+
+            Paint promedio = new Paint();
+            promedio.setTextSize(35f);
+            promedio.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
+            promedio.setTextAlign(Paint.Align.LEFT);
+            promedio.setColor(Color.BLACK);
+
+            cansas01.drawText("Promedio de los últimos " + size + " días", 35, 1600, promedio);
+            cansas01.drawText("1)Promedio temperatura : " + cadTemp.substring(0, 4), 45, 1650, myPaint);
+            cansas01.drawText("2)Promedio Saturación de oxigeno  : " + cadSa.substring(0, 4), 45, 1700, myPaint);
+            cansas01.drawText("3)Promedio pulso : " + cadPulse.substring(0, 4), 45, 1750, myPaint);
             //-------------------------------------------------------------------------------
         } catch (Exception e) {
             Log.e("error promedio  :  ", " --> " + e.getMessage());
@@ -1443,7 +1451,7 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
                 Log.e(TAG, "---> listPulso : " + listPulso.size());
 
                 try {
-                    generarListaporPersonalPdf(nombre, metodo);
+                    generarListaporPersonalPdf(nombre, metodo, dni);
                 } catch (Exception e) {
                     Log.e(TAG, "ERROR --> getDataFromFirebase : " + e.getMessage());
                     Toast.makeText(ReportDataWorkerActivity.this, "Error al Generar PDF ", Toast.LENGTH_SHORT).show();
