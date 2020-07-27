@@ -6,7 +6,6 @@ import androidx.core.app.ActivityCompat;
 
 import android.Manifest;
 import android.app.AlertDialog;
-import android.app.DirectAction;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -78,6 +77,7 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
     List<String> listTemperatura;
     List<Integer> listSaturacion;
     List<Integer> listPulso;
+    List<Boolean> listTest;
     //
 
     private List<MetricasPersonal> listtemp;
@@ -1204,15 +1204,16 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
 
     //===============================================================================
 
-    private void generarListaporPersonalPdf(String nombre, String metodo, String dni) {
+    private void reporterPorTrabajador(String nombre, String metodo, String dni) {
         //
-        Log.e(TAG, "---> generarListaporPersonalPdf()");
+        Log.e(TAG, "---> reporterPorTrabajador()");
         Log.e(TAG, "===> Nombre : " + nombre);
         Log.e(TAG, "===> DNI :  " + dni);
         Log.e(TAG, "tamaño  listDate : " + listDate.size());
         Log.e(TAG, "tamaño listTemperatura : " + listTemperatura.size());
         Log.e(TAG, "tamaño listSaturacion : " + listSaturacion.size());
         Log.e(TAG, "tamaño listPulso : " + listPulso.size());
+        Log.e(TAG, "tamaño listTest : " + listTest.size());
         //
         int pageWidth = 1200;
         Date currentDate = new Date();
@@ -1221,7 +1222,6 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
         PdfDocument pdfDocument = new PdfDocument();
         PdfDocument.PageInfo myPageInfo01 = new PdfDocument.PageInfo.Builder(1200, 2010, 1).create();
         PdfDocument.Page myPage01 = pdfDocument.startPage(myPageInfo01);
-        Paint myPaint = new Paint();
         Canvas cansas01 = myPage01.getCanvas();
         //
         Paint title = new Paint();
@@ -1259,6 +1259,7 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
         cansas01.drawText("Responsable : " + Common.currentUser.getReg_name(), 20, 320, info);
 
         // Encabezados
+        Paint myPaint = new Paint();
         myPaint.setStyle(Paint.Style.STROKE);
         myPaint.setStrokeWidth(2);
         myPaint.setTextSize(25f);
@@ -1269,38 +1270,40 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
 
         cansas01.drawText("Nro.", 55, 415, myPaint);
         cansas01.drawText("Fecha y hora", 200, 415, myPaint);
-        cansas01.drawText("TEMPERATURA", 450, 415, myPaint);
-        cansas01.drawText("SO2", 680, 415, myPaint);
-        cansas01.drawText("Pulso", 780, 415, myPaint);
-        cansas01.drawText("Prueba Rápida.", 920, 415, myPaint);
+        cansas01.drawText("TEMPERATURA", 460, 415, myPaint);
+        cansas01.drawText("SO2", 710, 415, myPaint);
+        cansas01.drawText("Pulso", 810, 415, myPaint);
+        cansas01.drawText("Prueba Rápida.", 950, 415, myPaint);
 
         cansas01.drawLine(140, 380, 140, 430, myPaint);
-        cansas01.drawLine(420, 380, 420, 430, myPaint);
-        cansas01.drawLine(650, 380, 650, 430, myPaint);
-        cansas01.drawLine(750, 380, 750, 430, myPaint);
-        cansas01.drawLine(880, 380, 880, 430, myPaint);
+        cansas01.drawLine(430, 380, 430, 430, myPaint);
+        cansas01.drawLine(680, 380, 680, 430, myPaint);
+        cansas01.drawLine(780, 380, 780, 430, myPaint);
+        cansas01.drawLine(910, 380, 910, 430, myPaint);
         //
         int ytext = 400;
         int ysum = 50;
         int ytextname = 400;
         int ysumname = 50;
         //
-
         Paint temp = new Paint();
         Paint so = new Paint();
-        so.setTextSize(25f);
         Paint pulse = new Paint();
+
+        Paint paint_pruebarapida = new Paint();
+
+
+        so.setTextSize(25f);
         pulse.setTextSize(25f);
-        //
+        paint_pruebarapida.setTextSize(25f);
         //-------------------------------------------------------------------------------
         //---> Pagina 01 Pagina 01 : [0-28]
-        //metricas
+        //Promedio
         double sumaTemp = 0;
         double promedioTemp = 0.0f;
 
         double sumaSatura = 0;
         double promedioSatura = 0.0f;
-
 
         double sumaPulse = 0;
         double promedioPulse = 0.0f;
@@ -1313,18 +1316,14 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
             cansas01.drawText(listDate.get(i), 170, ytextname + ysumname, myPaint);
         }
 
-
         for (int i = 0; i < size; i++) {
             ysum = ysum + 50;
-            // Nro
-            cansas01.drawText(i + 1 + " ", 80, ytext + ysum, myPaint);
+
             // Temperatura
-            cansas01.drawText(listTemperatura.get(i), 520, ytext + ysum, myPaint);
             sumaTemp = sumaTemp + Double.parseDouble(listTemperatura.get(i));
 
-            // Saturacion
+            // Color SO2
             int valueSatura = Integer.parseInt(listSaturacion.get(i).toString());
-
             sumaSatura = sumaSatura + valueSatura;
 
             if (valueSatura >= 95 && valueSatura <= 99) {
@@ -1336,12 +1335,10 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
             } else {
                 so.setColor(Color.rgb(255, 38, 38));
             }
-            cansas01.drawText(listSaturacion.get(i).toString(), 680, ytext + ysum, so);
-            // Pulse
+
+            // Color Pulse
             int valuePulso = Integer.parseInt(listPulso.get(i).toString());
-
             sumaPulse = sumaPulse + valuePulso;
-
             if (valuePulso >= 86) {
                 pulse.setColor(Color.rgb(17, 230, 165));
             } else if (valuePulso >= 70 && valuePulso <= 84) {
@@ -1351,8 +1348,30 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
             } else {
                 pulse.setColor(Color.rgb(255, 38, 38));
             }
-            cansas01.drawText(listPulso.get(i).toString(), 780, ytext + ysum, pulse);
-            //
+            // Prueba rapida
+            String cad_pruebaRapida = "";
+            if (listTest.get(i)) {
+                cad_pruebaRapida = "SI";
+                paint_pruebarapida.setColor(Color.rgb(17, 230, 165));
+            } else {
+                cad_pruebaRapida = "NO";
+                paint_pruebarapida.setColor(Color.rgb(255, 38, 38));
+            }
+
+
+            try {
+
+
+                //
+                cansas01.drawText(i + 1 + " ", 80, ytext + ysum, myPaint);
+                cansas01.drawText(listTemperatura.get(i), 520, ytext + ysum, myPaint);
+                cansas01.drawText(listSaturacion.get(i).toString(), 710, ytext + ysum, so);
+                cansas01.drawText(listPulso.get(i).toString(), 810, ytext + ysum, pulse);
+                cansas01.drawText(cad_pruebaRapida, 1010, ytext + ysum, paint_pruebarapida);
+                //
+            } catch (Exception e) {
+                Log.e(TAG, "ERROR " + e.getMessage());
+            }
         }
 
         try {
@@ -1420,6 +1439,7 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
         listTemperatura = new ArrayList<>();
         listSaturacion = new ArrayList<>();
         listPulso = new ArrayList<>();
+        listTest = new ArrayList<>();
 
         Query query = FirebaseDatabase
                 .getInstance()
@@ -1438,6 +1458,7 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
                         listTemperatura.add((metricasPersonal.getTempurature()));
                         listSaturacion.add(Integer.parseInt(metricasPersonal.getSo2()));
                         listPulso.add(Integer.parseInt(metricasPersonal.getPulse()));
+                        listTest.add(metricasPersonal.getTestpruebarapida());
 
                     } else {
                         mDialog.dismiss();
@@ -1449,9 +1470,10 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
                 Log.e(TAG, "---> listTemperatura : " + listTemperatura.size());
                 Log.e(TAG, "---> listSaturacion : " + listSaturacion.size());
                 Log.e(TAG, "---> listPulso : " + listPulso.size());
+                Log.e(TAG, "---> listTest : " + listTest.size());
 
                 try {
-                    generarListaporPersonalPdf(nombre, metodo, dni);
+                    reporterPorTrabajador(nombre, metodo, dni);
                 } catch (Exception e) {
                     Log.e(TAG, "ERROR --> getDataFromFirebase : " + e.getMessage());
                     Toast.makeText(ReportDataWorkerActivity.this, "Error al Generar PDF ", Toast.LENGTH_SHORT).show();
