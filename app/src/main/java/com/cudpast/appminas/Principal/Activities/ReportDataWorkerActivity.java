@@ -1454,11 +1454,19 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     MetricasPersonal metricasPersonal = snapshot.getValue(MetricasPersonal.class);
                     if (metricasPersonal != null) {
-                        listDate.add(metricasPersonal.getDateRegister());
-                        listTemperatura.add((metricasPersonal.getTempurature()));
-                        listSaturacion.add(Integer.parseInt(metricasPersonal.getSo2()));
-                        listPulso.add(Integer.parseInt(metricasPersonal.getPulse()));
-                        listTest.add(metricasPersonal.getTestpruebarapida());
+
+                        try {
+                            if (metricasPersonal.getHorario()) {
+                                listDate.add(metricasPersonal.getDateRegister());
+                                listTemperatura.add((metricasPersonal.getTempurature()));
+                                listSaturacion.add(Integer.parseInt(metricasPersonal.getSo2()));
+                                listPulso.add(Integer.parseInt(metricasPersonal.getPulse()));
+                                listTest.add(metricasPersonal.getTestpruebarapida());
+                            }
+                        } catch (Exception e) {
+                            Log.e(TAG, " no tiene horario ");
+                        }
+
 
                     } else {
                         mDialog.dismiss();
