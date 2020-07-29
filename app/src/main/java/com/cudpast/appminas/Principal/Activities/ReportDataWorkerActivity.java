@@ -248,10 +248,10 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
     private void filtrarFecha(DataSnapshot dataAll, String metodo, boolean horario) {
 
         ArrayList<String> listDNI = new ArrayList<>();
-        for (DataSnapshot snapshot : dataAll.getChildren()) { //<--- all data
-            if (snapshot != null) {
-                String dni = snapshot.getKey();// <-- Get key ( dni worker)
-                for (DataSnapshot item_date : snapshot.getChildren()) {  // <-- Todas la metricas por fechas de 1 persona
+        for (DataSnapshot item_snapshot : dataAll.getChildren()) { //<--- all data
+            if (item_snapshot != null) {
+                String dni = item_snapshot.getKey();// <-- Get key ( dni worker)
+                for (DataSnapshot item_date : item_snapshot.getChildren()) {  // <-- Todas la metricas por fechas de 1 persona
                     if (item_date != null) {
                         // Check Date , si coincide la fecha guardar data metrica y dni
                         String registerDate = Objects.requireNonNull(item_date.getKey()).substring(0, 10).trim();
@@ -289,7 +289,7 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
                 }
                 Log.e(TAG, "[onDataChange] dni = " + dni);
             } else {
-                Log.e(TAG, "no hay snaphot = " + snapshot);
+                Log.e(TAG, "no hay snaphot = " + item_snapshot);
             }
         }
 
@@ -334,6 +334,11 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
         Log.e(TAG, "[generarListaporFechaPdf]-listPersonal.size() : " + listPersonal.size());
         //
         // todo :  aqui se juntaria las dos lista para order por Apellido
+
+
+
+
+
         //
         if (listPersonal.size() >= 1) {
             if (listMetricasPersonal.size() == listPersonal.size()) {
