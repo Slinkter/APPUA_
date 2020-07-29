@@ -423,14 +423,13 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:gravity="center"
-            android:orientation="horizontal"
-            android:weightSum="2">
+            android:orientation="vertical">
 
             <Button
                 android:id="@+id/btn_input_data"
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="10dp"
+                android:layout_marginBottom="10dp"
                 android:layout_weight="1"
                 android:fontFamily="@font/headland_one"
                 android:text="Ingresar" />
@@ -438,12 +437,11 @@
             <Button
                 android:id="@+id/btn_input_back"
                 style="?attr/materialButtonOutlinedStyle"
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
                 android:layout_weight="1"
                 android:fontFamily="@font/headland_one"
-                android:text="Regresar" />
+                android:text="Salir" />
         </LinearLayout>
 
         <TextView

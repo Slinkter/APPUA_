@@ -127,7 +127,7 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
         mdp.addOnPositiveButtonClickListener((MaterialPickerOnPositiveButtonClickListener<Long>) input_dateSelected -> {
             //
             mDialog = new ProgressDialog(ReportDataWorkerActivity.this);
-            mDialog.setMessage("Descargando ...");
+            mDialog.setMessage("Descargando datos...");
             mDialog.show();
             // Init arrays
             //Horario
@@ -274,11 +274,10 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
                                 Log.e(TAG, "getWho_user_register = " + data.getWho_user_register());
 
                                 if (data.getHorario() == horario) {
-                                    Log.e(TAG, "filtro horario = " + data.getHorario());
                                     listaMetricasPersonalesEntrada.add(data);
                                     listDNI.add(dni);
+                                    Log.e(TAG, "filtro horario = " + data.getHorario());
                                 }
-
 
                             } catch (Exception e) {
                                 Log.e(TAG, " error try - cath" + e.getMessage());
@@ -313,7 +312,7 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
                     }
                     if (listaPersonal.size() == listDNI.size()) {
                         //-->
-                        generarListaporFechaPdf(listaMetricasPersonalesEntrada, listaPersonal, seletedDate, metodo, horario);
+                        reporte_por_dia(listaMetricasPersonalesEntrada, listaPersonal, seletedDate, metodo, horario);
                     }
                     Log.e(TAG, "[filtrarFecha]-onDataChange  listaPersonal.size()  : " + listaPersonal.size());
                     Log.e(TAG, "[filtrarFecha]-onDataChange  listDNI.size()  : " + listDNI.size());
@@ -329,27 +328,26 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
 
     }
 
-    private void generarListaporFechaPdf(List<MetricasPersonal> listMetricasPersonal, List<Personal> listPersonal, String seletedDate, String metodo, boolean horario) {
+    private void reporte_por_dia(List<MetricasPersonal> listMetricasPersonal, List<Personal> listPersonal, String seletedDate, String metodo, boolean horario) {
         Log.e(TAG, "[generarListaporFechaPdf]");
         Log.e(TAG, "[generarListaporFechaPdf]-listMetricasPersonal.size() : " + listMetricasPersonal.size());
         Log.e(TAG, "[generarListaporFechaPdf]-listPersonal.size() : " + listPersonal.size());
+        //
         if (listPersonal.size() >= 1) {
             if (listMetricasPersonal.size() == listPersonal.size()) {
                 int pageWidth = 1200;
                 Date currentDate = new Date();
-                //
                 java.text.DateFormat dateFormat;
                 //
                 PdfDocument pdfDocument = new PdfDocument();
-                Paint myPaint = new Paint();
-                //
                 PdfDocument.PageInfo myPageInfo01 = new PdfDocument.PageInfo.Builder(1200, 2010, 1).create();
                 PdfDocument.Page myPage01 = pdfDocument.startPage(myPageInfo01);
                 Canvas cansas01 = myPage01.getCanvas();
                 //
+                Paint myPaint = new Paint();
+                //
                 Paint title = new Paint();
                 title.setTextSize(60);
-
                 title.setTextAlign(Paint.Align.CENTER);
                 title.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
                 title.setColor(Color.BLACK);
@@ -463,7 +461,7 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
                         }
 
                         cansas01.drawText(listPersonal.get(i).getDni(), 140, ytextname + ysumname, myPaint);
-                        cansas01.drawText(listPersonal.get(i).getLast() + " " + listPersonal.get(i).getName(), 300, ytextname + ysumname, myPaint);
+                        cansas01.drawText(listPersonal.get(i).getLast() + " , " + listPersonal.get(i).getName(), 300, ytextname + ysumname, myPaint);
                         ysumname = ysumname + 50;
                     }
                     //
@@ -516,7 +514,7 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
                     //
                     for (int i = 0; i <= 28; i++) {
                         cansas01.drawText(listPersonal.get(i).getDni(), 140, ytextname + ysumname, myPaint);
-                        cansas01.drawText(listPersonal.get(i).getLast() + " " + listPersonal.get(i).getName(), 300, ytextname + ysumname, myPaint);
+                        cansas01.drawText(listPersonal.get(i).getLast() + " , " + listPersonal.get(i).getName(), 300, ytextname + ysumname, myPaint);
                         ysumname = ysumname + 55;
                     }
                     //
@@ -566,7 +564,7 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
                     //
                     for (int i = 29; i < list2b; i++) {
                         canvas2.drawText(listPersonal.get(i).getDni(), 140, 30 + x2sum, myPaint);
-                        canvas2.drawText(listPersonal.get(i).getLast() + " " + listPersonal.get(i).getName(), 300, 30 + x2sum, myPaint);
+                        canvas2.drawText(listPersonal.get(i).getLast() + " , " + listPersonal.get(i).getName(), 300, 30 + x2sum, myPaint);
                         x2sum = x2sum + 50;
                     }
                     //
@@ -616,7 +614,7 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
                     //
                     for (int i = 0; i <= 28; i++) {
                         cansas01.drawText(listPersonal.get(i).getDni(), 170, ytextname + ysumname, myPaint);
-                        cansas01.drawText(listPersonal.get(i).getName(), 340, ytextname + ysumname, myPaint);
+                        cansas01.drawText(listPersonal.get(i).getLast() + " , " + listPersonal.get(i).getName(), 340, ytextname + ysumname, myPaint);
                         ysumname = ysumname + 55;
                     }
                     //
