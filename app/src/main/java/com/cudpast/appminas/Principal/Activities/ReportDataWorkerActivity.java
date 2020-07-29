@@ -333,6 +333,8 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
         Log.e(TAG, "[generarListaporFechaPdf]-listMetricasPersonal.size() : " + listMetricasPersonal.size());
         Log.e(TAG, "[generarListaporFechaPdf]-listPersonal.size() : " + listPersonal.size());
         //
+        // todo :  aqui se juntaria las dos lista para order por Apellido
+        //
         if (listPersonal.size() >= 1) {
             if (listMetricasPersonal.size() == listPersonal.size()) {
                 int pageWidth = 1200;
