@@ -49,6 +49,9 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -354,12 +357,9 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
         List<AllPersonalMetricas> list_workers = new ArrayList<>();
         int allSize = listMetricasPersonal.size();
         for (int i = 0; i < allSize; i++) {
-
-
             try {
 
                 AllPersonalMetricas worker = new AllPersonalMetricas();
-
                 worker.setDni(listPersonal.get(i).getDni());
                 worker.setName(listPersonal.get(i).getName());
                 worker.setLast(listPersonal.get(i).getLast());
@@ -391,6 +391,24 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
                 list_workers.add(worker);
             } catch (Exception e) {
                 Log.e(TAG, " ERROR TRY -CATCH  " + e.getMessage());
+            }
+
+        }
+
+        //
+        if (list_workers.size() >= 1) {
+            // order por Apellido
+            Collections.sort(list_workers, new Comparator<AllPersonalMetricas>() {
+                @Override
+                public int compare(AllPersonalMetricas o1, AllPersonalMetricas o2) {
+                    return o1.getLast().compareToIgnoreCase(o2.getLast());
+                }
+            });
+
+            Log.e(TAG, "nueva lista ordenada");
+            for (AllPersonalMetricas temp : list_workers) {
+                Log.e(TAG, " Dni : " + temp.getDni());
+                Log.e(TAG, " Apellido : " + temp.getLast());
             }
 
 
