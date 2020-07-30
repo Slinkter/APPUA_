@@ -339,21 +339,6 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
         //
         // todo :  aqui se juntaria las dos lista para order por Apellido
 
-        /*
-        private String dni, name, last, age, address, born, date, phone1, phone2;
-
-        private String tempurature;
-        private String so2;
-        private String pulse;
-        private String symptoms;
-        private String dateRegister;
-        private String who_user_register;
-        private Boolean testpruebarapida;
-        private Boolean horario;
-        private Boolean s1, s2, s3, s4, s5, s6, s7;
-        */
-
-
         List<AllPersonalMetricas> list_workers = new ArrayList<>();
         int allSize = listMetricasPersonal.size();
         for (int i = 0; i < allSize; i++) {
@@ -395,22 +380,21 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
 
         }
 
-        //
+        // order por Apellido
         if (list_workers.size() >= 1) {
-            // order por Apellido
+            // JAVA SORT
             Collections.sort(list_workers, new Comparator<AllPersonalMetricas>() {
                 @Override
                 public int compare(AllPersonalMetricas o1, AllPersonalMetricas o2) {
                     return o1.getLast().compareToIgnoreCase(o2.getLast());
                 }
             });
-
+            // JAVA Sort TEST
             Log.e(TAG, "nueva lista ordenada");
             for (AllPersonalMetricas temp : list_workers) {
                 Log.e(TAG, " Dni : " + temp.getDni());
                 Log.e(TAG, " Apellido : " + temp.getLast());
             }
-
 
         }
 
