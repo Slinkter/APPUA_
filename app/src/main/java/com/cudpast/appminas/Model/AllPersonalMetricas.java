@@ -155,6 +155,9 @@ public class AllPersonalMetricas {
     }
 
     public void setLast(String last) {
+        if (last == null) {
+            this.last = "";
+        }
         this.last = last;
     }
 
@@ -221,8 +224,6 @@ public class AllPersonalMetricas {
         } else {
             this.s1 = s1;
         }
-
-
     }
 
     public void setS2(Boolean s2) {
@@ -231,7 +232,6 @@ public class AllPersonalMetricas {
         } else {
             this.s2 = s2;
         }
-
     }
 
     public void setS3(Boolean s3) {

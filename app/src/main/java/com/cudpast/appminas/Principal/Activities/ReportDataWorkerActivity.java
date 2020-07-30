@@ -473,7 +473,7 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
             cansas01.drawLine(960, 380, 960, 430, myPaint);
             cansas01.drawLine(1070, 380, 1070, 430, myPaint);
             // el aumento para cada fila para los empleados
-            int ytext = 480;
+            int yInit = 480;
             int ysum = 0;
             //
             Paint temp = new Paint();
@@ -487,24 +487,19 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
                 // Page 01-01 : [0-28]
                 try {
                     for (int i = 0; i < nCountWorkers; i++) {
-                        //
-                        if (list_workers.get(i).getLast() == null) {
-                            list_workers.get(i).setLast("");
-                        }
                         //Saturacion  color
                         int valueSatura = Integer.parseInt(list_workers.get(i).getSo2());
                         setColorSaturacion(valueSatura, so);
-
                         //Pulso color
                         int valuePulso = Integer.parseInt(list_workers.get(i).getPulse());
                         setColorPulso(valuePulso, pulse);
                         //
-                        cansas01.drawText(i + 1 + ".", 60, ytext + ysum, myPaint);
-                        cansas01.drawText(list_workers.get(i).getDni(), 140, ytext + ysum, myPaint);
-                        cansas01.drawText(list_workers.get(i).getLast() + " , " + listPersonal.get(i).getName(), 300, ytext + ysum, myPaint);
-                        cansas01.drawText(list_workers.get(i).getTempurature(), 830, ytext + ysum, myPaint);
-                        cansas01.drawText(list_workers.get(i).getSo2(), 1000, ytext + ysum, so);
-                        cansas01.drawText(list_workers.get(i).getPulse(), 1105, ytext + ysum, pulse);
+                        cansas01.drawText(i + 1 + ".", 60, yInit + ysum, myPaint);
+                        cansas01.drawText(list_workers.get(i).getDni(), 140, yInit + ysum, myPaint);
+                        cansas01.drawText(list_workers.get(i).getLast() + " , " + listPersonal.get(i).getName(), 300, yInit + ysum, myPaint);
+                        cansas01.drawText(list_workers.get(i).getTempurature(), 830, yInit + ysum, myPaint);
+                        cansas01.drawText(list_workers.get(i).getSo2(), 1000, yInit + ysum, so);
+                        cansas01.drawText(list_workers.get(i).getPulse(), 1105, yInit + ysum, pulse);
                         // el aumento en fila
                         ysum = ysum + 50;
                     }
@@ -512,18 +507,98 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
                     pdfDocument.finishPage(myPage01);
                     File file = new File(Environment.getExternalStorageDirectory(), "/arsi21.pdf");
                     pdfDocument.writeTo(new FileOutputStream(file));
+                    pdfDocument.close();
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    Log.e(TAG, "try-catch :  Page 01 " + e.getMessage());
                 }
-                pdfDocument.close();
                 //-------------------------------------------------------------------------------
             } else if (nCountWorkers >= 29 && nCountWorkers <= 63) {
+                //-------------------------------------------------------------------------------
+                try {
+                    //-----------------------------------------------> Page 01-02 : [0-28]
+                    for (int i = 0; i < 28; i++) {
+                        //Saturacion  color
+                        int valueSatura = Integer.parseInt(list_workers.get(i).getSo2());
+                        setColorSaturacion(valueSatura, so);
+                        //Pulso color
+                        int valuePulso = Integer.parseInt(list_workers.get(i).getPulse());
+                        setColorPulso(valuePulso, pulse);
+                        //
+                        cansas01.drawText(i + 1 + ".", 60, yInit + ysum, myPaint);
+                        cansas01.drawText(list_workers.get(i).getDni(), 140, yInit + ysum, myPaint);
+                        cansas01.drawText(list_workers.get(i).getLast() + " , " + listPersonal.get(i).getName(), 300, yInit + ysum, myPaint);
+                        cansas01.drawText(list_workers.get(i).getTempurature(), 830, yInit + ysum, myPaint);
+                        cansas01.drawText(list_workers.get(i).getSo2(), 1000, yInit + ysum, so);
+                        cansas01.drawText(list_workers.get(i).getPulse(), 1105, yInit + ysum, pulse);
+                        // el aumento en fila
+                        ysum = ysum + 50;
+                    }
+                    //
+                    pdfDocument.finishPage(myPage01);
+                    //----------------------------------------------->  Page 02-02 : [29-63]
+                    PdfDocument.PageInfo myPageInfo2 = new PdfDocument.PageInfo.Builder(pageWidth, pageHeigt, 2).create();
+                    PdfDocument.Page myPage2 = pdfDocument.startPage(myPageInfo2);
+                    Canvas canvas02 = myPage2.getCanvas();
+                    //
+                    yInit = 100;
+                    ysum = 0;
+                    for (int i = 29; i < nCountWorkers; i++) {
+                        //Saturacion  color
+                        int valueSatura = Integer.parseInt(list_workers.get(i).getSo2());
+                        setColorSaturacion(valueSatura, so);
+                        //Pulso color
+                        int valuePulso = Integer.parseInt(list_workers.get(i).getPulse());
+                        setColorPulso(valuePulso, pulse);
+                        //
+                        canvas02.drawText(i + 1 + ".", 60, yInit + ysum, myPaint);
+                        canvas02.drawText(list_workers.get(i).getDni(), 140, yInit + ysum, myPaint);
+                        canvas02.drawText(list_workers.get(i).getLast() + " , " + listPersonal.get(i).getName(), 300, yInit + ysum, myPaint);
+                        canvas02.drawText(list_workers.get(i).getTempurature(), 830, yInit + ysum, myPaint);
+                        canvas02.drawText(list_workers.get(i).getSo2(), 1000, yInit + ysum, so);
+                        canvas02.drawText(list_workers.get(i).getPulse(), 1105, yInit + ysum, pulse);
+                        // el aumento en fila
+                        ysum = ysum + 50;
+                    }
+                    pdfDocument.finishPage(myPage2);
+
+                    // creacion del pdf
+                    File file = new File(Environment.getExternalStorageDirectory(), "/arsi21.pdf");
+                    pdfDocument.writeTo(new FileOutputStream(file));
+                    pdfDocument.close();
+                } catch (IOException e) {
+                    Log.e(TAG, "try-catch : Page 02 " + e.getMessage());
+                }
+
 
             } else if (nCountWorkers >= 67 && nCountWorkers <= 90) {
+                Toast.makeText(this, "Falta", Toast.LENGTH_SHORT).show();
+                // Page 01-03 : [0-28]
+
+                // Page 02-03 : [29-63]
+
+                // Page 03-03 : [29-63]
 
             } else if (nCountWorkers >= 99 && nCountWorkers <= 133) {
+                Toast.makeText(this, "Falta", Toast.LENGTH_SHORT).show();
+                // Page 01-04 : [0-28]
+
+                // Page 02-04 : [29-63]
+
+                // Page 03-04 : [29-63]
+
+                // Page 04-04 : [29-63]
 
             } else if (nCountWorkers >= 134 && nCountWorkers <= 150) {
+                Toast.makeText(this, "Falta", Toast.LENGTH_SHORT).show();
+                // Page 01-05 : [0-28]
+
+                // Page 02-05 : [29-63]
+
+                // Page 03-05 : [29-63]
+
+                // Page 04-05 : [29-63]
+
+                // Page 05-05 : [29-63]
 
             }
 
