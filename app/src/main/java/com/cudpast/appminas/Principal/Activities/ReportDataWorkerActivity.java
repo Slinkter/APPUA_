@@ -27,6 +27,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.cudpast.appminas.Common.Common;
+import com.cudpast.appminas.Model.AllPersonalMetricas;
 import com.cudpast.appminas.Model.MetricasPersonal;
 import com.cudpast.appminas.Model.Personal;
 import com.cudpast.appminas.Principal.Activities.Support.ShowPdfActivity;
@@ -79,7 +80,6 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
     List<Integer> listPulso;
     List<Boolean> listTest;
     //
-
     private List<MetricasPersonal> listtemp;
 
     @Override
@@ -329,14 +329,72 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
     }
 
     private void reporte_por_dia(List<MetricasPersonal> listMetricasPersonal, List<Personal> listPersonal, String seletedDate, String metodo, boolean horario) {
-        Log.e(TAG, "[generarListaporFechaPdf]");
-        Log.e(TAG, "[generarListaporFechaPdf]-listMetricasPersonal.size() : " + listMetricasPersonal.size());
-        Log.e(TAG, "[generarListaporFechaPdf]-listPersonal.size() : " + listPersonal.size());
+        Log.e(TAG, ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+        Log.e(TAG, "[   reporte_por_dia   ]");
+        Log.e(TAG, "listMetricasPersonal.size() = " + listMetricasPersonal.size());
+        Log.e(TAG, "listPersonal.size() = " + listPersonal.size());
         //
         // todo :  aqui se juntaria las dos lista para order por Apellido
 
+        /*
+        private String dni, name, last, age, address, born, date, phone1, phone2;
+
+        private String tempurature;
+        private String so2;
+        private String pulse;
+        private String symptoms;
+        private String dateRegister;
+        private String who_user_register;
+        private Boolean testpruebarapida;
+        private Boolean horario;
+        private Boolean s1, s2, s3, s4, s5, s6, s7;
+        */
 
 
+        List<AllPersonalMetricas> list_workers = new ArrayList<>();
+        int allSize = listMetricasPersonal.size();
+        for (int i = 0; i < allSize; i++) {
+
+
+            try {
+
+                AllPersonalMetricas worker = new AllPersonalMetricas();
+
+                worker.setDni(listPersonal.get(i).getDni());
+                worker.setName(listPersonal.get(i).getName());
+                worker.setLast(listPersonal.get(i).getLast());
+                worker.setAge(listPersonal.get(i).getAge());
+                worker.setAddress(listPersonal.get(i).getAddress());
+                worker.setBorn(listPersonal.get(i).getBorn());
+                worker.setDate(listPersonal.get(i).getDate());
+                worker.setPhone1(listPersonal.get(i).getPhone1());
+                worker.setPhone2(listPersonal.get(i).getPhone2());
+
+                worker.setTempurature(listMetricasPersonal.get(i).getTempurature());
+                worker.setSo2(listMetricasPersonal.get(i).getSo2());
+                worker.setPulse(listMetricasPersonal.get(i).getPulse());
+                worker.setSymptoms(listMetricasPersonal.get(i).getSymptoms());
+                worker.setDateRegister(listMetricasPersonal.get(i).getDateRegister());
+                worker.setWho_user_register(listMetricasPersonal.get(i).getWho_user_register());
+                worker.setTestpruebarapida(listMetricasPersonal.get(i).getTestpruebarapida());
+                worker.setHorario(listMetricasPersonal.get(i).getHorario());
+
+                worker.setS1(listMetricasPersonal.get(i).getS1());
+                worker.setS2(listMetricasPersonal.get(i).getS2());
+                worker.setS3(listMetricasPersonal.get(i).getS3());
+                worker.setS4(listMetricasPersonal.get(i).getS4());
+                worker.setS5(listMetricasPersonal.get(i).getS5());
+                worker.setS6(listMetricasPersonal.get(i).getS6());
+                worker.setS7(listMetricasPersonal.get(i).getS7());
+
+                Log.e(TAG, "  " + worker.getAllInfoWorker());
+                list_workers.add(worker);
+            } catch (Exception e) {
+                Log.e(TAG, " ERROR TRY -CATCH  " + e.getMessage());
+            }
+
+
+        }
 
 
         //
