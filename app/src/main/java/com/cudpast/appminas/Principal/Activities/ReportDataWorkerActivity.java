@@ -31,6 +31,7 @@ import com.cudpast.appminas.Model.AllPersonalMetricas;
 import com.cudpast.appminas.Model.MetricasPersonal;
 import com.cudpast.appminas.Model.Personal;
 import com.cudpast.appminas.Principal.Activities.Support.ShowPdfActivity;
+import com.cudpast.appminas.Principal.Activities.Support.ShowPdfActivity2;
 import com.cudpast.appminas.R;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
@@ -643,7 +644,7 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
 
             if (metodo.equalsIgnoreCase("pdf")) {
                 Log.e(TAG, " metodo pdf ");
-                Intent intent = new Intent(ReportDataWorkerActivity.this, ShowPdfActivity.class);
+                Intent intent = new Intent(ReportDataWorkerActivity.this, ShowPdfActivity2.class);
                 startActivity(intent);
                 mDialog.dismiss();
             } else {
@@ -900,7 +901,7 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
 
         if (metodo.equalsIgnoreCase("pdf")) {
             Log.e(TAG, " metodo pdf ");
-            Intent intent = new Intent(ReportDataWorkerActivity.this, ShowPdfActivity.class);
+            Intent intent = new Intent(ReportDataWorkerActivity.this, ShowPdfActivity2.class);
             startActivity(intent);
             mDialog.dismiss();
         } else if (metodo.equalsIgnoreCase("email")) {
@@ -1371,7 +1372,7 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
 
         if (metodo.equalsIgnoreCase("pdf")) {
             Log.e(TAG, " metodo pdf ");
-            Intent intent = new Intent(ReportDataWorkerActivity.this, ShowPdfActivity.class);
+            Intent intent = new Intent(ReportDataWorkerActivity.this, ShowPdfActivity2.class);
             startActivity(intent);
             mDialog.dismiss();
         } else if (metodo.equalsIgnoreCase("email")) {

@@ -19,19 +19,14 @@ public class ShowPdfActivity extends AppCompatActivity {
 
     private PDFView pdfView;
     private File file;
-
     public static final String folderpdf = "/arsi21.pdf";
-
     public static final String TAG = ShowPdfActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         getSupportActionBar().setTitle("Regresar");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-
         setContentView(R.layout.activity_show_pdf);
         pdfView = findViewById(R.id.pdfView);
         init();

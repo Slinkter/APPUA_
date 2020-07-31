@@ -24,6 +24,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
+            android:name=".Principal.Activities.Support.ShowPdfActivity2"
+            android:label="@string/title_activity_show_pdf2"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity
             android:name=".Principal.Activities.Support.ShowPdfActivity"
             android:parentActivityName=".Principal.Activities.ReportDataWorkerActivity"
             android:screenOrientation="portrait" />
@@ -76,16 +80,16 @@
             android:name=".Principal.MainActivity"
             android:screenOrientation="portrait" />
 
-
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.provider"
             android:exported="false"
             android:grantUriPermissions="true">
+
             <!-- ressource file to create -->
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/provider_path"></meta-data>
+                android:resource="@xml/provider_path" />
         </provider>
 
         <meta-data
