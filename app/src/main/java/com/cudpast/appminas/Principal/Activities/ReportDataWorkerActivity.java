@@ -59,6 +59,7 @@ import java.util.TimeZone;
 public class ReportDataWorkerActivity extends AppCompatActivity {
 
     public static final String TAG = ReportDataWorkerActivity.class.getSimpleName();
+    public static final String folderpdf = "/arsi21.pdf";
     //
     private FirebaseDatabase database;
     private DatabaseReference ref_datos_paciente;
@@ -380,10 +381,12 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
             }
 
         }
-        // todo : no esta ordenadno el dni
+
         // Tratameindo : order por Apellido
         if (list_workers.size() >= 1) {
             //
+            // Prueba unitarias
+            /*
             List<AllPersonalMetricas> list_temp = list_workers;
             Log.e(TAG, "old  list ");
             for (AllPersonalMetricas tempOld : list_workers) {
@@ -392,12 +395,7 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
 
             }
             //   Collections.sort(list_workers, (o1, o2) -> o1.getLast().compareToIgnoreCase(o2.getLast()));
-            Collections.sort(list_workers, new Comparator<AllPersonalMetricas>() {
-                @Override
-                public int compare(AllPersonalMetricas o1, AllPersonalMetricas o2) {
-                    return new String(o1.getLast()).compareTo(o2.getLast());
-                }
-            });
+
             //
             Log.e(TAG, " ");
             Log.e(TAG, "new list sorted");
@@ -416,6 +414,10 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
                 Log.e("list_workers", " " + list_workers.get(j).getAllInfoWorker2());
                 Log.e("list_temp", " " + list_temp.get(j).getAllInfoWorker2());
             }
+
+            */
+            // ser ordena por apellido
+            Collections.sort(list_workers, (o1, o2) -> new String(o1.getLast()).compareToIgnoreCase(o2.getLast()));
 
 
         }
@@ -475,24 +477,28 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
             // Encabezados
             myPaint.setStyle(Paint.Style.STROKE);
             myPaint.setStrokeWidth(2);
-            myPaint.setTextSize(25f);
+            myPaint.setTextSize(23f);
             cansas01.drawRect(20, 360, pageWidth - 20, 440, myPaint);
             //
             myPaint.setTextAlign(Paint.Align.LEFT);
             myPaint.setStyle(Paint.Style.FILL);
             // se imprime los campos de documentos
-            cansas01.drawText("Nro.", 50, 415, myPaint);
-            cansas01.drawText("DNI", 170, 415, myPaint);
-            cansas01.drawText("APELLIDOS Y NOMBRES ", 330, 415, myPaint);
-            cansas01.drawText("TEMPERATURA", 760, 415, myPaint);
-            cansas01.drawText("SO2.", 990, 415, myPaint);
-            cansas01.drawText("PULSO", 1090, 415, myPaint);
+            Paint celda = new Paint();
+            celda.setStyle(Paint.Style.STROKE);
+            celda.setStrokeWidth(2);
+            celda.setTextSize(23f);
+            cansas01.drawText("Nro.", 50, 415, celda);
+            cansas01.drawText("DNI", 170, 415, celda);
+            cansas01.drawText("APELLIDOS Y NOMBRES ", 330, 415, celda);
+            cansas01.drawText("TEMPERATURA", 760, 415, celda);
+            cansas01.drawText("SO2.", 990, 415, celda);
+            cansas01.drawText("PULSO", 1090, 415, celda);
             // se dibuja los recuerado o celdas de los campos
-            cansas01.drawLine(120, 380, 120, 430, myPaint);
-            cansas01.drawLine(280, 380, 280, 430, myPaint);
-            cansas01.drawLine(730, 380, 730, 430, myPaint);
-            cansas01.drawLine(960, 380, 960, 430, myPaint);
-            cansas01.drawLine(1070, 380, 1070, 430, myPaint);
+            cansas01.drawLine(120, 380, 120, 430, celda);
+            cansas01.drawLine(280, 380, 280, 430, celda);
+            cansas01.drawLine(730, 380, 730, 430, celda);
+            cansas01.drawLine(960, 380, 960, 430, celda);
+            cansas01.drawLine(1070, 380, 1070, 430, celda);
             // el aumento para cada fila para los empleados
             int yInit = 480;
             int ysum = 0;
@@ -515,9 +521,14 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
                         int valuePulso = Integer.parseInt(list_workers.get(i).getPulse());
                         setColorPulso(valuePulso, pulse);
                         //
+                        // Poner en mayuscula el Apellido y Nombre
+                        String fullName = list_workers.get(i).getLast() + " , " + list_workers.get(i).getName();
+                        fullName.toUpperCase();
+
+
                         cansas01.drawText(i + 1 + ".", 60, yInit + ysum, myPaint);
                         cansas01.drawText(list_workers.get(i).getDni(), 140, yInit + ysum, myPaint);
-                        cansas01.drawText(list_workers.get(i).getLast() + " , " + list_workers.get(i).getName(), 300, yInit + ysum, myPaint);
+                        cansas01.drawText(fullName, 300, yInit + ysum, myPaint);
                         cansas01.drawText(list_workers.get(i).getTempurature(), 830, yInit + ysum, myPaint);
                         cansas01.drawText(list_workers.get(i).getSo2(), 1000, yInit + ysum, so);
                         cansas01.drawText(list_workers.get(i).getPulse(), 1105, yInit + ysum, pulse);
@@ -526,7 +537,7 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
                     }
                     //
                     pdfDocument.finishPage(myPage01);
-                    File file = new File(Environment.getExternalStorageDirectory(), "/arsi21.pdf");
+                    File file = new File(Environment.getExternalStorageDirectory(), folderpdf);
                     pdfDocument.writeTo(new FileOutputStream(file));
                     pdfDocument.close();
                 } catch (IOException e) {
@@ -545,13 +556,12 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
                         int valuePulso = Integer.parseInt(list_workers.get(i).getPulse());
                         setColorPulso(valuePulso, pulse);
                         //
-                        Log.e(TAG, " -----------------");
-                        Log.e(TAG, "  DNI : " + list_workers.get(i).getDni());
-                        Log.e(TAG, "  Last : " + list_workers.get(i).getLast());
-                        Log.e(TAG, "  Name : " + list_workers.get(i).getName());
+                        // Poner en mayuscula el Apellido y Nombre
+                        String fullName = list_workers.get(i).getLast() + " , " + list_workers.get(i).getName();
+                        //
                         cansas01.drawText(i + 1 + ".", 60, yInit + ysum, myPaint);
                         cansas01.drawText(list_workers.get(i).getDni(), 140, yInit + ysum, myPaint);
-                        cansas01.drawText(list_workers.get(i).getLast() + " , " + list_workers.get(i).getName(), 300, yInit + ysum, myPaint);
+                        cansas01.drawText(fullName.toUpperCase(), 300, yInit + ysum, myPaint);
                         cansas01.drawText(list_workers.get(i).getTempurature(), 830, yInit + ysum, myPaint);
                         cansas01.drawText(list_workers.get(i).getSo2(), 1000, yInit + ysum, so);
                         cansas01.drawText(list_workers.get(i).getPulse(), 1105, yInit + ysum, pulse);
@@ -575,14 +585,12 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
                         int valuePulso = Integer.parseInt(list_workers.get(i).getPulse());
                         setColorPulso(valuePulso, pulse);
                         //
-                        Log.e(TAG, " -----------------");
-                        Log.e(TAG, "  DNI : " + list_workers.get(i).getDni());
-                        Log.e(TAG, "  Last : " + list_workers.get(i).getLast());
-                        Log.e(TAG, "  Name : " + list_workers.get(i).getName());
+                        String fullName = list_workers.get(i).getLast() + " , " + list_workers.get(i).getName();
+                        //
 
                         canvas02.drawText(i + ".", 60, yInit + ysum, myPaint);
                         canvas02.drawText(list_workers.get(i).getDni(), 140, yInit + ysum, myPaint);
-                        canvas02.drawText(list_workers.get(i).getLast() + " , " + list_workers.get(i).getName(), 300, yInit + ysum, myPaint);
+                        canvas02.drawText(fullName.toUpperCase(), 300, yInit + ysum, myPaint);
                         canvas02.drawText(list_workers.get(i).getTempurature(), 830, yInit + ysum, myPaint);
                         canvas02.drawText(list_workers.get(i).getSo2(), 1000, yInit + ysum, so);
                         canvas02.drawText(list_workers.get(i).getPulse(), 1105, yInit + ysum, pulse);
@@ -592,7 +600,7 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
                     pdfDocument.finishPage(myPage2);
 
                     // creacion del pdf
-                    File file = new File(Environment.getExternalStorageDirectory(), "/arsi21.pdf");
+                    File file = new File(Environment.getExternalStorageDirectory(), folderpdf);
                     pdfDocument.writeTo(new FileOutputStream(file));
                     pdfDocument.close();
                 } catch (IOException e) {

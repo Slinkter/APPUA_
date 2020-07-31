@@ -20,6 +20,8 @@ public class ShowPdfActivity extends AppCompatActivity {
     private PDFView pdfView;
     private File file;
 
+    public static final String folderpdf = "/arsi21.pdf";
+
     public static final String TAG = ShowPdfActivity.class.getSimpleName();
 
     @Override
@@ -38,7 +40,7 @@ public class ShowPdfActivity extends AppCompatActivity {
 
     private void init() {
         try {
-            file = new File(Environment.getExternalStorageDirectory(), "/arsi21.pdf");
+            file = new File(Environment.getExternalStorageDirectory(), folderpdf);
             Log.e(TAG, "file archivo  " + file.toString());
             pdfView.fromFile(file)
                     .enableSwipe(true)
@@ -59,7 +61,7 @@ public class ShowPdfActivity extends AppCompatActivity {
     private void sendEmail2() {
         Log.e(TAG, "sendEmail()  2 ");
         File root = Environment.getExternalStorageDirectory();
-        String filelocation = root.getAbsolutePath() + "/arsi21.pdf";
+        String filelocation = root.getAbsolutePath() + folderpdf;
         Intent intent = new Intent(Intent.ACTION_SENDTO);
         intent.setType("text/plain");
         String message = "Documento Generado por " + Common.currentUser.getReg_name();
@@ -75,7 +77,7 @@ public class ShowPdfActivity extends AppCompatActivity {
 
     private void initApp() {
 
-        file = new File(Environment.getExternalStorageDirectory(), "/arsi21.pdf");
+        file = new File(Environment.getExternalStorageDirectory(), folderpdf);
         Log.e(TAG, "file archivo initApp() " + file.toString());
         if (file.exists()) {
             try {
