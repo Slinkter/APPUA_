@@ -384,33 +384,39 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
         // Tratameindo : order por Apellido
         if (list_workers.size() >= 1) {
             //
-            List<AllPersonalMetricas> list_workers_old = list_workers;
+            List<AllPersonalMetricas> list_temp = list_workers;
             Log.e(TAG, "old  list ");
             for (AllPersonalMetricas tempOld : list_workers) {
                 Log.e("tempOld", "-----------------------");
-                Log.e("tempOld", " DNI = " + tempOld.getDni());
-                Log.e("tempOld", " LAST = " + tempOld.getLast() + tempOld.getName());
-
+                Log.e("tempOld", " " + tempOld.getAllInfoWorker2());
 
             }
             //   Collections.sort(list_workers, (o1, o2) -> o1.getLast().compareToIgnoreCase(o2.getLast()));
-
             Collections.sort(list_workers, new Comparator<AllPersonalMetricas>() {
                 @Override
                 public int compare(AllPersonalMetricas o1, AllPersonalMetricas o2) {
                     return new String(o1.getLast()).compareTo(o2.getLast());
                 }
             });
-
             //
+            Log.e(TAG, " ");
             Log.e(TAG, "new list sorted");
+            Log.e(TAG, " ");
             for (AllPersonalMetricas tempNew : list_workers) {
                 Log.e("tempNew", "-----------------------");
-                Log.e("tempNew", " DNI = " + tempNew.getDni());
-                Log.e("tempNew", " LAST = " + tempNew.getLast() + tempNew.getName());
-                //  Log.e("as", tempNew.getAllInfoWorker2());
+                Log.e("tempNew", " " + tempNew.getAllInfoWorker2());
 
             }
+            // para los dos
+            Log.e(TAG, " ");
+            Log.e(TAG, "Comparando las dos lista ");
+            Log.e(TAG, " ");
+            int valorLista = list_workers.size();
+            for (int j = 0; j < valorLista; j++) {
+                Log.e("list_workers", " " + list_workers.get(j).getAllInfoWorker2());
+                Log.e("list_temp", " " + list_temp.get(j).getAllInfoWorker2());
+            }
+
 
         }
         //
@@ -511,7 +517,7 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
                         //
                         cansas01.drawText(i + 1 + ".", 60, yInit + ysum, myPaint);
                         cansas01.drawText(list_workers.get(i).getDni(), 140, yInit + ysum, myPaint);
-                        cansas01.drawText(list_workers.get(i).getLast() + " , " + listPersonal.get(i).getName(), 300, yInit + ysum, myPaint);
+                        cansas01.drawText(list_workers.get(i).getLast() + " , " + list_workers.get(i).getName(), 300, yInit + ysum, myPaint);
                         cansas01.drawText(list_workers.get(i).getTempurature(), 830, yInit + ysum, myPaint);
                         cansas01.drawText(list_workers.get(i).getSo2(), 1000, yInit + ysum, so);
                         cansas01.drawText(list_workers.get(i).getPulse(), 1105, yInit + ysum, pulse);
@@ -545,7 +551,7 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
                         Log.e(TAG, "  Name : " + list_workers.get(i).getName());
                         cansas01.drawText(i + 1 + ".", 60, yInit + ysum, myPaint);
                         cansas01.drawText(list_workers.get(i).getDni(), 140, yInit + ysum, myPaint);
-                        cansas01.drawText(list_workers.get(i).getLast() + " , " + listPersonal.get(i).getName(), 300, yInit + ysum, myPaint);
+                        cansas01.drawText(list_workers.get(i).getLast() + " , " + list_workers.get(i).getName(), 300, yInit + ysum, myPaint);
                         cansas01.drawText(list_workers.get(i).getTempurature(), 830, yInit + ysum, myPaint);
                         cansas01.drawText(list_workers.get(i).getSo2(), 1000, yInit + ysum, so);
                         cansas01.drawText(list_workers.get(i).getPulse(), 1105, yInit + ysum, pulse);
@@ -576,7 +582,7 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
 
                         canvas02.drawText(i + ".", 60, yInit + ysum, myPaint);
                         canvas02.drawText(list_workers.get(i).getDni(), 140, yInit + ysum, myPaint);
-                        canvas02.drawText(list_workers.get(i).getLast() + " , " + listPersonal.get(i).getName(), 300, yInit + ysum, myPaint);
+                        canvas02.drawText(list_workers.get(i).getLast() + " , " + list_workers.get(i).getName(), 300, yInit + ysum, myPaint);
                         canvas02.drawText(list_workers.get(i).getTempurature(), 830, yInit + ysum, myPaint);
                         canvas02.drawText(list_workers.get(i).getSo2(), 1000, yInit + ysum, so);
                         canvas02.drawText(list_workers.get(i).getPulse(), 1105, yInit + ysum, pulse);

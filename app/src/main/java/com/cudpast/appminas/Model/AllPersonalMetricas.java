@@ -312,15 +312,15 @@ public class AllPersonalMetricas {
     }
 
     public String getAllInfoWorker2() {
-        String cad = "\n" + "------------------ " + "\n";
-        cad = cad +
-                "dni = " + dni + "\n" +
-                "name = " + name + "\n" +
-                "last = " + last + "\n" +
-                "tempurature = " + tempurature + "\n" +
-                "so2 = " + so2 + "\n" +
-                "pulse = " + pulse + "\n";
+        String cad = "\n" + "------------------ ";
+        cad = cad + "\n" +
+                " dni = " + dni + "\n" +
+                " last = " + last + " , " + name + "\n" +
+                " tempurature = " + tempurature + "\n" +
+                " so2 = " + so2 + "\n" +
+                " pulse = " + pulse + "\n";
         return cad;
     }
+
 
 }
