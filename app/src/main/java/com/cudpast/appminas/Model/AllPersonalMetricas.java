@@ -311,4 +311,16 @@ public class AllPersonalMetricas {
         return cad;
     }
 
+    public String getAllInfoWorker2() {
+        String cad = "\n" + "------------------ " + "\n";
+        cad = cad +
+                "dni = " + dni + "\n" +
+                "name = " + name + "\n" +
+                "last = " + last + "\n" +
+                "tempurature = " + tempurature + "\n" +
+                "so2 = " + so2 + "\n" +
+                "pulse = " + pulse + "\n";
+        return cad;
+    }
+
 }

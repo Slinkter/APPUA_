@@ -373,28 +373,43 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
                 worker.setS6(listMetricasPersonal.get(i).getS6());
                 worker.setS7(listMetricasPersonal.get(i).getS7());
 
-                Log.e(TAG, "  " + worker.getAllInfoWorker());
+                Log.e(TAG, "  " + worker.getAllInfoWorker2());
                 list_workers.add(worker);
             } catch (Exception e) {
                 Log.e(TAG, " ERROR TRY -CATCH  " + e.getMessage());
             }
 
         }
-
+        // todo : no esta ordenadno el dni
         // Tratameindo : order por Apellido
         if (list_workers.size() >= 1) {
-            // JAVA SORT
+            //
+            List<AllPersonalMetricas> list_workers_old = list_workers;
+            Log.e(TAG, "old  list ");
+            for (AllPersonalMetricas tempOld : list_workers) {
+                Log.e("tempOld", "-----------------------");
+                Log.e("tempOld", " DNI = " + tempOld.getDni());
+                Log.e("tempOld", " LAST = " + tempOld.getLast() + tempOld.getName());
+
+
+            }
+            //   Collections.sort(list_workers, (o1, o2) -> o1.getLast().compareToIgnoreCase(o2.getLast()));
+
             Collections.sort(list_workers, new Comparator<AllPersonalMetricas>() {
                 @Override
                 public int compare(AllPersonalMetricas o1, AllPersonalMetricas o2) {
-                    return o1.getLast().compareToIgnoreCase(o2.getLast());
+                    return new String(o1.getLast()).compareTo(o2.getLast());
                 }
             });
-            // JAVA Sort TEST
-            Log.e(TAG, "nueva lista ordenada");
-            for (AllPersonalMetricas temp : list_workers) {
-                Log.e(TAG, " Dni : " + temp.getDni());
-                Log.e(TAG, " Apellido : " + temp.getLast());
+
+            //
+            Log.e(TAG, "new list sorted");
+            for (AllPersonalMetricas tempNew : list_workers) {
+                Log.e("tempNew", "-----------------------");
+                Log.e("tempNew", " DNI = " + tempNew.getDni());
+                Log.e("tempNew", " LAST = " + tempNew.getLast() + tempNew.getName());
+                //  Log.e("as", tempNew.getAllInfoWorker2());
+
             }
 
         }
@@ -524,6 +539,10 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
                         int valuePulso = Integer.parseInt(list_workers.get(i).getPulse());
                         setColorPulso(valuePulso, pulse);
                         //
+                        Log.e(TAG, " -----------------");
+                        Log.e(TAG, "  DNI : " + list_workers.get(i).getDni());
+                        Log.e(TAG, "  Last : " + list_workers.get(i).getLast());
+                        Log.e(TAG, "  Name : " + list_workers.get(i).getName());
                         cansas01.drawText(i + 1 + ".", 60, yInit + ysum, myPaint);
                         cansas01.drawText(list_workers.get(i).getDni(), 140, yInit + ysum, myPaint);
                         cansas01.drawText(list_workers.get(i).getLast() + " , " + listPersonal.get(i).getName(), 300, yInit + ysum, myPaint);
@@ -550,7 +569,12 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
                         int valuePulso = Integer.parseInt(list_workers.get(i).getPulse());
                         setColorPulso(valuePulso, pulse);
                         //
-                        canvas02.drawText(i + 1 + ".", 60, yInit + ysum, myPaint);
+                        Log.e(TAG, " -----------------");
+                        Log.e(TAG, "  DNI : " + list_workers.get(i).getDni());
+                        Log.e(TAG, "  Last : " + list_workers.get(i).getLast());
+                        Log.e(TAG, "  Name : " + list_workers.get(i).getName());
+
+                        canvas02.drawText(i + ".", 60, yInit + ysum, myPaint);
                         canvas02.drawText(list_workers.get(i).getDni(), 140, yInit + ysum, myPaint);
                         canvas02.drawText(list_workers.get(i).getLast() + " , " + listPersonal.get(i).getName(), 300, yInit + ysum, myPaint);
                         canvas02.drawText(list_workers.get(i).getTempurature(), 830, yInit + ysum, myPaint);
