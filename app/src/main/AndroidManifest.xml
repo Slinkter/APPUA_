@@ -23,10 +23,13 @@
         android:roundIcon="@drawable/ic_app_mina3"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
         <activity
             android:name=".Principal.Activities.Support.ShowPdfActivity2"
-            android:label="@string/title_activity_show_pdf2"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:parentActivityName=".Principal.Activities.ReportDataWorkerActivity"
+            android:screenOrientation="portrait" />
+
+
         <activity
             android:name=".Principal.Activities.Support.ShowPdfActivity"
             android:parentActivityName=".Principal.Activities.ReportDataWorkerActivity"

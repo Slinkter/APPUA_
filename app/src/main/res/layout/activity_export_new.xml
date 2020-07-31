@@ -27,6 +27,7 @@
             android:textStyle="bold" />
 
         <androidx.cardview.widget.CardView
+            android:onClick="btn_entrada_pdf"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:cardCornerRadius="15dp"
@@ -71,6 +72,7 @@
             app:cardUseCompatPadding="true">
 
             <LinearLayout
+                android:onClick="btn_salida_pdf"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -102,6 +104,7 @@
 
 
         <androidx.cardview.widget.CardView
+            android:onClick="btn_workerd"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:cardCornerRadius="15dp"

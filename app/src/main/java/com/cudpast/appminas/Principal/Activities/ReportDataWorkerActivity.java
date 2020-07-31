@@ -91,10 +91,13 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         getSupportActionBar().setTitle("Regresar");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        setContentView(R.layout.activity_export);
+        setContentView(R.layout.activity_export_new);
         //Solicitar permisos
         ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, PackageManager.PERMISSION_GRANTED);
-        //xml
+
+        /*
+
+            //xml
         img_reportdatepdf = findViewById(R.id.img_reportdatepdf);
         img_reportmailpdf = findViewById(R.id.img_reportmailpdf);
         img_reportworkpdf = findViewById(R.id.img_reportworkpdf);
@@ -110,8 +113,8 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
         // Report 3
         img_reportexampdf.setOnClickListener(v -> showTestEmailDNI("pdf"));
         img_reportexamemail.setOnClickListener(v -> showTestEmailDNI("email"));
+         */
         //Firebaase
-
         database = FirebaseDatabase.getInstance();
 
     }
@@ -159,6 +162,9 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
         });
     }
 
+
+    //===============================================================================
+    // CardView 2
     public void btn_salida_pdf(View view) {
         String metodo = "pdf";
         Boolean horario = false;
@@ -199,13 +205,11 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
 
     }
 
-
-    //===============================================================================
-    // CardView 2
-
-
     //===============================================================================
     // CardView 3
+    public void btn_workerd(View view) {
+        showPdfDialog("pdf");
+    }
 
 
     // Bloque 1
@@ -1383,5 +1387,6 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
 
 
     }
+
 
 }
