@@ -12,7 +12,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_margin="10dp"
+        android:layout_margin="5dp"
+        android:padding="5dp"
         android:gravity="center"
         android:orientation="vertical">
 
@@ -20,10 +21,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:layout_marginTop="15dp"
             android:layout_marginBottom="5dp"
             android:fontFamily="@font/headland_one"
             android:gravity="center"
-            android:text="Bienvenido"
+            android:text="Bienvenid@"
             android:textColor="@color/colorPrimaryDark"
             android:textSize="@dimen/text_size_h1"
             android:textStyle="bold" />
@@ -36,7 +38,7 @@
             android:layout_marginBottom="10dp"
             android:fontFamily="@font/headland_one"
             android:gravity="center"
-            android:text="Seleccione Actividad"
+            android:text="user"
             android:textSize="13dp" />
         <!-- 1 -->
         <LinearLayout
@@ -120,7 +122,7 @@
                         android:layout_margin="5dp"
                         android:fontFamily="@font/headland_one"
                         android:gravity="center"
-                        android:text="Ingresar\nSíntomas"
+                        android:text="Registrar\nSíntomas"
                         android:textSize="@dimen/text_size_h2"
                         android:textStyle="bold" />
                 </LinearLayout>
