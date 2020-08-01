@@ -22,6 +22,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -126,6 +127,7 @@ public class InputDataWorkerActivity extends AppCompatActivity {
             if (submitForm()) {
                 savePersonalData();
             }
+
         });
 
         btn_input_back.setOnClickListener(v -> {
@@ -311,7 +313,6 @@ public class InputDataWorkerActivity extends AppCompatActivity {
                     public void onSuccess(Void aVoid) {
                         Toast.makeText(InputDataWorkerActivity.this, "Excelente , datos registrados !!!!", Toast.LENGTH_SHORT).show();
                         gotoMAin();
-
                         Log.e(TAG, "datos registrado");
                     }
                 })
@@ -323,6 +324,9 @@ public class InputDataWorkerActivity extends AppCompatActivity {
 
                     }
                 });
+
+        FirebaseCrashlytics.getInstance().setUserId(Common.currentUser.getReg_email());
+        FirebaseCrashlytics.getInstance().log("error en --> savePersonalData");
 
     }
 
@@ -375,6 +379,8 @@ public class InputDataWorkerActivity extends AppCompatActivity {
             }
         });
 
+        FirebaseCrashlytics.getInstance().setUserId(Common.currentUser.getReg_email());
+        FirebaseCrashlytics.getInstance().log("error en --> consultarDniPersonal()");
     }
 
     //Validacion
@@ -413,7 +419,7 @@ public class InputDataWorkerActivity extends AppCompatActivity {
 
 
         } catch (Exception e) {
-            Log.e(TAG, "error - checkTemperatura : "+ e.getMessage());
+            Log.e(TAG, "error - checkTemperatura : " + e.getMessage());
         }
 
         return true;
