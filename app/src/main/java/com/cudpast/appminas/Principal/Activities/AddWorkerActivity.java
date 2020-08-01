@@ -7,6 +7,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -16,6 +17,7 @@ import com.cudpast.appminas.Principal.AllActivity;
 import com.cudpast.appminas.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
@@ -89,13 +91,13 @@ public class AddWorkerActivity extends AppCompatActivity {
         personal_phone1_layout = findViewById(R.id.personal_phone1_layout);
         personal_phone2_layout = findViewById(R.id.personal_phone2_layout);
         //Ejecutar
-        btn_personal_create_user.setOnClickListener(v -> createNewPersonal());
+        btn_personal_create_user.setOnClickListener(v -> createNewPersonal(v));
         btn_personal_back_main.setOnClickListener(v -> goToMainActivity());
 
     }
 
 
-    private void createNewPersonal() {
+    private void createNewPersonal(final View v) {
 
         if (submitForm()) {
             //
@@ -128,11 +130,13 @@ public class AddWorkerActivity extends AppCompatActivity {
                         Toast.makeText(AddWorkerActivity.this, "El trabajador ha sido registrado ", Toast.LENGTH_SHORT).show();
                         goToMainActivity();
                         mDialog.dismiss();
+
                     })
                     .addOnFailureListener(e -> {
                         Toast.makeText(AddWorkerActivity.this, "Trabajador no ha sido Registrado", Toast.LENGTH_SHORT).show();
                         Log.e(TAG, "error : personal no registrado");
                         mDialog.dismiss();
+
                     });
         }
     }
