@@ -18,13 +18,13 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="20dp"
+            android:layout_marginBottom="10dp"
             android:fontFamily="@font/headland_one"
             android:text="Datos TRABAJADOR"
             android:textAllCaps="true"
-            android:textSize="25dp"
+            android:textSize="@dimen/text_size_h1"
             android:textStyle="bold"
-            android:visibility="gone" />
+            android:visibility="visible" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -114,8 +114,8 @@
                     android:id="@+id/personal_age"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="number"
                     android:fontFamily="@font/headland_one"
+                    android:inputType="number"
                     android:maxLength="2" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -209,7 +209,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/mb_input"
-                android:hint="Teléfono alternativo"
+                android:hint="Teléfono opcional *"
                 app:endIconMode="custom"
                 app:errorEnabled="true"
                 app:startIconDrawable="@drawable/ic_phone">
@@ -229,30 +229,28 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="50dp"
             android:gravity="center"
-            android:orientation="horizontal"
-            android:weightSum="2">
+            android:orientation="vertical">
 
             <Button
                 android:id="@+id/btn_personal_create_user"
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="10dp"
-                android:layout_weight="1"
+                android:layout_marginTop="10dp"
                 android:fontFamily="@font/headland_one"
                 android:text="crear" />
 
             <Button
                 android:id="@+id/btn_personal_back_main"
                 style="?attr/materialButtonOutlinedStyle"
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_weight="1"
+                android:layout_marginTop="10dp"
                 android:fontFamily="@font/headland_one"
-                android:text="Regresar" />
+                android:text="Salir"
+                android:textColor="#fff"
+                app:backgroundTint="@android:color/holo_red_dark" />
+
         </LinearLayout>
 
         <TextView

@@ -23,14 +23,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.cudpast.appminas.Common.Common;
 import com.cudpast.appminas.Model.AllPersonalMetricas;
 import com.cudpast.appminas.Model.MetricasPersonal;
 import com.cudpast.appminas.Model.Personal;
-import com.cudpast.appminas.Principal.Activities.Support.ShowPdfActivity;
 import com.cudpast.appminas.Principal.Activities.Support.ShowPdfActivity2;
 import com.cudpast.appminas.R;
 import com.google.android.material.datepicker.MaterialDatePicker;
@@ -51,7 +49,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -75,7 +72,6 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
     //
     private String seletedDate;
     private ProgressDialog mDialog;
-
     //
     List<String> listDate;
     List<String> listTemperatura;
@@ -127,7 +123,7 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
             ref_datos_paciente.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    filtrarFecha(dataSnapshot, metodo, horario);
+                    filtrarFechaHorario(dataSnapshot, metodo, horario);
                 }
 
                 @Override
@@ -169,7 +165,7 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
             ref_datos_paciente.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    filtrarFecha(dataSnapshot, metodo, horario);
+                    filtrarFechaHorario(dataSnapshot, metodo, horario);
                 }
 
                 @Override
@@ -190,7 +186,7 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
     }
 
 
-    private void filtrarFecha(DataSnapshot dataAll, String metodo, boolean horario) {
+    private void filtrarFechaHorario(DataSnapshot dataAll, String metodo, boolean horario) {
 
         ArrayList<String> listDNI = new ArrayList<>();
         for (DataSnapshot item_snapshot : dataAll.getChildren()) { //<--- all data

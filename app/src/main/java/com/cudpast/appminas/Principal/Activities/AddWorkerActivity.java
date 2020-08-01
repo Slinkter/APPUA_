@@ -7,7 +7,6 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -51,19 +50,21 @@ public class AddWorkerActivity extends AppCompatActivity {
 
     private Button btn_personal_create_user, btn_personal_back_main;
 
-    private FirebaseDatabase database = FirebaseDatabase.getInstance();
-    private FirebaseAuth mAuth;
-    private ProgressDialog mDialog;
+
+    FirebaseAuth mAuth;
+    FirebaseDatabase mDatabase;
+    ProgressDialog mDialog;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_minero);
-        getSupportActionBar().setTitle("Registrar  trabajador ");
+        getSupportActionBar().setTitle("Registrar  trabajador");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        //
+        //Firebase
         mAuth = FirebaseAuth.getInstance();
+        mDatabase = FirebaseDatabase.getInstance();
         //
         btn_personal_create_user = findViewById(R.id.btn_personal_create_user);
         btn_personal_back_main = findViewById(R.id.btn_personal_back_main);
@@ -87,39 +88,25 @@ public class AddWorkerActivity extends AppCompatActivity {
         personal_date_layout = findViewById(R.id.personal_date_layout);
         personal_phone1_layout = findViewById(R.id.personal_phone1_layout);
         personal_phone2_layout = findViewById(R.id.personal_phone2_layout);
-        //
-        btn_personal_create_user.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                createNewPersonal();
-            }
-        });
-
-        btn_personal_back_main.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(AddWorkerActivity.this, AllActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(intent);
-                finish();
-            }
-        });
-
+        //Ejecutar
+        btn_personal_create_user.setOnClickListener(v -> createNewPersonal());
+        btn_personal_back_main.setOnClickListener(v -> goToMainActivity());
 
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-
-
-
-    }
 
     private void createNewPersonal() {
 
         if (submitForm()) {
+            //
+            mDialog = new ProgressDialog(AddWorkerActivity.this);
+            mDialog.setMessage(" Registrando trabajador ");
+            mDialog.show();
+            //Declerarar Variables
             final String dni, name, last, age, address, born, date, phone1, phone2;
+            Personal user;
+            DatabaseReference ref_db_personal;
+            //Obtener valores
             dni = personal_dni.getText().toString();
             name = personal_name.getText().toString();
             last = personal_last.getText().toString();
@@ -129,54 +116,39 @@ public class AddWorkerActivity extends AppCompatActivity {
             date = personal_date.getText().toString();
             phone1 = personal_phone1.getText().toString();
             phone2 = personal_phone2.getText().toString();
-
-            Personal user = new Personal(dni, name, last, age, address, born, date, phone1, phone2);
-            DatabaseReference ref_db_personal = database.getReference(Common.db_mina_personal);
-
-
-            mDialog = new ProgressDialog(AddWorkerActivity.this);
-            mDialog.setMessage(" Registrando trabajador ");
-            mDialog.show();
-
+            // Crear usuario validado
+            user = new Personal(dni, name, last, age, address, born, date, phone1, phone2);
+            // Instanciar base de datos firebase
+            ref_db_personal = mDatabase.getReference(Common.db_mina_personal);
             ref_db_personal
                     .child(Common.unidadTrabajoSelected.getNameUT())
                     .child(user.getDni())
                     .setValue(user)
-                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void aVoid) {
-                            Toast.makeText(AddWorkerActivity.this, "El trabajador ha sido registrado ", Toast.LENGTH_SHORT).show();
-                            gotoMAin();
-
-                        }
+                    .addOnSuccessListener(aVoid -> {
+                        Toast.makeText(AddWorkerActivity.this, "El trabajador ha sido registrado ", Toast.LENGTH_SHORT).show();
+                        goToMainActivity();
+                        mDialog.dismiss();
                     })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Toast.makeText(AddWorkerActivity.this, "Trabajador no ha sido Registrado", Toast.LENGTH_SHORT).show();
-                            Log.e(TAG, "personal no registrado");
-                            mDialog.dismiss();
-                        }
+                    .addOnFailureListener(e -> {
+                        Toast.makeText(AddWorkerActivity.this, "Trabajador no ha sido Registrado", Toast.LENGTH_SHORT).show();
+                        Log.e(TAG, "error : personal no registrado");
+                        mDialog.dismiss();
                     });
-
         }
-
-
     }
 
-    private void gotoMAin() {
-        mDialog.dismiss();
+    private void goToMainActivity() {
         Intent intent = new Intent(AddWorkerActivity.this, AllActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
         finish();
-
     }
 
     //Validacion
     private boolean checkDNI() {
         if (personal_dni.getText().toString().trim().isEmpty()) {
             personal_dni_layout.setError("Ingrese su DNI");
+            personal_dni_layout.requestFocus();
             return false;
         } else {
             personal_dni_layout.setError(null);
@@ -187,6 +159,7 @@ public class AddWorkerActivity extends AppCompatActivity {
     private boolean checkName() {
         if (personal_name.getText().toString().trim().isEmpty()) {
             personal_name_layout.setError("Ingrese su nombre");
+            personal_name_layout.requestFocus();
             return false;
         } else {
             personal_name_layout.setError(null);
@@ -194,9 +167,21 @@ public class AddWorkerActivity extends AppCompatActivity {
         return true;
     }
 
+    private boolean checkLast() {
+        if (personal_last.getText().toString().trim().isEmpty()) {
+            personal_last_layout.setError("Ingrese su apellidos");
+            personal_last_layout.requestFocus();
+            return false;
+        } else {
+            personal_last_layout.setError(null);
+        }
+        return true;
+    }
+
     private boolean checkAge() {
         if (personal_age.getText().toString().trim().isEmpty()) {
             personal_age_layout.setError("Ingrese su edad");
+            personal_age_layout.requestFocus();
             return false;
         } else {
             personal_age_layout.setError(null);
@@ -207,6 +192,7 @@ public class AddWorkerActivity extends AppCompatActivity {
     private boolean checkAddress() {
         if (personal_address.getText().toString().trim().isEmpty()) {
             personal_address_layout.setError("Ingrese su dirección");
+            personal_address_layout.requestFocus();
             return false;
         } else {
             personal_address_layout.setError(null);
@@ -217,6 +203,7 @@ public class AddWorkerActivity extends AppCompatActivity {
     private boolean checkBorn() {
         if (personal_born.getText().toString().trim().isEmpty()) {
             personal_born_layout.setError("Ingrese su lugar de nacimiento");
+            personal_born_layout.requestFocus();
             return false;
         } else {
             personal_born_layout.setError(null);
@@ -227,6 +214,7 @@ public class AddWorkerActivity extends AppCompatActivity {
     private boolean checkDate() {
         if (personal_date.getText().toString().trim().isEmpty()) {
             personal_date_layout.setError("Ingrese su fecha de nacimiento");
+            personal_date_layout.requestFocus();
             return false;
         } else {
             personal_date_layout.setError(null);
@@ -237,6 +225,7 @@ public class AddWorkerActivity extends AppCompatActivity {
     private boolean checkPhone1() {
         if (personal_phone1.getText().toString().trim().isEmpty()) {
             personal_phone1_layout.setError("Ingrese su telefono principal");
+            personal_phone1_layout.requestFocus();
             return false;
         } else {
             personal_phone1_layout.setError(null);
@@ -247,6 +236,7 @@ public class AddWorkerActivity extends AppCompatActivity {
     private boolean checkPhone2() {
         if (personal_phone2.getText().toString().trim().isEmpty()) {
             personal_phone2_layout.setError("Ingrese su telefono secundario");
+            personal_phone2_layout.requestFocus();
             return false;
         } else {
             personal_phone2_layout.setError(null);
@@ -262,6 +252,10 @@ public class AddWorkerActivity extends AppCompatActivity {
         }
 
         if (!checkName()) {
+            return false;
+        }
+
+        if (!checkLast()) {
             return false;
         }
 
