@@ -20,9 +20,9 @@
             android:fontFamily="@font/headland_one"
             android:text="Ingresar Datos"
             android:textAllCaps="true"
-            android:textSize="25dp"
+            android:textSize="@dimen/text_size_h1"
             android:textStyle="bold"
-            android:visibility="gone" />
+            android:visibility="visible" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -63,10 +63,19 @@
 
 
             <TextView
+                style="?android:attr/listSeparatorTextViewStyle"
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:layout_below="@+id/connect_help"
+                android:background="@color/colorPrimaryDark"
+                android:gravity="center_horizontal"
+                android:paddingTop="15dip" />
+
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start"
-                android:layout_marginTop="5dp"
+                android:layout_marginTop="15dp"
                 android:layout_marginBottom="5dp"
                 android:fontFamily="@font/headland_one"
                 android:gravity="start"
@@ -74,6 +83,7 @@
                 android:textColor="@color/colorPrimary"
                 android:textSize="20sp"
                 android:textStyle="bold" />
+
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/show_consulta_nombre_layout"
@@ -117,11 +127,19 @@
 
 
             <TextView
+                style="?android:attr/listSeparatorTextViewStyle"
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:layout_below="@+id/connect_help"
+                android:background="@color/colorPrimaryDark"
+                android:gravity="center_horizontal"
+                android:paddingTop="15dip" />
+
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start"
-                android:layout_marginTop="5dp"
-                android:layout_marginBottom="5dp"
+                android:layout_marginTop="15dp"
                 android:fontFamily="@font/headland_one"
                 android:gravity="start"
                 android:text="Control de horario"
@@ -132,7 +150,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp"
+
                 android:orientation="horizontal">
 
                 <TextView
@@ -161,12 +179,20 @@
 
             </LinearLayout>
 
+            <TextView
+                style="?android:attr/listSeparatorTextViewStyle"
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:layout_below="@+id/connect_help"
+                android:background="@color/colorPrimaryDark"
+                android:gravity="center_horizontal"
+                android:paddingTop="15dip" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start"
-                android:layout_marginTop="5dp"
+                android:layout_marginTop="15dp"
                 android:layout_marginBottom="5dp"
                 android:fontFamily="@font/headland_one"
                 android:gravity="start"
@@ -181,7 +207,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/mb_input"
-                android:hint="Temperatura  [35 - 43]"
+                android:hint="Temperatura  [35.0 - 43.0]"
                 app:endIconMode="custom"
                 app:errorEnabled="true"
                 app:startIconDrawable="@drawable/ic_tempe">
@@ -240,12 +266,20 @@
 
             </com.google.android.material.textfield.TextInputLayout>
 
+            <TextView
+                style="?android:attr/listSeparatorTextViewStyle"
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:layout_below="@+id/connect_help"
+                android:background="@color/colorPrimaryDark"
+                android:gravity="center_horizontal"
+                android:paddingTop="15dip" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start"
-
+                android:layout_marginTop="15dp"
                 android:layout_marginBottom="5dp"
                 android:fontFamily="@font/headland_one"
                 android:gravity="start"
@@ -254,12 +288,20 @@
                 android:textSize="20sp"
                 android:textStyle="bold" />
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:fontFamily="@font/headland_one"
+                android:gravity="start"
+                android:text="*Obligaroio"
+                android:textColor="@color/colorAccent"
+                android:textSize="12sp"
+                android:textStyle="bold" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:layout_marginBottom="5dp"
                 android:orientation="horizontal">
 
                 <TextView
@@ -289,9 +331,19 @@
             </LinearLayout>
 
             <TextView
+                style="?android:attr/listSeparatorTextViewStyle"
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:layout_below="@+id/connect_help"
+                android:background="@color/colorPrimaryDark"
+                android:gravity="center_horizontal"
+                android:paddingTop="15dip" />
+
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start"
+                android:layout_marginTop="15dp"
                 android:layout_marginBottom="5dp"
                 android:fontFamily="@font/headland_one"
                 android:gravity="start"
@@ -304,11 +356,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start"
-                android:layout_marginTop="5dp"
                 android:layout_marginBottom="5dp"
                 android:fontFamily="@font/headland_one"
                 android:gravity="start"
-                android:text="*Nota : si no tiene síntomas dejar en uncheck "
+                android:text="*Opcional "
                 android:textColor="@color/colorAccent"
                 android:textSize="12sp"
                 android:textStyle="bold" />
@@ -432,7 +483,7 @@
                 android:layout_marginBottom="15dp"
                 android:layout_weight="1"
                 android:fontFamily="@font/headland_one"
-                android:text="Ingresar" />
+                android:text="Guardar" />
 
             <Button
                 android:id="@+id/btn_input_back"
@@ -442,7 +493,9 @@
                 android:layout_marginBottom="15dp"
                 android:layout_weight="1"
                 android:fontFamily="@font/headland_one"
-                android:text="Salir" />
+                android:text="Salir"
+                android:textColor="#fff"
+                app:backgroundTint="@android:color/holo_red_dark" />
         </LinearLayout>
 
         <TextView
