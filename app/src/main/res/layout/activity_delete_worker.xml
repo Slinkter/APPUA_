@@ -34,7 +34,7 @@
             android:orientation="vertical">
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/delete_personal_dni_layout"
+                android:id="@+id/query_personal_dni_layout"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -47,7 +47,7 @@
                 app:startIconDrawable="@drawable/ic_dni">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/delete_personal_dni"
+                    android:id="@+id/query_personal_dni"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/headland_one"
@@ -58,7 +58,7 @@
 
 
             <Button
-                android:id="@+id/btndeletepersonalcosultardni"
+                android:id="@+id/btn_query_dni_personal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
@@ -107,7 +107,7 @@
                     android:padding="15dp">
 
                     <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/personal_name_layout"
+                        android:id="@+id/update_personal_name_layout"
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -118,7 +118,7 @@
                         app:startIconDrawable="@drawable/ic_account">
 
                         <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/personal_name"
+                            android:id="@+id/update_personal_name"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/headland_one"
@@ -128,7 +128,7 @@
 
 
                     <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/personal_last_layout"
+                        android:id="@+id/update_personal_last_layout"
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -139,7 +139,7 @@
                         app:startIconDrawable="@drawable/ic_account">
 
                         <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/personal_last"
+                            android:id="@+id/update_personal_last"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/headland_one"
@@ -148,7 +148,7 @@
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/personal_address_layout"
+                        android:id="@+id/update_personal_address_layout"
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -159,7 +159,7 @@
                         app:startIconDrawable="@drawable/ic_home">
 
                         <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/personal_address"
+                            android:id="@+id/update_personal_address"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/headland_one"
@@ -169,7 +169,7 @@
 
 
                     <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/personal_phone1_layout"
+                        android:id="@+id/update_personal_phone1_layout"
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -182,7 +182,7 @@
                         app:startIconDrawable="@drawable/ic_phone">
 
                         <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/personal_phone1"
+                            android:id="@+id/update_personal_phone1"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/headland_one"
@@ -202,14 +202,14 @@
 
 
         <LinearLayout
-            android:id="@+id/layout_delete"
+            android:id="@+id/layout_btn_update"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:orientation="vertical">
 
             <Button
-                android:id="@+id/btndeletepersonal"
+                android:id="@+id/btn_update_personal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
@@ -217,7 +217,7 @@
                 android:text="Actualizar" />
 
             <Button
-                android:id="@+id/btndeleteback"
+                android:id="@+id/btn_exit_back"
                 style="?attr/materialButtonOutlinedStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
