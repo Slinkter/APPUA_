@@ -4,15 +4,15 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
-    android:layout_margin="10dp"
     android:gravity="center"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:padding="5dp">
 
     <androidx.cardview.widget.CardView
         android:layout_width="340dp"
         android:layout_height="240dp"
         android:layout_gravity="center"
-        android:layout_margin="10dp"
+        android:layout_margin="5dp"
         app:cardCornerRadius="25dp"
         app:cardElevation="8dp"
         app:cardUseCompatPadding="true">
@@ -29,9 +29,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
+                android:fontFamily="@font/headland_one"
                 android:gravity="center"
                 android:text="Deseas actualizar al trabajador ?"
-                android:fontFamily="@font/headland_one"
                 android:textColor="@color/border_color_edge" />
 
             <LinearLayout
@@ -42,23 +42,26 @@
                 android:weightSum="2">
 
                 <Button
-                    android:fontFamily="@font/headland_one"
                     android:id="@+id/btn_update_confirm_yes"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_margin="10dp"
                     android:layout_weight="1"
+                    android:fontFamily="@font/headland_one"
                     android:text="si" />
 
 
                 <Button
                     android:id="@+id/btn_update_confirm_no"
+                    style="?attr/materialButtonOutlinedStyle"
                     android:layout_width="0dp"
-                    android:fontFamily="@font/headland_one"
                     android:layout_height="wrap_content"
                     android:layout_margin="10dp"
                     android:layout_weight="1"
-                    android:text="no" />
+                    android:fontFamily="@font/headland_one"
+                    android:text="no"
+                    android:textColor="#fff"
+                    app:backgroundTint="@android:color/holo_red_dark" />
 
             </LinearLayout>
 

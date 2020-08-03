@@ -45,7 +45,7 @@ public class EditWorkerActivity extends AppCompatActivity {
     private Button btn_update_personal, btn_exit_back, btn_query_dni_personal;
     private FirebaseDatabase database;
     private Personal personal;
-    private LinearLayout layout_btn_update;
+    private LinearLayout layout_btn_update, update_layout_show;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,6 +73,8 @@ public class EditWorkerActivity extends AppCompatActivity {
 
 
         layout_btn_update = findViewById(R.id.layout_btn_update);
+
+        update_layout_show = findViewById(R.id.update_layout_show);
         btn_update_personal = findViewById(R.id.btn_update_personal);
         btn_exit_back = findViewById(R.id.btn_exit_back);
 
@@ -87,8 +89,42 @@ public class EditWorkerActivity extends AppCompatActivity {
             }
         });
 
+        //
+        btn_exit_back.setOnClickListener(v -> {
+            Intent intent = new Intent(EditWorkerActivity.this, AllActivity.class);
+            startActivity(intent);
+            finish();
+        });
+
+
+        disable();
+
+
     }
 
+    private void able() {
+        update_layout_show.setEnabled(true);
+        update_personal_name_layout.setEnabled(true);
+        update_personal_last_layout.setEnabled(true);
+        update_personal_address_layout.setEnabled(true);
+        update_personal_phone1_layout.setEnabled(true);
+    }
+
+    private void disable() {
+        update_layout_show.setEnabled(false);
+        update_personal_name_layout.setEnabled(false);
+        update_personal_last_layout.setEnabled(false);
+        update_personal_address_layout.setEnabled(false);
+        update_personal_phone1_layout.setEnabled(false);
+    }
+
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+
+    }
 
     private void consultarDniPersonal(String dni_personal) {
 
@@ -104,6 +140,8 @@ public class EditWorkerActivity extends AppCompatActivity {
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         personal = dataSnapshot.getValue(Personal.class);
                         if (personal != null) {
+
+                            able();
                             Log.e(TAG, "nombre : " + personal.getName());
                             Log.e(TAG, "dni : " + personal.getDni());
                             Log.e(TAG, "dirección : " + personal.getAddress());
@@ -112,7 +150,7 @@ public class EditWorkerActivity extends AppCompatActivity {
                             show_delete_personal.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.color_error_null));
                             query_personal_dni_layout.setError(null);
                             layout_btn_update.setVisibility(View.VISIBLE);
-
+                            update_layout_show.setEnabled(true);
                             //
                             update_personal_name.setText(personal.getName());
                             update_personal_last.setText(personal.getLast());
@@ -160,12 +198,14 @@ public class EditWorkerActivity extends AppCompatActivity {
 
 
                         } else {
+                            disable();
                             Log.e(TAG, "el trabjador no existe en  ");
                             show_delete_personal.setText("");
                             show_delete_personal.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.color_error));
                             query_personal_dni_layout.setError("El trabajador no exsite en la base de datos");
                             query_personal_dni_layout.requestFocus();
                             layout_btn_update.setVisibility(View.INVISIBLE);
+                            update_layout_show.setEnabled(false);
                             //
                             update_personal_name.setText(" ");
                             update_personal_last.setText(" ");
