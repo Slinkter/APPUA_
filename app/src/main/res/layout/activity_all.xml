@@ -144,7 +144,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:foreground="?android:attr/selectableItemBackground"
-                android:onClick="btnDeleteWorker"
+                android:onClick="btnEditWorker"
                 app:cardCornerRadius="@dimen/cardRadiusAll"
                 app:cardElevation="@dimen/card_elevation"
                 app:cardUseCompatPadding="true">
@@ -154,7 +154,7 @@
                     android:layout_height="match_parent"
                     android:fontFamily="@font/headland_one"
                     android:gravity="center"
-                    android:onClick="btnDeleteWorker"
+                    android:onClick="btnEditWorker"
                     android:orientation="vertical"
                     android:padding="20dp">
 

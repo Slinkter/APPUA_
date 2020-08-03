@@ -58,7 +58,7 @@
             android:parentActivityName=".Principal.AllActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".Principal.Activities.DeleteWorkerActivity"
+            android:name=".Principal.Activities.EditWorkerActivity"
             android:parentActivityName=".Principal.AllActivity"
             android:screenOrientation="portrait" />
         <activity

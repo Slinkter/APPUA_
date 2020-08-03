@@ -31,9 +31,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-public class DeleteWorkerActivity extends AppCompatActivity {
+public class EditWorkerActivity extends AppCompatActivity {
 
-    public static final String TAG = DeleteWorkerActivity.class.getSimpleName();
+    public static final String TAG = EditWorkerActivity.class.getSimpleName();
     private TextInputLayout delete_personal_dni_layout;
     private TextInputEditText delete_personal_dni;
     private TextView show_delete_personal;
@@ -89,7 +89,7 @@ public class DeleteWorkerActivity extends AppCompatActivity {
         btnDeleteback.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(DeleteWorkerActivity.this, AllActivity.class);
+                Intent intent = new Intent(EditWorkerActivity.this, AllActivity.class);
                 startActivity(intent);
                 finish();
             }
@@ -158,7 +158,7 @@ public class DeleteWorkerActivity extends AppCompatActivity {
 
     public void showDiaglo(final String dni) {
 
-        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(DeleteWorkerActivity.this);
+        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(EditWorkerActivity.this);
         LayoutInflater inflater = getLayoutInflater();
         View view = inflater.inflate(R.layout.pop_up_delete_personal, null);
         builder.setView(view);
@@ -188,13 +188,13 @@ public class DeleteWorkerActivity extends AppCompatActivity {
                         ref_mina_data.child(dni).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void aVoid) {
-                                Toast.makeText(DeleteWorkerActivity.this, "Trabajador Eliminado ", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(EditWorkerActivity.this, "Trabajador Eliminado ", Toast.LENGTH_SHORT).show();
                                 dialog.dismiss();
                             }
                         }).addOnFailureListener(new OnFailureListener() {
                             @Override
                             public void onFailure(@NonNull Exception e) {
-                                Toast.makeText(DeleteWorkerActivity.this, "Trabajador no  Eliminado", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(EditWorkerActivity.this, "Trabajador no  Eliminado", Toast.LENGTH_SHORT).show();
                                 dialog.dismiss();
                             }
                         });
@@ -203,7 +203,7 @@ public class DeleteWorkerActivity extends AppCompatActivity {
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(DeleteWorkerActivity.this, "Trabjador no  Eliminado", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(EditWorkerActivity.this, "Trabjador no  Eliminado", Toast.LENGTH_SHORT).show();
                         dialog.dismiss();
                     }
                 });

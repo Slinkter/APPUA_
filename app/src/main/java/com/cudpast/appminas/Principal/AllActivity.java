@@ -10,7 +10,7 @@ import android.widget.Toast;
 
 import com.cudpast.appminas.Common.Common;
 import com.cudpast.appminas.Principal.Activities.AddWorkerActivity;
-import com.cudpast.appminas.Principal.Activities.DeleteWorkerActivity;
+import com.cudpast.appminas.Principal.Activities.EditWorkerActivity;
 import com.cudpast.appminas.Principal.Activities.InputDataWorkerActivity;
 import com.cudpast.appminas.Principal.Activities.ReportDataWorkerActivity;
 import com.cudpast.appminas.R;
@@ -42,10 +42,10 @@ public class AllActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public void btnDeleteWorker(View view) {
-        Toast.makeText(this, "Solo admin", Toast.LENGTH_SHORT).show();
-        //  Intent intent = new Intent(AllActivity.this, DeleteWorkerActivity.class);
-        //  startActivity(intent);
+    public void btnEditWorker(View view) {
+        // Toast.makeText(this, "Solo admin", Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(AllActivity.this, EditWorkerActivity.class);
+        startActivity(intent);
     }
 
     public void btnInputData(View view) {
