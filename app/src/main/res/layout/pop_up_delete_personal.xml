@@ -30,7 +30,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 android:gravity="center"
-                android:text="Deseas Eliminar al trabajador ?"
+                android:text="Deseas actualizar al trabajador ?"
                 android:fontFamily="@font/headland_one"
                 android:textColor="@color/border_color_edge" />
 
@@ -43,17 +43,16 @@
 
                 <Button
                     android:fontFamily="@font/headland_one"
-                    android:id="@+id/btn_delete_yes"
+                    android:id="@+id/btn_update_confirm_yes"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_margin="10dp"
-
                     android:layout_weight="1"
                     android:text="si" />
 
 
                 <Button
-                    android:id="@+id/btn_delete_no"
+                    android:id="@+id/btn_update_confirm_no"
                     android:layout_width="0dp"
                     android:fontFamily="@font/headland_one"
                     android:layout_height="wrap_content"

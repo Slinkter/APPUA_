@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -21,8 +22,6 @@ import com.cudpast.appminas.Common.Common;
 import com.cudpast.appminas.Model.Personal;
 import com.cudpast.appminas.Principal.AllActivity;
 import com.cudpast.appminas.R;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.database.DataSnapshot;
@@ -88,21 +87,6 @@ public class EditWorkerActivity extends AppCompatActivity {
             }
         });
 
-        // Realiza la actualizacion del trabajador
-        btn_update_personal.setOnClickListener(v -> {
-            String dni = query_personal_dni.getText().toString();
-            showDiaglo(dni);
-
-        });
-
-        // Salir
-        btn_exit_back.setOnClickListener(v -> {
-            Intent intent = new Intent(EditWorkerActivity.this, AllActivity.class);
-            startActivity(intent);
-            finish();
-        });
-
-
     }
 
 
@@ -136,6 +120,43 @@ public class EditWorkerActivity extends AppCompatActivity {
                             update_personal_phone1.setText(personal.getPhone1());
                             //
 
+                            // Realiza la actualizacion del trabajador
+                            btn_update_personal.setOnClickListener(v -> {
+
+                                String dni, name, last, age, address, born, date, phone1, phone2;
+
+                                dni = personal.getDni();
+                                name = update_personal_name.getText().toString();
+                                last = update_personal_last.getText().toString();
+                                age = personal.getAge();
+                                address = update_personal_address.getText().toString();
+                                born = personal.getBorn();
+                                date = personal.getDate();
+                                phone1 = update_personal_phone1.getText().toString();
+                                phone2 = personal.getPhone2();
+
+                                Personal updatepersonal = new Personal();
+
+                                updatepersonal.setDni(dni);
+                                updatepersonal.setName(name);
+                                updatepersonal.setLast(last);
+                                updatepersonal.setAge(age);
+                                updatepersonal.setAddress(address);
+                                updatepersonal.setBorn(born);
+                                updatepersonal.setDate(date);
+                                updatepersonal.setPhone1(phone1);
+                                updatepersonal.setPhone2(phone2);
+
+                                updateWorker(updatepersonal);
+
+                            });
+
+                            // Salir
+                            btn_exit_back.setOnClickListener(v -> {
+                                Intent intent = new Intent(EditWorkerActivity.this, AllActivity.class);
+                                startActivity(intent);
+                                finish();
+                            });
 
 
                         } else {
@@ -185,7 +206,8 @@ public class EditWorkerActivity extends AppCompatActivity {
     }
 
 
-    public void showDiaglo(final String dni) {
+    public void updateWorker(Personal updatepersonal) {
+
 
         android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(EditWorkerActivity.this);
         LayoutInflater inflater = getLayoutInflater();
@@ -196,65 +218,85 @@ public class EditWorkerActivity extends AppCompatActivity {
         final AlertDialog dialog = builder.create();
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         //
-        Button btn_delete_yes = view.findViewById(R.id.btn_delete_yes);
-        Button btn_delete_no = view.findViewById(R.id.btn_delete_no);
+        ProgressDialog mDialog = new ProgressDialog(view.getContext());
+        mDialog.setMessage(" Actualizando datos ... ");
+        mDialog.show();
+        //
+        Button btn_update_confirm_yes = view.findViewById(R.id.btn_update_confirm_yes);
+        Button btn_update_confirm_no = view.findViewById(R.id.btn_update_confirm_no);
 
-        btn_delete_yes.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                DatabaseReference ref_db_mina_personal = database.getReference(Common.db_mina_personal);
-                DatabaseReference ref_mina = ref_db_mina_personal.child(Common.unidadTrabajoSelected.getNameUT());
-
-                DatabaseReference ref_db_mina_personal_data = database.getReference(Common.db_mina_personal_data);
-                final DatabaseReference ref_mina_data = ref_db_mina_personal_data.child(Common.unidadTrabajoSelected.getNameUT());
-
-                ref_mina.child(dni).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
+        btn_update_confirm_yes.setOnClickListener(v -> {
+            DatabaseReference ref_db_mina_personal = database
+                    .getReference(Common.db_mina_personal)
+                    .child(Common.unidadTrabajoSelected.getNameUT())
+                    .child(updatepersonal.getDni());
 
 
-                        ref_mina_data.child(dni).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void aVoid) {
-                                Toast.makeText(EditWorkerActivity.this, "Trabajador Eliminado ", Toast.LENGTH_SHORT).show();
-                                dialog.dismiss();
-                            }
-                        }).addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Toast.makeText(EditWorkerActivity.this, "Trabajador no  Eliminado", Toast.LENGTH_SHORT).show();
-                                dialog.dismiss();
-                            }
-                        });
+            ref_db_mina_personal.setValue(updatepersonal);
 
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(EditWorkerActivity.this, "Trabjador no  Eliminado", Toast.LENGTH_SHORT).show();
-                        dialog.dismiss();
-                    }
-                });
+            ref_db_mina_personal.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    dialog.dismiss();
+                    mDialog.dismiss();
+                    Log.e(TAG, "EXITO");
+                    Log.e(TAG, "getKey = " + dataSnapshot.getKey());
+                    Log.e(TAG, "getValue = " + dataSnapshot.getValue());
+
+                    Toast.makeText(view.getContext(), " Se actualizado  ", Toast.LENGTH_SHORT).show();
+
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                    dialog.dismiss();
+                    mDialog.dismiss();
+                    Toast.makeText(view.getContext(), " error al actualizar  ", Toast.LENGTH_SHORT).show();
+                    Log.e(TAG, "FAIL = " + databaseError.getMessage());
+                }
+            });
 
 
-                Log.e(TAG, "ref_db_mina_personal" + ref_db_mina_personal);
-                Log.e(TAG, "ref_mina" + ref_mina);
-                Log.e(TAG, "ref_mina.child(dni)." + ref_mina.child(dni));
-
-            }
         });
 
 
-        btn_delete_no
-                .setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        dialog.dismiss();
-                    }
-                });
+        btn_update_confirm_no.setOnClickListener(view1 -> dialog.dismiss());
         dialog.show();
     }
 
+
+
+     /*
+        btn_futuro_eliminacion_de_trabajador_yes.setOnClickListener(v -> {
+
+            DatabaseReference ref_db_mina_personal = database.getReference(Common.db_mina_personal);
+            DatabaseReference ref_mina = ref_db_mina_personal.child(Common.unidadTrabajoSelected.getNameUT());
+
+            DatabaseReference ref_db_mina_personal_data = database.getReference(Common.db_mina_personal_data);
+            final DatabaseReference ref_mina_data = ref_db_mina_personal_data.child(Common.unidadTrabajoSelected.getNameUT());
+
+            ref_mina.child(dni).removeValue().addOnSuccessListener(aVoid -> ref_mina_data.child(dni).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+                @Override
+                public void onSuccess(Void aVoid) {
+                    Toast.makeText(EditWorkerActivity.this, "Trabajador Eliminado ", Toast.LENGTH_SHORT).show();
+                    dialog.dismiss();
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Toast.makeText(EditWorkerActivity.this, "Trabajador no  Eliminado", Toast.LENGTH_SHORT).show();
+                    dialog.dismiss();
+                }
+            })).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Toast.makeText(EditWorkerActivity.this, "Trabjador no  Eliminado", Toast.LENGTH_SHORT).show();
+                    dialog.dismiss();
+                }
+            });
+
+
+        });
+        */
 
 }
