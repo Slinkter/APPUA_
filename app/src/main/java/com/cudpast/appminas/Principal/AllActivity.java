@@ -24,6 +24,7 @@ public class AllActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         getSupportActionBar().hide();
         setContentView(R.layout.activity_all);
+
         tv_selectedunidadminera = findViewById(R.id.tv_selectedunidadminera);
         tv_selectedunidadminera.setText(Common.unidadTrabajoSelected.getAliasUT());
         currentuser = findViewById(R.id.currentuser);
@@ -42,16 +43,18 @@ public class AllActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+
+    public void btnRegisterSymptoms(View view) {
+        Intent intent = new Intent(AllActivity.this, InputDataWorkerActivity.class);
+        startActivity(intent);
+    }
+
     public void btnEditWorker(View view) {
         // Toast.makeText(this, "Solo admin", Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(AllActivity.this, EditWorkerActivity.class);
         startActivity(intent);
     }
 
-    public void btnInputData(View view) {
-        Intent intent = new Intent(AllActivity.this, InputDataWorkerActivity.class);
-        startActivity(intent);
-    }
 
     public void btnReportData(View view) {
         Intent intent = new Intent(AllActivity.this, ReportDataWorkerActivity.class);

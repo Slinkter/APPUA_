@@ -12,10 +12,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_margin="5dp"
-        android:padding="5dp"
+        android:layout_margin="10dp"
         android:gravity="center"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:padding="0dp">
 
         <TextView
             android:layout_width="wrap_content"
@@ -44,7 +44,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="0dp"
+            android:layout_margin="1dp"
             android:clipToPadding="false"
             android:gravity="center"
             android:orientation="horizontal"
@@ -68,7 +68,7 @@
                     android:gravity="center"
                     android:onClick="btnAddWorker"
                     android:orientation="vertical"
-                    android:padding="20dp">
+                    android:padding="15dp">
 
                     <ImageView
                         android:layout_width="75dp"
@@ -96,7 +96,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:foreground="?android:attr/selectableItemBackground"
-                android:onClick="btnInputData"
+                android:onClick="btnRegisterSymptoms"
                 app:cardCornerRadius="@dimen/cardRadiusAll"
                 app:cardElevation="@dimen/card_elevation"
                 app:cardUseCompatPadding="true">
@@ -105,9 +105,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center"
-                    android:onClick="btnInputData"
+                    android:onClick="btnRegisterSymptoms"
                     android:orientation="vertical"
-                    android:padding="20dp"
+                    android:padding="15dp"
                     android:weightSum="2">
 
                     <ImageView
@@ -134,7 +134,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="0dp"
+            android:layout_margin="1dp"
             android:clipToPadding="false"
             android:gravity="center"
             android:orientation="horizontal">
@@ -156,7 +156,7 @@
                     android:gravity="center"
                     android:onClick="btnEditWorker"
                     android:orientation="vertical"
-                    android:padding="20dp">
+                    android:padding="15dp">
 
                     <ImageView
                         android:layout_width="75dp"
@@ -194,7 +194,7 @@
                     android:gravity="center"
                     android:onClick="btnReportData"
                     android:orientation="vertical"
-                    android:padding="20dp">
+                    android:padding="15dp">
 
                     <ImageView
                         android:layout_width="75dp"
@@ -309,7 +309,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="40dp"
+            android:layout_margin="20dp"
             android:clipToPadding="false"
             android:gravity="center"
             android:orientation="vertical">
