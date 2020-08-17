@@ -1,5 +1,7 @@
 package com.cudpast.appminas.Model;
 
+import android.util.Log;
+
 public class MetricasPersonal {
 
     private String tempurature;
@@ -136,5 +138,24 @@ public class MetricasPersonal {
 
     public void setS7(Boolean s7) {
         this.s7 = s7;
+    }
+
+    public String showInfo() {
+        String cad = "";
+
+        cad = cad +
+
+                "======================== " +
+                "getDateRegister = " + dateRegister + "\n" +
+                "getHorario = " + horario + "\n" +
+                "getPulse = " + pulse + "\n" +
+                "getSo2 = " + so2 + "\n" +
+                "getSymptoms = " + symptoms + "\n" +
+                "getTempurature = " + tempurature + "\n" +
+                "getTestpruebarapida = " + testpruebarapida + "\n" +
+                "getWho_user_register = " + who_user_register + "\n";
+
+
+        return cad;
     }
 }
