@@ -27,11 +27,12 @@
             android:textStyle="bold" />
 
         <androidx.cardview.widget.CardView
-            android:onClick="btn_entrada_pdf"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:onClick="btn_entrada_pdf"
             app:cardCornerRadius="15dp"
             app:cardElevation="8dp"
+            app:cardMaxElevation="9dp"
             app:cardUseCompatPadding="true">
 
             <LinearLayout
@@ -72,11 +73,11 @@
             app:cardUseCompatPadding="true">
 
             <LinearLayout
-                android:onClick="btn_salida_pdf"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center"
+                android:onClick="btn_salida_pdf"
                 android:orientation="horizontal"
                 android:padding="20dp"
                 android:weightSum="5">
@@ -104,9 +105,9 @@
 
 
         <androidx.cardview.widget.CardView
-            android:onClick="btn_workerd"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:onClick="btn_workerd"
             app:cardCornerRadius="15dp"
             app:cardElevation="8dp"
             app:cardUseCompatPadding="true">
