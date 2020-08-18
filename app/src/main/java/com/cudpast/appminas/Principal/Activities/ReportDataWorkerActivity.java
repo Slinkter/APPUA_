@@ -282,7 +282,9 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
 
         // todo :  aqui se juntaria las dos lista para order por Apellido
         List<AllPersonalMetricas> list_workers = new ArrayList<>();
+
         int nCountWorkers = listMetricasPersonal.size();
+
         Log.e(TAG, "nCountWorkers = " + nCountWorkers);
         //
         for (int i = 0; i < nCountWorkers; i++) {
@@ -329,40 +331,6 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
         if (list_workers.size() >= 1) {
             //
             Collections.sort(list_workers, (o1, o2) -> new String(o1.getLast()).compareToIgnoreCase(o2.getLast()));
-            //
-            // Prueba unitarias
-            /*
-            List<AllPersonalMetricas> list_temp = list_workers;
-            Log.e(TAG, "old  list ");
-            for (AllPersonalMetricas tempOld : list_workers) {
-                Log.e("tempOld", "-----------------------");
-                Log.e("tempOld", " " + tempOld.getAllInfoWorker2());
-
-            }
-            //   Collections.sort(list_workers, (o1, o2) -> o1.getLast().compareToIgnoreCase(o2.getLast()));
-
-            //
-            Log.e(TAG, " ");
-            Log.e(TAG, "new list sorted");
-            Log.e(TAG, " ");
-            for (AllPersonalMetricas tempNew : list_workers) {
-                Log.e("tempNew", "-----------------------");
-                Log.e("tempNew", " " + tempNew.getAllInfoWorker2());
-
-            }
-            // para los dos
-            Log.e(TAG, " ");
-            Log.e(TAG, "Comparando las dos lista ");
-            Log.e(TAG, " ");
-            int valorLista = list_workers.size();
-            for (int j = 0; j < valorLista; j++) {
-                Log.e("list_workers", " " + list_workers.get(j).getAllInfoWorker2());
-                Log.e("list_temp", " " + list_temp.get(j).getAllInfoWorker2());
-            }
-
-            */
-            // ser ordena por apellido
-
         }
         //
         if (list_workers.size() >= 1) {
@@ -457,6 +425,8 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
                 // Page 01-01 : [0-28]
                 try {
                     for (int i = 0; i < nCountWorkers; i++) {
+                        // Poner en mayuscula el Apellido y Nombre
+                        String fullName = list_workers.get(i).getLast() + " , " + list_workers.get(i).getName();
                         //Saturacion  color
                         int valueSatura = Integer.parseInt(list_workers.get(i).getSo2());
                         setColorSaturacion(valueSatura, so);
@@ -464,12 +434,9 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
                         int valuePulso = Integer.parseInt(list_workers.get(i).getPulse());
                         setColorPulso(valuePulso, pulse);
                         //
-                        // Poner en mayuscula el Apellido y Nombre
-                        String fullName = list_workers.get(i).getLast() + " , " + list_workers.get(i).getName();
-                        fullName.toUpperCase();
                         cansas01.drawText(i + 1 + ".", 60, yInit + ysum, myPaint);
                         cansas01.drawText(list_workers.get(i).getDni(), 140, yInit + ysum, myPaint);
-                        cansas01.drawText(fullName, 300, yInit + ysum, myPaint);
+                        cansas01.drawText(fullName.toUpperCase(), 300, yInit + ysum, myPaint);
                         cansas01.drawText(list_workers.get(i).getTempurature(), 830, yInit + ysum, myPaint);
                         cansas01.drawText(list_workers.get(i).getSo2(), 1000, yInit + ysum, so);
                         cansas01.drawText(list_workers.get(i).getPulse(), 1105, yInit + ysum, pulse);
@@ -485,7 +452,7 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
                     Log.e(TAG, "try-catch :  Page 01 " + e.getMessage());
                 }
                 //-------------------------------------------------------------------------------
-            } else if (nCountWorkers >= 29 && nCountWorkers <= 63) {
+            } else if (nCountWorkers >= 29 && nCountWorkers <= 60) {
                 //-------------------------------------------------------------------------------
                 try {
                     //----------------------------------------------->
@@ -493,15 +460,14 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
                     // [0-28]
                     //----------------------------------------------->
                     for (int i = 0; i < 28; i++) {
+                        // Poner en mayuscula el Apellido y Nombre
+                        String fullName = list_workers.get(i).getLast() + " , " + list_workers.get(i).getName();
                         //Saturacion  color
                         int valueSatura = Integer.parseInt(list_workers.get(i).getSo2());
                         setColorSaturacion(valueSatura, so);
                         //Pulso color
                         int valuePulso = Integer.parseInt(list_workers.get(i).getPulse());
                         setColorPulso(valuePulso, pulse);
-                        //
-                        // Poner en mayuscula el Apellido y Nombre
-                        String fullName = list_workers.get(i).getLast() + " , " + list_workers.get(i).getName();
                         //
                         cansas01.drawText(i + 1 + ".", 60, yInit + ysum, myPaint);
                         cansas01.drawText(list_workers.get(i).getDni(), 140, yInit + ysum, myPaint);
@@ -525,14 +491,14 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
                     yInit = 100;
                     ysum = 0;
                     for (int i = 29; i < nCountWorkers; i++) {
+                        // Up FullName
+                        String fullName = list_workers.get(i).getLast() + " , " + list_workers.get(i).getName();
                         //Saturacion  color
                         int valueSatura = Integer.parseInt(list_workers.get(i).getSo2());
                         setColorSaturacion(valueSatura, so);
                         //Pulso color
                         int valuePulso = Integer.parseInt(list_workers.get(i).getPulse());
                         setColorPulso(valuePulso, pulse);
-                        //
-                        String fullName = list_workers.get(i).getLast() + " , " + list_workers.get(i).getName();
                         //
                         canvas02.drawText(i + ".", 60, yInit + ysum, myPaint);
                         canvas02.drawText(list_workers.get(i).getDni(), 140, yInit + ysum, myPaint);
@@ -554,8 +520,7 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
                     Log.e(TAG, "try-catch : Page 02 " + e.getMessage());
                 }
 
-
-            } else if (nCountWorkers >= 67 && nCountWorkers <= 90) {
+            } else if (nCountWorkers >= 61 && nCountWorkers <= 92) {
                 Toast.makeText(this, "nCountWorkers >= 67 && nCountWorkers <= 90", Toast.LENGTH_SHORT).show();
                 try {
                     //----------------------------------------------->
@@ -563,15 +528,14 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
                     // [0-28]
                     //----------------------------------------------->
                     for (int i = 0; i < 28; i++) {
+                        // Poner en mayuscula el Apellido y Nombre
+                        String fullName = list_workers.get(i).getLast() + " , " + list_workers.get(i).getName();
                         //Saturacion  color
                         int valueSatura = Integer.parseInt(list_workers.get(i).getSo2());
                         setColorSaturacion(valueSatura, so);
                         //Pulso color
                         int valuePulso = Integer.parseInt(list_workers.get(i).getPulse());
                         setColorPulso(valuePulso, pulse);
-                        //
-                        // Poner en mayuscula el Apellido y Nombre
-                        String fullName = list_workers.get(i).getLast() + " , " + list_workers.get(i).getName();
                         //
                         cansas01.drawText(i + 1 + ".", 60, yInit + ysum, myPaint);
                         cansas01.drawText(list_workers.get(i).getDni(), 140, yInit + ysum, myPaint);
@@ -598,14 +562,14 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
                     int listTemp = 63;
 
                     for (int i = 29; i < listTemp; i++) {
+                        //
+                        String fullName = list_workers.get(i).getLast() + " , " + list_workers.get(i).getName();
                         //Saturacion  color
                         int valueSatura = Integer.parseInt(list_workers.get(i).getSo2());
                         setColorSaturacion(valueSatura, so);
                         //Pulso color
                         int valuePulso = Integer.parseInt(list_workers.get(i).getPulse());
                         setColorPulso(valuePulso, pulse);
-                        //
-                        String fullName = list_workers.get(i).getLast() + " , " + list_workers.get(i).getName();
                         //
                         canvas02.drawText(i + ".", 60, yInit + ysum, myPaint);
                         canvas02.drawText(list_workers.get(i).getDni(), 140, yInit + ysum, myPaint);
@@ -626,14 +590,14 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
                     Canvas canvas03 = myPage3.getCanvas();
 
                     for (int i = 64; i < nCountWorkers; i++) {
+                        //
+                        String fullName = list_workers.get(i).getLast() + " , " + list_workers.get(i).getName();
                         //Saturacion  color
                         int valueSatura = Integer.parseInt(list_workers.get(i).getSo2());
                         setColorSaturacion(valueSatura, so);
                         //Pulso color
                         int valuePulso = Integer.parseInt(list_workers.get(i).getPulse());
                         setColorPulso(valuePulso, pulse);
-                        //
-                        String fullName = list_workers.get(i).getLast() + " , " + list_workers.get(i).getName();
                         //
                         canvas03.drawText(i + ".", 60, yInit + ysum, myPaint);
                         canvas03.drawText(list_workers.get(i).getDni(), 140, yInit + ysum, myPaint);
@@ -655,7 +619,7 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
                     Log.e(TAG, "try-catch : Page 02 " + e.getMessage());
                 }
 
-            } else if (nCountWorkers >= 99 && nCountWorkers <= 133) {
+            } else if (nCountWorkers >= 93 && nCountWorkers <= 124) {
                 Toast.makeText(this, "nCountWorkers >= 99 && nCountWorkers <= 133", Toast.LENGTH_SHORT).show();
                 try {
                     //----------------------------------------------->
@@ -663,15 +627,14 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
                     // [0-28]
                     //----------------------------------------------->
                     for (int i = 0; i < 28; i++) {
+                        // Poner en mayuscula el Apellido y Nombre
+                        String fullName = list_workers.get(i).getLast() + " , " + list_workers.get(i).getName();
                         //Saturacion  color
                         int valueSatura = Integer.parseInt(list_workers.get(i).getSo2());
                         setColorSaturacion(valueSatura, so);
                         //Pulso color
                         int valuePulso = Integer.parseInt(list_workers.get(i).getPulse());
                         setColorPulso(valuePulso, pulse);
-                        //
-                        // Poner en mayuscula el Apellido y Nombre
-                        String fullName = list_workers.get(i).getLast() + " , " + list_workers.get(i).getName();
                         //
                         cansas01.drawText(i + 1 + ".", 60, yInit + ysum, myPaint);
                         cansas01.drawText(list_workers.get(i).getDni(), 140, yInit + ysum, myPaint);
@@ -698,14 +661,14 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
                     int listTemp = 63;
 
                     for (int i = 29; i < listTemp; i++) {
+                        //
+                        String fullName = list_workers.get(i).getLast() + " , " + list_workers.get(i).getName();
                         //Saturacion  color
                         int valueSatura = Integer.parseInt(list_workers.get(i).getSo2());
                         setColorSaturacion(valueSatura, so);
                         //Pulso color
                         int valuePulso = Integer.parseInt(list_workers.get(i).getPulse());
                         setColorPulso(valuePulso, pulse);
-                        //
-                        String fullName = list_workers.get(i).getLast() + " , " + list_workers.get(i).getName();
                         //
                         canvas02.drawText(i + ".", 60, yInit + ysum, myPaint);
                         canvas02.drawText(list_workers.get(i).getDni(), 140, yInit + ysum, myPaint);
@@ -728,14 +691,14 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
                     listTemp = 90;
 
                     for (int i = 64; i < listTemp; i++) {
+                        //
+                        String fullName = list_workers.get(i).getLast() + " , " + list_workers.get(i).getName();
                         //Saturacion  color
                         int valueSatura = Integer.parseInt(list_workers.get(i).getSo2());
                         setColorSaturacion(valueSatura, so);
                         //Pulso color
                         int valuePulso = Integer.parseInt(list_workers.get(i).getPulse());
                         setColorPulso(valuePulso, pulse);
-                        //
-                        String fullName = list_workers.get(i).getLast() + " , " + list_workers.get(i).getName();
                         //
                         canvas03.drawText(i + ".", 60, yInit + ysum, myPaint);
                         canvas03.drawText(list_workers.get(i).getDni(), 140, yInit + ysum, myPaint);
@@ -757,14 +720,14 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
                     Canvas canvas04 = myPage4.getCanvas();
                     //
                     for (int i = 99; i < nCountWorkers; i++) {
+                        //
+                        String fullName = list_workers.get(i).getLast() + " , " + list_workers.get(i).getName();
                         //Saturacion  color
                         int valueSatura = Integer.parseInt(list_workers.get(i).getSo2());
                         setColorSaturacion(valueSatura, so);
                         //Pulso color
                         int valuePulso = Integer.parseInt(list_workers.get(i).getPulse());
                         setColorPulso(valuePulso, pulse);
-                        //
-                        String fullName = list_workers.get(i).getLast() + " , " + list_workers.get(i).getName();
                         //
                         canvas04.drawText(i + ".", 60, yInit + ysum, myPaint);
                         canvas04.drawText(list_workers.get(i).getDni(), 140, yInit + ysum, myPaint);
@@ -787,7 +750,7 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
                     Log.e(TAG, "try-catch : Page 02 " + e.getMessage());
                 }
 
-            } else if (nCountWorkers >= 134 && nCountWorkers <= 150) {
+            } else if (nCountWorkers >= 125 && nCountWorkers <= 150) {
                 Toast.makeText(this, "nCountWorkers >= 134 && nCountWorkers <= 150", Toast.LENGTH_SHORT).show();
                 try {
                     //----------------------------------------------->
@@ -795,15 +758,14 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
                     // [0-28]
                     //----------------------------------------------->
                     for (int i = 0; i < 28; i++) {
+                        // Poner en mayuscula el Apellido y Nombre
+                        String fullName = list_workers.get(i).getLast() + " , " + list_workers.get(i).getName();
                         //Saturacion  color
                         int valueSatura = Integer.parseInt(list_workers.get(i).getSo2());
                         setColorSaturacion(valueSatura, so);
                         //Pulso color
                         int valuePulso = Integer.parseInt(list_workers.get(i).getPulse());
                         setColorPulso(valuePulso, pulse);
-                        //
-                        // Poner en mayuscula el Apellido y Nombre
-                        String fullName = list_workers.get(i).getLast() + " , " + list_workers.get(i).getName();
                         //
                         cansas01.drawText(i + 1 + ".", 60, yInit + ysum, myPaint);
                         cansas01.drawText(list_workers.get(i).getDni(), 140, yInit + ysum, myPaint);
@@ -830,14 +792,15 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
                     int listTemp = 63;
 
                     for (int i = 29; i < listTemp; i++) {
+                        //
+                        String fullName = list_workers.get(i).getLast() + " , " + list_workers.get(i).getName();
                         //Saturacion  color
                         int valueSatura = Integer.parseInt(list_workers.get(i).getSo2());
                         setColorSaturacion(valueSatura, so);
                         //Pulso color
                         int valuePulso = Integer.parseInt(list_workers.get(i).getPulse());
                         setColorPulso(valuePulso, pulse);
-                        //
-                        String fullName = list_workers.get(i).getLast() + " , " + list_workers.get(i).getName();
+
                         //
                         canvas02.drawText(i + ".", 60, yInit + ysum, myPaint);
                         canvas02.drawText(list_workers.get(i).getDni(), 140, yInit + ysum, myPaint);
@@ -859,15 +822,16 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
 
                     listTemp = 90;
 
-                    for (int i = 64; i < listTemp; i++) {
+                    for (int i = 91; i < listTemp; i++) {
+                        //
+                        String fullName = list_workers.get(i).getLast() + " , " + list_workers.get(i).getName();
                         //Saturacion  color
                         int valueSatura = Integer.parseInt(list_workers.get(i).getSo2());
                         setColorSaturacion(valueSatura, so);
                         //Pulso color
                         int valuePulso = Integer.parseInt(list_workers.get(i).getPulse());
                         setColorPulso(valuePulso, pulse);
-                        //
-                        String fullName = list_workers.get(i).getLast() + " , " + list_workers.get(i).getName();
+
                         //
                         canvas03.drawText(i + ".", 60, yInit + ysum, myPaint);
                         canvas03.drawText(list_workers.get(i).getDni(), 140, yInit + ysum, myPaint);
@@ -890,14 +854,14 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
                     //
                     listTemp = 133;
                     for (int i = 99; i < listTemp; i++) {
+                        //
+                        String fullName = list_workers.get(i).getLast() + " , " + list_workers.get(i).getName();
                         //Saturacion  color
                         int valueSatura = Integer.parseInt(list_workers.get(i).getSo2());
                         setColorSaturacion(valueSatura, so);
                         //Pulso color
                         int valuePulso = Integer.parseInt(list_workers.get(i).getPulse());
                         setColorPulso(valuePulso, pulse);
-                        //
-                        String fullName = list_workers.get(i).getLast() + " , " + list_workers.get(i).getName();
                         //
                         canvas04.drawText(i + ".", 60, yInit + ysum, myPaint);
                         canvas04.drawText(list_workers.get(i).getDni(), 140, yInit + ysum, myPaint);
@@ -919,14 +883,14 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
                     Canvas canvas05 = myPage5.getCanvas();
                     //
                     for (int i = 134; i < nCountWorkers; i++) {
+                        //
+                        String fullName = list_workers.get(i).getLast() + " , " + list_workers.get(i).getName();
                         //Saturacion  color
                         int valueSatura = Integer.parseInt(list_workers.get(i).getSo2());
                         setColorSaturacion(valueSatura, so);
                         //Pulso color
                         int valuePulso = Integer.parseInt(list_workers.get(i).getPulse());
                         setColorPulso(valuePulso, pulse);
-                        //
-                        String fullName = list_workers.get(i).getLast() + " , " + list_workers.get(i).getName();
                         //
                         canvas05.drawText(i + ".", 60, yInit + ysum, myPaint);
                         canvas05.drawText(list_workers.get(i).getDni(), 140, yInit + ysum, myPaint);
@@ -951,17 +915,15 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
 
             }
 
-
             if (metodo.equalsIgnoreCase("pdf")) {
                 Log.e(TAG, " metodo pdf ");
                 Intent intent = new Intent(ReportDataWorkerActivity.this, ShowPdfActivity2.class);
                 startActivity(intent);
-                mDialog.dismiss();
             } else {
                 Log.e(TAG, " metodo sendEmail ");
                 sendEmail();
-                mDialog.dismiss();
             }
+            mDialog.dismiss();
         }
         mDialog.dismiss();
 
@@ -1382,3 +1344,37 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
 
 
 }
+//
+// Prueba unitarias
+    /*
+  List<AllPersonalMetricas> list_temp = list_workers;
+            Log.e(TAG,"old  list ");
+                    for(AllPersonalMetricas tempOld:list_workers){
+                    Log.e("tempOld","-----------------------");
+                    Log.e("tempOld"," "+tempOld.getAllInfoWorker2());
+
+                    }
+                    //   Collections.sort(list_workers, (o1, o2) -> o1.getLast().compareToIgnoreCase(o2.getLast()));
+
+                    //
+                    Log.e(TAG," ");
+                    Log.e(TAG,"new list sorted");
+                    Log.e(TAG," ");
+                    for(AllPersonalMetricas tempNew:list_workers){
+                    Log.e("tempNew","-----------------------");
+                    Log.e("tempNew"," "+tempNew.getAllInfoWorker2());
+
+                    }
+                    // para los dos
+                    Log.e(TAG," ");
+                    Log.e(TAG,"Comparando las dos lista ");
+                    Log.e(TAG," ");
+                    int valorLista=list_workers.size();
+                    for(int j=0;j<valorLista; j++){
+        Log.e("list_workers"," "+list_workers.get(j).getAllInfoWorker2());
+        Log.e("list_temp"," "+list_temp.get(j).getAllInfoWorker2());
+        }
+
+     */
+// ser ordena por apellido
+
