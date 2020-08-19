@@ -52,7 +52,7 @@ public class InputDataWorkerActivity extends AppCompatActivity {
 
 
     public static final String TAG = InputDataWorkerActivity.class.getSimpleName();
-    private FirebaseDatabase database = FirebaseDatabase.getInstance();
+    private FirebaseDatabase database ;
 
     private Personal personal;
 
@@ -62,6 +62,8 @@ public class InputDataWorkerActivity extends AppCompatActivity {
         getSupportActionBar().setTitle("Registrar Síntomas");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setContentView(R.layout.activity_input_data_minero);
+
+        database = FirebaseDatabase.getInstance();
 
         show_consulta_lastname = findViewById(R.id.show_consulta_nombre);
         show_consulta_firstname = findViewById(R.id.show_consulta_edad);
@@ -308,21 +310,15 @@ public class InputDataWorkerActivity extends AppCompatActivity {
                 .child(personal.getDni())
                 .child(date_atention)
                 .setValue(metricasPersonal)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Toast.makeText(InputDataWorkerActivity.this, "Excelente , datos registrados !!!!", Toast.LENGTH_SHORT).show();
-                        gotoMAin();
-                        Log.e(TAG, "datos registrado");
-                    }
+                .addOnSuccessListener(aVoid -> {
+                    Toast.makeText(InputDataWorkerActivity.this, "Excelente , datos registrados !!!!", Toast.LENGTH_SHORT).show();
+                    gotoMAin();
+                    Log.e(TAG, "datos registrado");
                 })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(InputDataWorkerActivity.this, "Error al ingresar los datos", Toast.LENGTH_SHORT).show();
-                        Log.e(TAG, "datos no registrado");
+                .addOnFailureListener(e -> {
+                    Toast.makeText(InputDataWorkerActivity.this, "Error al ingresar los datos", Toast.LENGTH_SHORT).show();
+                    Log.e(TAG, "datos no registrado");
 
-                    }
                 });
 
         FirebaseCrashlytics.getInstance().setUserId(Common.currentUser.getReg_email());

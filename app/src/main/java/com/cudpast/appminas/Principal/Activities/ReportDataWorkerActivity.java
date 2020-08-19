@@ -184,8 +184,6 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
     public void btn_workerd(View view) {
         showPdfDialog("pdf");
     }
-
-
     // metodos
 
     private void dateTurnSelected(DataSnapshot dataAll, String metodo, boolean horario) {
@@ -275,16 +273,14 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
     }
 
     private void reporte_por_dia(List<MetricasPersonal> listMetricasPersonal, List<Personal> listPersonal, String seletedDate, String metodo, boolean horario) {
+
+        List<AllPersonalMetricas> list_workers = new ArrayList<>();
+        int nCountWorkers = listMetricasPersonal.size();
+        //
         Log.e(TAG, ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
         Log.e(TAG, "[   reporte_por_dia   ]");
         Log.e(TAG, "listMetricasPersonal.size() = " + listMetricasPersonal.size());
         Log.e(TAG, "listPersonal.size() = " + listPersonal.size());
-
-        // todo :  aqui se juntaria las dos lista para order por Apellido
-        List<AllPersonalMetricas> list_workers = new ArrayList<>();
-
-        int nCountWorkers = listMetricasPersonal.size();
-
         Log.e(TAG, "nCountWorkers = " + nCountWorkers);
         //
         for (int i = 0; i < nCountWorkers; i++) {
@@ -318,7 +314,7 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
                 worker.setS5(listMetricasPersonal.get(i).getS5());
                 worker.setS6(listMetricasPersonal.get(i).getS6());
                 worker.setS7(listMetricasPersonal.get(i).getS7());
-
+                //
                 Log.e(TAG, "  " + worker.getAllInfoWorker2());
                 list_workers.add(worker);
             } catch (Exception e) {
@@ -329,7 +325,6 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
 
         // Tratameindo : order por Apellido
         if (list_workers.size() >= 1) {
-            //
             Collections.sort(list_workers, (o1, o2) -> new String(o1.getLast()).compareToIgnoreCase(o2.getLast()));
         }
         //

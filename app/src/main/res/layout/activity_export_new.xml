@@ -45,7 +45,7 @@
                 android:weightSum="5">
 
                 <ImageView
-                    android:id="@+id/img_reportdatepdf"
+
                     android:layout_width="65dp"
                     android:layout_height="65dp"
                     android:layout_margin="5dp"
