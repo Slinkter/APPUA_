@@ -9,7 +9,7 @@
     tools:context=".Principal.Activities.EditWorkerActivity">
 
 
-<LinearLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
@@ -192,7 +192,6 @@
                             android:maxLength="9" />
 
                     </com.google.android.material.textfield.TextInputLayout>
-
 
 
                     <LinearLayout

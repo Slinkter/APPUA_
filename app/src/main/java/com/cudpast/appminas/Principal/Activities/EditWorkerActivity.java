@@ -52,7 +52,7 @@ public class EditWorkerActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         getSupportActionBar().setTitle(" ");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        setContentView(R.layout.activity_delete_worker);
+        setContentView(R.layout.activity_edit_worker);
 
         database = FirebaseDatabase.getInstance();
 
@@ -266,6 +266,7 @@ public class EditWorkerActivity extends AppCompatActivity {
         Button btn_update_confirm_no = view.findViewById(R.id.btn_update_confirm_no);
 
         btn_update_confirm_yes.setOnClickListener(v -> {
+
             DatabaseReference ref_db_mina_personal = database
                     .getReference(Common.db_mina_personal)
                     .child(Common.unidadTrabajoSelected.getNameUT())
