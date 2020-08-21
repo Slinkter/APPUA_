@@ -37,10 +37,8 @@ public class EditWorkerActivity extends AppCompatActivity {
     private TextInputEditText query_personal_dni;
     private TextView show_delete_personal;
 
-
     TextInputLayout update_personal_name_layout, update_personal_last_layout, update_personal_address_layout, update_personal_phone1_layout;
     TextInputEditText update_personal_name, update_personal_last, update_personal_address, update_personal_phone1;
-
 
     private Button btn_update_personal, btn_exit_back, btn_query_dni_personal;
     private FirebaseDatabase database;
@@ -65,12 +63,10 @@ public class EditWorkerActivity extends AppCompatActivity {
         update_personal_address_layout = findViewById(R.id.update_personal_address_layout);
         update_personal_phone1_layout = findViewById(R.id.update_personal_phone1_layout);
 
-
         update_personal_name = findViewById(R.id.update_personal_name);
         update_personal_last = findViewById(R.id.update_personal_last);
         update_personal_address = findViewById(R.id.update_personal_address);
         update_personal_phone1 = findViewById(R.id.update_personal_phone1);
-
 
         layout_btn_update = findViewById(R.id.layout_btn_update);
 
@@ -119,11 +115,10 @@ public class EditWorkerActivity extends AppCompatActivity {
     }
 
 
+
     @Override
     protected void onStart() {
         super.onStart();
-
-
     }
 
     private void consultarDniPersonal(String dni_personal) {
@@ -132,7 +127,6 @@ public class EditWorkerActivity extends AppCompatActivity {
                 .getReference(Common.db_mina_personal)
                 .child(Common.unidadTrabajoSelected.getNameUT())
                 .child(dni_personal);
-
 
         ref_db_mina_personal
                 .addValueEventListener(new ValueEventListener() {

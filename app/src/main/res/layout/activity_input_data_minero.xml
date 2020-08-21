@@ -79,7 +79,7 @@
                 android:layout_marginBottom="5dp"
                 android:fontFamily="@font/headland_one"
                 android:gravity="start"
-                android:text="Datos del Trabajador "
+                android:text="1.Datos del Trabajador "
                 android:textColor="@color/colorPrimary"
                 android:textSize="20sp"
                 android:textStyle="bold" />
@@ -142,7 +142,7 @@
                 android:layout_marginTop="15dp"
                 android:fontFamily="@font/headland_one"
                 android:gravity="start"
-                android:text="Control de horario"
+                android:text="2.Control de horario"
                 android:textColor="@color/colorPrimary"
                 android:textSize="20sp"
                 android:textStyle="bold" />
@@ -195,7 +195,7 @@
                 android:layout_marginBottom="5dp"
                 android:fontFamily="@font/headland_one"
                 android:gravity="start"
-                android:text="Métricas "
+                android:text="3.Métricas "
                 android:textColor="@color/colorPrimary"
                 android:textSize="20sp"
                 android:textStyle="bold" />
@@ -282,7 +282,7 @@
                 android:layout_marginBottom="5dp"
                 android:fontFamily="@font/headland_one"
                 android:gravity="start"
-                android:text="Exámen"
+                android:text="4.Exámen"
                 android:textColor="@color/colorPrimary"
                 android:textSize="20sp"
                 android:textStyle="bold" />
@@ -346,7 +346,7 @@
                 android:layout_marginBottom="5dp"
                 android:fontFamily="@font/headland_one"
                 android:gravity="start"
-                android:text="Síntomas "
+                android:text="5.Síntomas "
                 android:textColor="@color/colorPrimary"
                 android:textSize="20sp"
                 android:textStyle="bold" />
@@ -437,13 +437,23 @@
             </LinearLayout>
 
             <TextView
+                style="?android:attr/listSeparatorTextViewStyle"
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:layout_below="@+id/connect_help"
+                android:background="@color/colorPrimaryDark"
+                android:gravity="center_horizontal"
+                android:paddingTop="15dip" />
+
+            <TextView
+                android:layout_marginTop="15dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start"
                 android:layout_marginBottom="5dp"
                 android:fontFamily="@font/headland_one"
                 android:gravity="start"
-                android:text="Otros "
+                android:text="6.Otros"
                 android:textColor="@color/colorPrimary"
                 android:textSize="20sp"
                 android:textStyle="bold" />
@@ -467,6 +477,15 @@
 
             </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
+
+        <TextView
+            style="?android:attr/listSeparatorTextViewStyle"
+            android:layout_width="match_parent"
+            android:layout_height="3dp"
+            android:layout_below="@+id/connect_help"
+            android:background="@color/colorPrimaryDark"
+            android:gravity="center_horizontal"
+            android:paddingTop="15dip" />
 
         <LinearLayout
             android:layout_width="match_parent"
