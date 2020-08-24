@@ -20,6 +20,8 @@ public class AllActivity extends AppCompatActivity {
 
     private TextView tv_selectedunidadminera, tv_name_current_user;
 
+    // todo : notificacion para los usuario para actualicen versiones
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
