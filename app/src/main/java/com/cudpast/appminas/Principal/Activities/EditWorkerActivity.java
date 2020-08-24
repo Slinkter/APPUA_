@@ -277,8 +277,11 @@ public class EditWorkerActivity extends AppCompatActivity {
                     Log.e(TAG, "EXITO");
                     Log.e(TAG, "getKey = " + dataSnapshot.getKey());
                     Log.e(TAG, "getValue = " + dataSnapshot.getValue());
+                    Intent intent = new Intent(EditWorkerActivity.this,AllActivity.class);
+                    startActivity(intent);
+                    finish();
+                    Toast.makeText(view.getContext(), "Se ha actualizado los datos del trabajador ", Toast.LENGTH_SHORT).show();
 
-                    Toast.makeText(view.getContext(), " Se actualizado  ", Toast.LENGTH_SHORT).show();
 
                 }
 

@@ -140,11 +140,23 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="start"
                 android:layout_marginTop="15dp"
+                android:layout_marginBottom="5dp"
                 android:fontFamily="@font/headland_one"
                 android:gravity="start"
                 android:text="2.Control de horario"
                 android:textColor="@color/colorPrimary"
                 android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:fontFamily="@font/headland_one"
+                android:gravity="start"
+                android:text="*Obligaroio"
+                android:textColor="@color/colorAccent"
+                android:textSize="12sp"
                 android:textStyle="bold" />
 
             <LinearLayout
@@ -193,11 +205,23 @@
                 android:layout_gravity="start"
                 android:layout_marginTop="15dp"
                 android:layout_marginBottom="5dp"
+
                 android:fontFamily="@font/headland_one"
                 android:gravity="start"
                 android:text="3.Métricas "
                 android:textColor="@color/colorPrimary"
                 android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:fontFamily="@font/headland_one"
+                android:gravity="start"
+                android:text="*Obligaroio"
+                android:textColor="@color/colorAccent"
+                android:textSize="12sp"
                 android:textStyle="bold" />
 
             <com.google.android.material.textfield.TextInputLayout
@@ -446,10 +470,10 @@
                 android:paddingTop="15dip" />
 
             <TextView
-                android:layout_marginTop="15dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start"
+                android:layout_marginTop="15dp"
                 android:layout_marginBottom="5dp"
                 android:fontFamily="@font/headland_one"
                 android:gravity="start"
@@ -457,6 +481,19 @@
                 android:textColor="@color/colorPrimary"
                 android:textSize="20sp"
                 android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:layout_marginBottom="5dp"
+                android:fontFamily="@font/headland_one"
+                android:gravity="start"
+                android:text="*Obligatorio "
+                android:textColor="@color/colorAccent"
+                android:textSize="12sp"
+                android:textStyle="bold" />
+
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/input_sintomas_layout"
