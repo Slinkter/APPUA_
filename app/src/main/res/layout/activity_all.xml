@@ -83,7 +83,6 @@
                         android:fontFamily="@font/headland_one"
                         android:gravity="center"
                         android:text="Agregar\nTrabajador"
-
                         android:textSize="@dimen/text_size_h2"
                         android:textStyle="bold">
 
