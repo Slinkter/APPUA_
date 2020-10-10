@@ -79,6 +79,18 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
     List<Integer> listPulso;
     List<Boolean> listTest;
     //
+    List<Boolean> s1;
+    List<Boolean> s2;
+    List<Boolean> s3;
+    List<Boolean> s4;
+    List<Boolean> s5;
+    List<Boolean> s6;
+    List<Boolean> s7;
+
+
+
+
+    //
     private List<MetricasPersonal> listtemp;
 
     @Override
@@ -86,7 +98,7 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         getSupportActionBar().setTitle("Regresar");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        setContentView(R.layout.activity_export_new);
+        setContentView(R.layout.activity_report_data_worker);
         //Solicitar permisos
         ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, PackageManager.PERMISSION_GRANTED);
         //Firebaase
@@ -184,7 +196,12 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
     public void btn_workerd(View view) {
         showPdfDialog("pdf");
     }
-    // metodos
+
+    // CardView 4
+    public void btn_historialSintomas(View view) {
+        showPopUpHistorialSintomas("pdf");
+    }
+
 
     private void dateTurnSelected(DataSnapshot dataAll, String metodo, boolean horario) {
 
@@ -1179,6 +1196,192 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
 
     }
 
+    private void reporterPorTrabajadorSintomas(String nombre, String metodo, String dni) {
+        //
+        Log.e(TAG, "---> reporterPorTrabajador()");
+        Log.e(TAG, "===> Nombre : " + nombre);
+        Log.e(TAG, "===> DNI :  " + dni);
+        Log.e(TAG, "tamaño  listDate : " + listDate.size());
+        Log.e(TAG, "tamaño  s1 : " + s1.size());
+        Log.e(TAG, "tamaño  s7 : " + s7.size());
+        //
+        int pageWidth = 1200;
+        Date currentDate = new Date();
+        java.text.DateFormat dateFormat;
+        //
+        PdfDocument pdfDocument = new PdfDocument();
+        PdfDocument.PageInfo myPageInfo01 = new PdfDocument.PageInfo.Builder(1200, 2010, 1).create();
+        PdfDocument.Page myPage01 = pdfDocument.startPage(myPageInfo01);
+        Canvas cansas01 = myPage01.getCanvas();
+        //
+        Paint title = new Paint();
+        title.setTextSize(60);
+        title.setTextAlign(Paint.Align.CENTER);
+        title.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
+        title.setColor(Color.BLACK);
+        cansas01.drawText("UNIDAD DE TRABAJO ", pageWidth / 2, 80, title);
+        cansas01.drawText(Common.unidadTrabajoSelected.getAliasUT(), pageWidth / 2, 160, title);
+
+        Paint fecha = new Paint();
+        fecha.setTextSize(25f);
+        fecha.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
+        fecha.setTextAlign(Paint.Align.RIGHT);
+        dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        cansas01.drawText("FECHA DE CONSULTA ", pageWidth - 20, 60, fecha);
+        fecha.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL));
+        cansas01.drawText("" + dateFormat.format(currentDate), pageWidth - 80, 90, fecha);
+        String fechapdf = dateFormat.format(currentDate);
+
+        dateFormat = new SimpleDateFormat("HH:mm:ss");
+        fecha.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
+        cansas01.drawText("HORA ", pageWidth - 100, 120, fecha);
+        fecha.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL));
+        cansas01.drawText("" + dateFormat.format(currentDate), pageWidth - 90, 150, fecha);
+
+        //
+        Paint info = new Paint();
+        info.setTextSize(30f);
+        info.setTextAlign(Paint.Align.LEFT);
+        info.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL));
+        info.setColor(Color.BLACK);
+        cansas01.drawText("DNI  : " + dni, 20, 220, info);
+        cansas01.drawText("Trabajador  : " + nombre, 20, 270, info);
+        cansas01.drawText("Responsable : " + Common.currentUser.getReg_name(), 20, 320, info);
+
+        // Encabezados
+        Paint myPaint = new Paint();
+        myPaint.setStyle(Paint.Style.STROKE);
+        myPaint.setStrokeWidth(2);
+        myPaint.setTextSize(25f);
+        cansas01.drawRect(20, 360, pageWidth - 20, 440, myPaint);
+        //
+        myPaint.setTextAlign(Paint.Align.LEFT);
+        myPaint.setStyle(Paint.Style.FILL);
+
+        cansas01.drawText("Nro.", 55, 415, myPaint);
+        cansas01.drawText("Fecha y hora", 200, 415, myPaint);
+        cansas01.drawText("s1.", 600, 415, myPaint);
+        cansas01.drawText("s2.", 680, 415, myPaint);
+        cansas01.drawText("s3.", 760, 415, myPaint);
+        cansas01.drawText("s4.", 840, 415, myPaint);
+        cansas01.drawText("s5.", 920, 415, myPaint);
+        cansas01.drawText("s6.", 1000, 415, myPaint);
+        cansas01.drawText("s7.", 1080, 415, myPaint);
+
+
+        //
+        int ytext = 400;
+        int ysum = 50;
+        int ytextname = 400;
+        int ysumname = 50;
+        //
+        Paint temp = new Paint();
+        Paint so = new Paint();
+        Paint pulse = new Paint();
+
+        Paint paint_pruebarapida = new Paint();
+
+
+        so.setTextSize(25f);
+        pulse.setTextSize(25f);
+        paint_pruebarapida.setTextSize(25f);
+        //-------------------------------------------------------------------------------
+        //---> Pagina 01 Pagina 01 : [0-28]
+        //Promedio
+        double sumaTemp = 0;
+        double promedioTemp = 0.0f;
+
+        double sumaSatura = 0;
+        double promedioSatura = 0.0f;
+
+        double sumaPulse = 0;
+        double promedioPulse = 0.0f;
+        //-------------------------------------------------------------------------------
+        int size = listDate.size();
+        // info trabajador
+
+        for (int i = 0; i < size; i++) {
+            ysumname = ysumname + 50;
+
+            cansas01.drawText(i + 1 + " ", 42, ytextname + ysumname, myPaint);
+            cansas01.drawText(listDate.get(i), 170, ytextname + ysumname, myPaint);
+
+            if (s1.get(i)) {
+                cansas01.drawText("si", 600, ytextname + ysumname, myPaint);
+            } else {
+                cansas01.drawText("no", 600, ytextname + ysumname, myPaint);
+            }
+            if (s2.get(i)) {
+                cansas01.drawText("si", 680, ytextname + ysumname, myPaint);
+            } else {
+                cansas01.drawText("no", 680, ytextname + ysumname, myPaint);
+            }
+            if (s3.get(i)) {
+                cansas01.drawText("si", 760, ytextname + ysumname, myPaint);
+            } else {
+                cansas01.drawText("no", 760, ytextname + ysumname, myPaint);
+            }
+            if (s4.get(i)) {
+                cansas01.drawText("si", 840, ytextname + ysumname, myPaint);
+            } else {
+                cansas01.drawText("no", 840, ytextname + ysumname, myPaint);
+            }
+
+            if (s5.get(i)) {
+                cansas01.drawText("si", 920, ytextname + ysumname, myPaint);
+            } else {
+                cansas01.drawText("no", 920, ytextname + ysumname, myPaint);
+            }
+
+            if (s6.get(i)) {
+                cansas01.drawText("si", 1000, ytextname + ysumname, myPaint);
+            } else {
+                cansas01.drawText("no", 1000, ytextname + ysumname, myPaint);
+            }
+            if (s7.get(i)) {
+                cansas01.drawText("si", 1080, ytextname + ysumname, myPaint);
+            } else {
+                cansas01.drawText("no", 1080, ytextname + ysumname, myPaint);
+            }
+
+        }
+
+
+
+        try {
+
+            //-------------------------------------------------------------------------------
+        } catch (Exception e) {
+            Log.e("error promedio  :  ", " --> " + e.getMessage());
+        }
+
+
+        pdfDocument.finishPage(myPage01);
+        //---> Cierre
+        File file = new File(Environment.getExternalStorageDirectory(), "/arsi21.pdf");
+        try {
+            pdfDocument.writeTo(new FileOutputStream(file));
+        } catch (Exception e) {
+            Log.e(TAG, "TRY-CATH : " + e.getMessage());
+        }
+        pdfDocument.close();
+        //
+
+
+        if (metodo.equalsIgnoreCase("pdf")) {
+            Log.e(TAG, " metodo pdf ");
+            Intent intent = new Intent(ReportDataWorkerActivity.this, ShowPdfActivity2.class);
+            startActivity(intent);
+            mDialog.dismiss();
+        } else if (metodo.equalsIgnoreCase("email")) {
+            Log.e(TAG, " metodo sendEmail ");
+            sendEmail();
+            mDialog.dismiss();
+        }
+
+
+    }
+
     private void getDataFromFirebase(String dni, String nombre, String metodo) {
         Log.e(TAG, "-----> funcion  : getDataFromFirebase");
         listDate = new ArrayList<String>();
@@ -1245,6 +1448,82 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
 
     }
 
+    private void getDataFromFirebaseSintomas(String dni, String nombre, String metodo) {
+        Log.e(TAG, "-----> funcion  : getDataFromFirebase");
+        listDate = new ArrayList<String>();
+        //
+        s1 = new ArrayList<>();
+        s2 = new ArrayList<>();
+        s3 = new ArrayList<>();
+        s4 = new ArrayList<>();
+        s5 = new ArrayList<>();
+        s6 = new ArrayList<>();
+        s7 = new ArrayList<>();
+
+        Query query = FirebaseDatabase
+                .getInstance()
+                .getReference(Common.db_mina_personal_data).child(Common.unidadTrabajoSelected.getNameUT())
+                .child(dni)
+                .orderByKey()
+                .limitToLast(15);
+
+        query
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        //
+                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                            MetricasPersonal metricasPersonal = snapshot.getValue(MetricasPersonal.class);
+
+                            if (metricasPersonal != null) {
+
+                                try {
+                                    if (metricasPersonal.getHorario()) {
+                                        listDate.add(metricasPersonal.getDateRegister());
+                                        s1.add(metricasPersonal.getS1());
+                                        s2.add(metricasPersonal.getS2());
+                                        s3.add(metricasPersonal.getS3());
+                                        s4.add(metricasPersonal.getS4());
+                                        s5.add(metricasPersonal.getS5());
+                                        s6.add(metricasPersonal.getS6());
+                                        s7.add(metricasPersonal.getS7());
+
+
+
+                                    }
+                                } catch (Exception e) {
+                                    Log.e(TAG, " no tiene horario ");
+                                }
+
+
+                            } else {
+                                mDialog.dismiss();
+                                Log.e(TAG, "getDataFromFirebase --> MetricasPersonal = NULL");
+                            }
+                        }
+
+                        Log.e(TAG, "---> listDate : " + listDate.size());
+
+
+                        try {
+                            reporterPorTrabajadorSintomas(nombre, metodo, dni);
+                        } catch (Exception e) {
+                            Log.e(TAG, "ERROR --> getDataFromFirebase : " + e.getMessage());
+                            Toast.makeText(ReportDataWorkerActivity.this, "Error al Generar PDF ", Toast.LENGTH_SHORT).show();
+                            mDialog.dismiss();
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                        Log.e(TAG, "error" + " : " + databaseError.getMessage());
+                        mDialog.dismiss();
+                    }
+                });
+
+
+    }
+
     private String timeStampToString(long time) {
         Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
         calendar.setTimeInMillis(time);
@@ -1271,6 +1550,7 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
     }
 
     public void showPdfDialog(String metodo) {
+
 
         android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(ReportDataWorkerActivity.this);
         LayoutInflater inflater = getLayoutInflater();
@@ -1331,6 +1611,81 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
 
             }
         });
+
+        btn_report_dni_close.setOnClickListener(v -> dialog.dismiss());
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.show();
+    }
+
+    public void showPopUpHistorialSintomas(String metodo) {
+
+
+        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(ReportDataWorkerActivity.this);
+        LayoutInflater inflater = getLayoutInflater();
+        View view = inflater.inflate(R.layout.pop_up_report_dni, null);
+        builder.setView(view);
+        builder.setCancelable(false);
+        view.setKeepScreenOn(true);
+        final AlertDialog dialog = builder.create();
+
+        TextInputLayout report_dni_layout = view.findViewById(R.id.report_dni_layout);
+        TextInputEditText report_dni = view.findViewById(R.id.report_dni);
+
+        Button btn_report_dni_close = view.findViewById(R.id.btn_report_dni_close);
+        Button btn_report_dni = view.findViewById(R.id.btn_report_dni);
+
+        btn_report_dni
+                .setOnClickListener(v -> {
+
+                    String dni = report_dni.getText().toString();
+
+                    if (report_dni.getText().toString().trim().isEmpty()) {
+                        report_dni_layout.setError("Ingrese su DNI");
+                        dialog.dismiss();
+                    } else {
+                        report_dni_layout.setError(null);
+                        mDialog = new ProgressDialog(view.getContext());
+                        mDialog.setMessage("Obteniendo datos ...");
+                        mDialog.show();
+                        //
+                        Log.e(TAG, "-----> funcion  : consultarDatosPaciente");
+                        Log.e(TAG, " dni : " + dni);
+                        //
+
+                        DatabaseReference ref_mina = database
+                                .getReference(Common.db_mina_personal)
+                                .child(Common.unidadTrabajoSelected.getNameUT());
+
+                        ref_mina
+                                .child(dni)
+                                .addValueEventListener(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                        Personal personal = dataSnapshot.getValue(Personal.class);
+                                        if (personal != null) {
+                                            if (personal.getLast() == null) {
+                                                personal.setLast(" ");
+                                            }
+                                            Log.e(TAG, " personal.getName() : " + personal.getName());
+                                            report_dni_layout.setError(null);
+                                            String fullname = personal.getName() + " " + personal.getLast();
+                                            getDataFromFirebaseSintomas(dni, fullname, metodo);
+                                        } else {
+                                            Log.e(TAG, " personal.getName() : null ");
+                                            mDialog.dismiss();
+                                            report_dni_layout.setError("El trabajador no exsite en la base de datos");
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                                        mDialog.dismiss();
+                                        Log.e(TAG, "error : " + databaseError.getMessage());
+                                    }
+                                });
+
+                    }
+                });
 
         btn_report_dni_close.setOnClickListener(v -> dialog.dismiss());
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
