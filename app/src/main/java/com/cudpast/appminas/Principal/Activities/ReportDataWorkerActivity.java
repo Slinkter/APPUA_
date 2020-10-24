@@ -1356,6 +1356,17 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
         }
 
 
+        cansas01.drawText("Leyenda ", 35, 1600 - 20, myPaint);
+        //
+        cansas01.drawText("s1 : Tos ", 35, 1650, myPaint);
+        cansas01.drawText("s2 : Dolor de garganta ", 35, 1700, myPaint);
+        cansas01.drawText("s3 : Fiebre ", 35, 1750, myPaint);
+        cansas01.drawText("s4 : Dificultad respitoria", 35, 1800, myPaint);
+        cansas01.drawText("s5 : Diarrea ", 35, 1850, myPaint);
+        cansas01.drawText("s6 : Dolor abdominal ", 35, 1900, myPaint);
+        cansas01.drawText("s7 : Dolor Pecho ", 35, 1950, myPaint);
+
+
         pdfDocument.finishPage(myPage01);
         //---> Cierre
         File file = new File(Environment.getExternalStorageDirectory(), "/arsi21.pdf");
