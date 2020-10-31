@@ -82,7 +82,8 @@ public class VisualActivity extends AppCompatActivity {
         btn_visual_dni.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                consultarDatosPaciente();
+
+           //     consultarDatosPaciente();
             }
         });
     }

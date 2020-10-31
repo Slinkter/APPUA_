@@ -11,62 +11,81 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="20sp"
+        android:layout_marginLeft="25dp"
+        android:layout_marginTop="45dp"
+        android:layout_marginRight="25dp"
+        android:layout_marginBottom="21dp"
+        android:gravity="center"
         android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="20sp"
+            android:gravity="center"
             android:orientation="vertical">
+
+
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/visual_dni_layout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/mb_input"
+                android:hint="DNI"
+                app:counterEnabled="true"
+                app:counterMaxLength="8"
+                app:endIconMode="custom"
+                app:errorEnabled="true"
+                app:startIconDrawable="@drawable/ic_dni">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/visual_dni"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:maxLength="8" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <TextView
+                android:id="@+id/show_name_visual_dni"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:textColor="@color/colorPrimaryDark"
+                android:textStyle="bold" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginBottom="20dp"
                 android:gravity="center"
-                android:orientation="vertical">
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/visual_dni_layout"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/mb_input"
-                    android:hint="DNI"
-                    app:counterEnabled="true"
-                    app:counterMaxLength="8"
-                    app:endIconMode="custom"
-                    app:errorEnabled="true"
-                    app:startIconDrawable="@drawable/ic_dni">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/visual_dni"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:inputType="number"
-                        android:maxLength="8" />
-
-                </com.google.android.material.textfield.TextInputLayout>
+                android:orientation="horizontal">
 
                 <Button
                     android:id="@+id/btn_visual_dni"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_marginTop="2dp"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+
                     android:text="Buscar" />
 
-
-                <TextView
-                    android:id="@+id/show_name_visual_dni"
-                    android:layout_width="wrap_content"
+                <Button
+                    android:id="@+id/btnGenerarChart"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="nombre de trabajador"
-                    android:textColor="@color/colorPrimaryDark"
-                    android:textStyle="bold" />
-            </LinearLayout>
-        </LinearLayout>
+                    android:layout_weight="1"
+                    android:enabled="false"
+                    android:text="Generar" />
 
+            </LinearLayout>
+
+
+        </LinearLayout>
 
         <LinearLayout
             android:id="@+id/visual_linerlayout"
@@ -75,43 +94,160 @@
             android:gravity="center"
             android:orientation="vertical">
 
-            <lecho.lib.hellocharts.view.LineChartView
-                android:id="@+id/chart1"
-                android:layout_width="match_parent"
-                android:layout_height="160dp"
-                android:layout_margin="10dp" />
-
-
-            <TextView
-                android:id="@+id/meanTempe"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Promedio temperatura : " />
-
-
-            <lecho.lib.hellocharts.view.LineChartView
-                android:id="@+id/chart2"
-                android:layout_width="match_parent"
-                android:layout_height="140dp"
-                 />
-
-            <lecho.lib.hellocharts.view.LineChartView
-                android:id="@+id/chart3"
-                android:layout_width="match_parent"
-                android:layout_height="140dp"
-               />
-
-
-            <TextView
+            <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="40sp"
-                android:text="fin"
-                android:visibility="invisible" />
+                app:cardCornerRadius="20dp"
+                app:cardElevation="@dimen/card_elevation"
+                app:cardUseCompatPadding="true">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="10dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:text="Temperatura/Días" />
+
+                    <lecho.lib.hellocharts.view.LineChartView
+                        android:id="@+id/chart1"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/hight_chart" />
+
+                    <TextView
+                        android:id="@+id/meanTempe"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginBottom="10dp"
+                        android:text="Promedio : " />
+
+                </LinearLayout>
+
+
+            </androidx.cardview.widget.CardView>
+
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="20dp"
+                app:cardElevation="@dimen/card_elevation"
+                app:cardUseCompatPadding="true">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="10dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:text="SO2/Días" />
+
+                    <lecho.lib.hellocharts.view.LineChartView
+                        android:id="@+id/chart2"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/hight_chart"
+                        android:padding="5dp" />
+
+                    <TextView
+                        android:id="@+id/meanOxig"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginBottom="10dp"
+                        android:text="Promedio: " />
+
+
+                </LinearLayout>
+
+
+            </androidx.cardview.widget.CardView>
+
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="20dp"
+                app:cardElevation="@dimen/card_elevation"
+                app:cardUseCompatPadding="true">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="10dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:text="Pulso/Días" />
+
+
+                    <lecho.lib.hellocharts.view.LineChartView
+                        android:id="@+id/chart3"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/hight_chart"
+                        android:padding="5dp" />
+
+                    <TextView
+                        android:id="@+id/meanPulse"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginBottom="10dp"
+                        android:text="Promedio pulso : " />
+
+                </LinearLayout>
+
+
+            </androidx.cardview.widget.CardView>
+
 
         </LinearLayout>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="10dp"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:weightSum="2">
 
+            <Button
+                android:id="@+id/btn_returnAllChart"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_weight="1"
+                android:text="Regresar"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="40dp" />
     </LinearLayout>
 
 

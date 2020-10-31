@@ -1704,6 +1704,16 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
     }
 
 
+    public void btn_chart(View view) {
+
+        Intent intent = new Intent(ReportDataWorkerActivity.this,VisualActivity.class);
+        startActivity(intent);
+
+
+
+
+
+    }
 }
 //
 // Prueba unitarias
