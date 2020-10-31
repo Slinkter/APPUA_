@@ -3,6 +3,7 @@ package com.cudpast.appminas.Principal.Activities;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.ProgressDialog;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
@@ -45,7 +46,7 @@ public class VisualActivity extends AppCompatActivity {
 
     FirebaseDatabase database = FirebaseDatabase.getInstance(); // conexion a firebase
     Personal personal;
-    TextView show_name_visual_dni, meanTempe;
+    TextView show_name_visual_dni, meanTempe, meanOxig, meanPulse;
     LinearLayout visual_linerlayout;
 
     private DatabaseReference ref_datos_paciente;
@@ -59,7 +60,10 @@ public class VisualActivity extends AppCompatActivity {
 
     LineChartView lineChartViewTemperatura;
     LineChartView lineChartViewSaturacion;
-    LineChartView lineChartViewOxigeno;
+    LineChartView lineChartViewPulse;
+
+    private ProgressDialog mDialog;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,56 +76,76 @@ public class VisualActivity extends AppCompatActivity {
         btn_visual_dni = findViewById(R.id.btn_visual_dni);
         show_name_visual_dni = findViewById(R.id.show_name_visual_dni);
         visual_linerlayout = findViewById(R.id.visual_linerlayout);
+
         lineChartViewTemperatura = findViewById(R.id.chart1);
         lineChartViewSaturacion = findViewById(R.id.chart2);
-        lineChartViewOxigeno = findViewById(R.id.chart3);
+        lineChartViewPulse = findViewById(R.id.chart3);
 
 
         meanTempe = findViewById(R.id.meanTempe);
+        meanOxig = findViewById(R.id.meanOxig);
+        meanPulse = findViewById(R.id.meanPulse);
+
 
         btn_visual_dni.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-           //     consultarDatosPaciente();
+                String dni = visual_dni.getText().toString();
+                consultarDatosPaciente(dni);
             }
         });
     }
 
-    private void consultarDatosPaciente() {
-        final String dni = visual_dni.getText().toString();
+    private void consultarDatosPaciente(String dni) {
+
+        mDialog = new ProgressDialog(VisualActivity.this);
+        mDialog.setMessage("Un momento por favor ...");
+        mDialog.show();
+
 
         if (dni.toString().isEmpty()) {
 
         } else {
-            DatabaseReference ref_db_mina_personal = database.getReference(Common.db_mina_personal);
-            DatabaseReference ref_mina = ref_db_mina_personal.child(Common.unidadTrabajoSelected.getNameUT());
-            ref_mina.child(dni).addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    personal = dataSnapshot.getValue(Personal.class);
-                    if (personal != null) {
-                        visual_dni_layout.setError(null);
-                        if (personal.getLast() == null) {
-                            personal.setLast(" ");
+
+            // Se verifica que existe el personal
+            DatabaseReference ref_mina = database
+                    .getReference(Common.db_mina_personal)
+                    .child(Common.unidadTrabajoSelected.getNameUT())
+                    .child(dni);
+
+
+            ref_mina
+                    .addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                            personal = dataSnapshot.getValue(Personal.class);
+
+                            if (personal != null) {
+                                visual_dni_layout.setError(null);
+                                if (personal.getLast() == null) {
+                                    personal.setLast(" ");
+                                }
+                                show_name_visual_dni.setText("Trabajador : " + personal.getName() + " " + personal.getLast());
+                                visual_linerlayout.setVisibility(View.VISIBLE);
+
+                                getDataFromFirebase(dni);
+                                mDialog.dismiss();
+                                //  tempShowChart();
+                            } else {
+                                visual_dni_layout.setError("El trabajador no exsite en la base de datos");
+                                show_name_visual_dni.setText("");
+                                visual_linerlayout.setVisibility(View.INVISIBLE);
+                                mDialog.dismiss();
+                            }
                         }
-                        show_name_visual_dni.setText("Trabajador : " + personal.getName() + " " + personal.getLast());
-                        visual_linerlayout.setVisibility(View.VISIBLE);
 
-                        getDataFromFirebase(dni);
-                        //  tempShowChart();
-                    } else {
-                        visual_dni_layout.setError("El trabajador no exsite en la base de datos");
-                        show_name_visual_dni.setText("");
-                        visual_linerlayout.setVisibility(View.INVISIBLE);
-                    }
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
-                    Log.e(TAG, "error : " + databaseError.getMessage());
-                }
-            });
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+                            Log.e(TAG, "error : " + databaseError.getMessage());
+                            mDialog.dismiss();
+                        }
+                    });
         }
     }
 
@@ -139,38 +163,41 @@ public class VisualActivity extends AppCompatActivity {
                 .getReference(Common.db_mina_personal_data).child(Common.unidadTrabajoSelected.getNameUT())
                 .child(dni)
                 .orderByKey()
-                .limitToFirst(15);
+                .limitToLast(15);
 
-        query.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    MetricasPersonal metricasPersonal = snapshot.getValue(MetricasPersonal.class);
-                    if (metricasPersonal != null) {
 
-                        listtemp.add(metricasPersonal);
-                        //
-                        listDate.add(metricasPersonal.getDateRegister().substring(8, 10));
-                        listTemperatura.add((metricasPersonal.getTempurature()));
-                        listSaturacion.add(Integer.parseInt(metricasPersonal.getSo2()));
-                        listPulso.add(Integer.parseInt(metricasPersonal.getPulse()));
+        query
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                            MetricasPersonal metricasPersonal = snapshot.getValue(MetricasPersonal.class);
+                            if (metricasPersonal != null) {
 
-                    } else {
+                                listtemp.add(metricasPersonal);
+                                //
+                                listDate.add(metricasPersonal.getDateRegister().substring(8, 10));
+                                listTemperatura.add((metricasPersonal.getTempurature()));
+                                listSaturacion.add(Integer.parseInt(metricasPersonal.getSo2()));
+                                listPulso.add(Integer.parseInt(metricasPersonal.getPulse()));
+
+                            } else {
+
+                            }
+                        }
+
+                        tempShowChart();
+                        oxigShowChart();
+                        pulseShowChart();
 
                     }
-                }
 
-                tempShowChart();
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                Log.e(TAG, "error" + " : " + databaseError.getMessage());
-            }
-        });
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                        Log.e(TAG, "error" + " : " + databaseError.getMessage());
+                    }
+                });
     }
-
 
     private void tempShowChart() {
 
@@ -202,13 +229,13 @@ public class VisualActivity extends AppCompatActivity {
             String cad = String.valueOf(promedio);
 
             meanTempe.setText("Promedio temperatura : " + cad.substring(0, 5));
-            meanTempe.setTextColor(Color.parseColor("#03A9F4"));
+            meanTempe.setTextColor(Color.parseColor("#FF2626"));
 
 
             List yAxisValues = new ArrayList();
             List axisValues = new ArrayList();
 
-            Line line = new Line(yAxisValues).setColor(Color.parseColor("#9C27B0"));
+            Line line = new Line(yAxisValues).setColor(Color.parseColor("#FF2626"));
 
             for (int i = 0; i < axisData.length; i++) {
                 Log.e(TAG, "axisData " + i + " = " + axisData[i]);
@@ -248,6 +275,164 @@ public class VisualActivity extends AppCompatActivity {
             Log.e(TAG, "lista data null");
         }
 
+
+    }
+
+    private void oxigShowChart() {
+
+        if (listDate != null && listSaturacion != null) {
+
+            List<String> list = new ArrayList<>();
+            list.addAll(listDate);
+            // String[] axisData = {"2020-05-12", "2020-05-12", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"}; /// fecha
+            // int[] yAxisData = {50, 20, 15, 30, 20, 60, 15, 40, 45, 10, 90, 18};
+            String[] axisData = list.toArray(new String[0]);
+            int[] yAxisData = new int[listSaturacion.size()];
+            double suma = 0;
+            double promedio = 0.0f;
+            try {
+                for (int i = 0; i < listSaturacion.size(); i++) {
+                    suma = suma + Double.parseDouble(listSaturacion.get(i).toString());
+                    yAxisData[i] = (int) (Double.parseDouble(listSaturacion.get(i).toString()));
+                    // -> Log
+                    Log.e(TAG, " " + (int) (Double.parseDouble(listSaturacion.get(i).toString())));
+                    Log.e(TAG, "suma = " + suma);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                Log.e(TAG, "[error]" + e.getMessage());
+            }
+
+            promedio = suma / listSaturacion.size();
+
+            String cad = String.valueOf(promedio);
+
+            meanOxig.setText("Promedio : " + cad.substring(0, 4));
+            meanOxig.setTextColor(Color.parseColor("#9C27B0"));
+
+
+            List yAxisValues = new ArrayList();
+            List axisValues = new ArrayList();
+
+            Line line = new Line(yAxisValues).setColor(Color.parseColor("#9C27B0"));
+
+            for (int i = 0; i < axisData.length; i++) {
+                Log.e(TAG, "axisData " + i + " = " + axisData[i]);
+                axisValues.add(i, new AxisValue(i).setLabel(axisData[i]));
+            }
+
+            for (int i = 0; i < yAxisData.length; i++) {
+                yAxisValues.add(new PointValue(i, (int) (yAxisData[i])));
+            }
+
+            List lines = new ArrayList();
+            lines.add(line);
+
+            LineChartData data = new LineChartData();
+            data.setLines(lines);
+
+            Axis axis = new Axis();
+            axis.setValues(axisValues);
+            axis.setTextSize(10);
+            //     axis.setName("días");
+            axis.setTextColor(Color.parseColor("#03A9F4"));
+            data.setAxisXBottom(axis);
+
+            Axis yAxis = new Axis();
+            //      yAxis.setName("Oxigeno");
+            yAxis.setTextColor(Color.parseColor("#03A9F4"));
+            yAxis.setTextSize(10);
+            data.setAxisYLeft(yAxis);
+
+
+            lineChartViewSaturacion.setLineChartData(data);
+            Viewport viewport = new Viewport(lineChartViewSaturacion.getMaximumViewport());
+            viewport.bottom = 80;
+            viewport.top = 110;
+            lineChartViewSaturacion.setMaximumViewport(viewport);
+            lineChartViewSaturacion.setCurrentViewport(viewport);
+        } else {
+            Log.e(TAG, "lista data null");
+        }
+
+    }
+
+    private void pulseShowChart() {
+
+        if (listDate != null && listPulso != null) {
+
+            List<String> list = new ArrayList<>();
+            list.addAll(listDate);
+            // String[] axisData = {"2020-05-12", "2020-05-12", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"}; /// fecha
+            // int[] yAxisData = {50, 20, 15, 30, 20, 60, 15, 40, 45, 10, 90, 18};
+            String[] axisData = list.toArray(new String[0]);
+            int[] yAxisData = new int[listPulso.size()];
+            double suma = 0;
+            double promedio = 0.0f;
+            try {
+                for (int i = 0; i < listPulso.size(); i++) {
+                    suma = suma + Double.parseDouble(listPulso.get(i).toString());
+                    yAxisData[i] = (int) (Double.parseDouble(listPulso.get(i).toString()));
+                    // -> Log
+                    Log.e(TAG, " " + (int) (Double.parseDouble(listPulso.get(i).toString())));
+                    Log.e(TAG, "suma = " + suma);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                Log.e(TAG, "[error]" + e.getMessage());
+            }
+
+            promedio = suma / listPulso.size();
+
+            String cad = String.valueOf(promedio);
+
+            meanPulse.setText("Promedio : " + cad.substring(0, 4));
+            meanPulse.setTextColor(Color.parseColor("#11E6A5"));
+
+
+            List yAxisValues = new ArrayList();
+            List axisValues = new ArrayList();
+
+            Line line = new Line(yAxisValues).setColor(Color.parseColor("#11E6A5"));
+
+            for (int i = 0; i < axisData.length; i++) {
+                Log.e(TAG, "axisData " + i + " = " + axisData[i]);
+                axisValues.add(i, new AxisValue(i).setLabel(axisData[i]));
+            }
+
+            for (int i = 0; i < yAxisData.length; i++) {
+                yAxisValues.add(new PointValue(i, (int) (yAxisData[i])));
+            }
+
+            List lines = new ArrayList();
+            lines.add(line);
+
+            LineChartData data = new LineChartData();
+            data.setLines(lines);
+
+            Axis axis = new Axis();
+            axis.setValues(axisValues);
+            axis.setTextSize(10);
+            //   axis.setName("días");
+            axis.setTextColor(Color.parseColor("#03A9F4"));
+            data.setAxisXBottom(axis);
+
+            Axis yAxis = new Axis();
+            //    yAxis.setName("Pulse");
+            yAxis.setTextColor(Color.parseColor("#03A9F4"));
+            yAxis.setTextSize(10);
+            data.setAxisYLeft(yAxis);
+
+
+            lineChartViewPulse.setLineChartData(data);
+            Viewport viewport = new Viewport(lineChartViewPulse.getMaximumViewport());
+            viewport.bottom = 50;
+            viewport.top = 115;
+            lineChartViewPulse.setMaximumViewport(viewport);
+            lineChartViewPulse.setCurrentViewport(viewport);
+        } else {
+            Log.e(TAG, "lista data null");
+        }
 
     }
 
@@ -332,11 +517,11 @@ public class VisualActivity extends AppCompatActivity {
         yAxis.setTextSize(16);
         data.setAxisYLeft(yAxis);
 
-        lineChartViewOxigeno.setLineChartData(data);
-        Viewport viewport = new Viewport(lineChartViewOxigeno.getMaximumViewport());
+        lineChartViewPulse.setLineChartData(data);
+        Viewport viewport = new Viewport(lineChartViewPulse.getMaximumViewport());
         viewport.top = 110;
-        lineChartViewOxigeno.setMaximumViewport(viewport);
-        lineChartViewOxigeno.setCurrentViewport(viewport);
+        lineChartViewPulse.setMaximumViewport(viewport);
+        lineChartViewPulse.setCurrentViewport(viewport);
     }
 
 
