@@ -140,7 +140,7 @@ public class MetricasPersonal {
         this.s7 = s7;
     }
 
-    public String showInfo() {
+    public String printInfo() {
         String cad = "";
 
         cad = cad +

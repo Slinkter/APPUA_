@@ -87,9 +87,6 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
     List<Boolean> s6;
     List<Boolean> s7;
 
-
-
-
     //
     private List<MetricasPersonal> listtemp;
 
@@ -109,9 +106,41 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
     //===============================================================================
     // CardView 1
     public void btn_entrada_pdf(View view) {
+        horarioPDF(true);
+    }
 
+    //===============================================================================
+    // CardView 2
+    public void btn_salida_pdf(View view) {
+        horarioPDF(false);
+    }
+
+    //===============================================================================
+    // CardView 3
+    public void btn_workerd(View view) {
+        showPdfDialog("pdf");
+    }
+
+    //===============================================================================
+    // CardView 4
+    public void btn_historialSintomas(View view) {
+        showPopUpHistorialSintomas("pdf");
+    }
+
+    //===============================================================================
+    // CardView 5
+    public void btn_chart(View view) {
+        Intent intent = new Intent(ReportDataWorkerActivity.this, VisualActivity.class);
+        startActivity(intent);
+    }
+
+    //===============================================================================
+    //
+    // Metodos
+    //
+    //===============================================================================
+    private void horarioPDF(final Boolean horario) {
         String metodo = "pdf";
-        Boolean horario = true;
         //
         builder = MaterialDatePicker.Builder.datePicker();
         builder.setTitleText("Seleccionar Fecha");
@@ -129,108 +158,68 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
             // Transform date selected
             seletedDate = timeStampToString(input_dateSelected);
             // Get Data From Firebase and init reference
-            ref_datos_paciente = database.getReference(Common.db_mina_personal_data).child(Common.unidadTrabajoSelected.getNameUT());
+            ref_datos_paciente = database
+                    .getReference(Common.db_mina_personal_data)
+                    .child(Common.unidadTrabajoSelected.getNameUT());
+
             ref_datos_paciente.keepSynced(true);
             ref_datos_paciente.orderByKey();
-            ref_datos_paciente.addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    dateTurnSelected(dataSnapshot, metodo, horario);
-                }
+            ref_datos_paciente
+                    .addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            dateSelected(dataSnapshot, metodo, horario);
+                        }
 
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
-                    Log.e(TAG, "[showSelectDate ] error : " + databaseError.getMessage());
-                    mDialog.dismiss();
-                }
-            });
-
-        });
-    }
-
-
-    //===============================================================================
-    // CardView 2
-    public void btn_salida_pdf(View view) {
-        String metodo = "pdf";
-        Boolean horario = false;
-        //
-        builder = MaterialDatePicker.Builder.datePicker();
-        builder.setTitleText("Seleccionar Fecha");
-        mdp = builder.build();
-        mdp.show(getSupportFragmentManager(), "DATE_PICKER");
-        mdp.addOnPositiveButtonClickListener((MaterialPickerOnPositiveButtonClickListener<Long>) input_dateSelected -> {
-            //
-            mDialog = new ProgressDialog(ReportDataWorkerActivity.this);
-            mDialog.setMessage("Obteniendo datos ...");
-            mDialog.show();
-            // Init arrays
-            //Horario
-            listaMetricasPersonalesEntrada = new ArrayList<>();
-            listaPersonal = new ArrayList<>();
-            // Transform date selected
-            seletedDate = timeStampToString(input_dateSelected);
-            // Get Data From Firebase and init reference
-            ref_datos_paciente = database.getReference(Common.db_mina_personal_data).child(Common.unidadTrabajoSelected.getNameUT());
-            ref_datos_paciente.keepSynced(true);
-            ref_datos_paciente.orderByKey();
-            ref_datos_paciente.addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    dateTurnSelected(dataSnapshot, metodo, horario);
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
-                    Log.e(TAG, "[showSelectDate ] error : " + databaseError.getMessage());
-                    mDialog.dismiss();
-                }
-            });
-
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+                            Log.e(TAG, "[showSelectDate ] error : " + databaseError.getMessage());
+                            mDialog.dismiss();
+                        }
+                    });
         });
 
     }
 
-    //===============================================================================
-    // CardView 3
-    public void btn_workerd(View view) {
-        showPdfDialog("pdf");
-    }
-
-    // CardView 4
-    public void btn_historialSintomas(View view) {
-        showPopUpHistorialSintomas("pdf");
-    }
-
-
-    private void dateTurnSelected(DataSnapshot dataAll, String metodo, boolean horario) {
-
+    //====
+    private void dateSelected(DataSnapshot lista_empleados, String metodo, boolean horario) {
+        // database
+        // --db_mina_personal_data
+        //    --unidadTrabajoSelect
+        //       --dni worker
+        //         -- date
         ArrayList<String> listDNI = new ArrayList<>();
-        for (DataSnapshot item_snapshot : dataAll.getChildren()) { //<--- all data
-            if (item_snapshot != null) {
-                String dni = item_snapshot.getKey();// <-- Get key ( dni worker)
-                for (DataSnapshot item_date : item_snapshot.getChildren()) {  // <-- Todas la metricas por fechas de 1 persona
+        //all data
+        //===================================================
+        //-->PASO 1 : Obtener datos
+        for (DataSnapshot item_empleados : lista_empleados.getChildren()) {
+            //validad empleado
+            if (item_empleados != null) {
+                // -- Get key ( dni worker)
+                String dni = item_empleados.getKey();
+                // -- Obtener la info por fechas de 1 personal
+                for (DataSnapshot item_date : item_empleados.getChildren()) {
+                    //validar la fecha
                     if (item_date != null) {
-                        // Check Date , si coincide la fecha guardar data metrica y dni
+                        // Check Date , si coincide la fecha ,guardar data metrica y dni
                         String registerDate = Objects.requireNonNull(item_date.getKey()).substring(0, 10).trim();
                         boolean checkdate = seletedDate.equalsIgnoreCase(registerDate);
+                        //
                         if (checkdate) {
                             try {
-                                MetricasPersonal data = item_date.getValue(MetricasPersonal.class);
-
-                                if (data.getHorario() == null) {
-                                    data.setHorario(false);
+                                MetricasPersonal personal_info = item_date.getValue(MetricasPersonal.class);
+                                // se rellena info
+                                if (personal_info.getHorario() == null) {
+                                    personal_info.setHorario(false);
                                 }
 
-                                data.showInfo();
-
-                                if (data.getHorario() == horario) {
-                                    listaMetricasPersonalesEntrada.add(data);
+                                if (personal_info.getHorario() == horario) {
+                                    listaMetricasPersonalesEntrada.add(personal_info);
                                     listDNI.add(dni);
-                                    //
-                                    Log.e(TAG, "filtro horario = " + data.getHorario());
+                                    Log.e(TAG, " horario-turno = " + personal_info.getHorario());
                                 }
-
+                                // test
+                                personal_info.printInfo();
                             } catch (Exception e) {
                                 Log.e(TAG, " error try - cath" + e.getMessage());
                             }
@@ -241,21 +230,22 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
                 }
                 Log.e(TAG, "[onDataChange] dni = " + dni);
             } else {
-                Log.e(TAG, "no hay snaphot = " + item_snapshot);
+                Log.e(TAG, "no hay snaphot = " + item_empleados);
             }
         }
-
+        //===================================================
+        //-->PASO 2 :  Verificar
         if (listDNI.size() == 0) {
             mDialog.dismiss();
             Log.e(TAG, " No hay datos para esta fecha");
             Toast.makeText(this, "No hay datos para esta fecha", Toast.LENGTH_SHORT).show();
         }
         //===================================================
-        //--> Generar lista por horario
+        //-->PASO 3 :  Generar lista por horario
         for (int i = 0; i < listDNI.size(); i++) {
             //
             String dni_personal = listDNI.get(i);
-            //
+            //Obtener info del personal (nombre,direccion,telefono)
             DatabaseReference ref_mina = database
                     .getReference(Common.db_mina_personal)
                     .child(Common.unidadTrabajoSelected.getNameUT())
@@ -264,16 +254,15 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
             ref_mina.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    //
+
                     Personal personal = dataSnapshot.getValue(Personal.class);
-                    //
                     if (personal != null) {
                         listaPersonal.add(personal);
                     }
+                    //
                     if (listaPersonal.size() == listDNI.size()) {
-                        // -------------------------------->
+                        // Generar report -------------------------------->
                         reporte_por_dia(listaMetricasPersonalesEntrada, listaPersonal, seletedDate, metodo, horario);
-                        //  <--------------------------------
                     }
                     Log.e(TAG, "[dateTurnSelected]-onDataChange  listaPersonal.size()  : " + listaPersonal.size());
                     Log.e(TAG, "[dateTurnSelected]-onDataChange  listDNI.size()  : " + listDNI.size());
@@ -286,20 +275,25 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
             });
 
         }
+        //===================================================
 
     }
 
+    //====>
     private void reporte_por_dia(List<MetricasPersonal> listMetricasPersonal, List<Personal> listPersonal, String seletedDate, String metodo, boolean horario) {
 
         List<AllPersonalMetricas> list_workers = new ArrayList<>();
         int nCountWorkers = listMetricasPersonal.size();
+
+        final int pageWidth = 1200;
+        final int pageHeigt = 2010;
         //
         Log.e(TAG, ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
         Log.e(TAG, "[   reporte_por_dia   ]");
-        Log.e(TAG, "listMetricasPersonal.size() = " + listMetricasPersonal.size());
-        Log.e(TAG, "listPersonal.size() = " + listPersonal.size());
-        Log.e(TAG, "nCountWorkers = " + nCountWorkers);
-        //
+        Log.e(TAG, "---> tamaño de  listMetricasPersonal = " + listMetricasPersonal.size());
+        Log.e(TAG, "---> tamaño de listPersonal = " + listPersonal.size());
+        Log.e(TAG, "---> numero de CountWorkers = " + nCountWorkers);
+        // PASO 1 :
         for (int i = 0; i < nCountWorkers; i++) {
             try {
 
@@ -332,23 +326,22 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
                 worker.setS6(listMetricasPersonal.get(i).getS6());
                 worker.setS7(listMetricasPersonal.get(i).getS7());
                 //
-                Log.e(TAG, "  " + worker.getAllInfoWorker2());
+                Log.e(TAG, " worker.getAllInfoWorker2 " + worker.getAllInfoWorker2());
                 list_workers.add(worker);
             } catch (Exception e) {
-                Log.e(TAG, " ERROR TRY -CATCH  " + e.getMessage());
+                Log.e(TAG, " reporte_por_dia [ERROR] = " + e.getMessage());
             }
 
         }
 
-        // Tratameindo : order por Apellido
+        // PASO 2 :  Ordenar alfabeticamente
         if (list_workers.size() >= 1) {
             Collections.sort(list_workers, (o1, o2) -> new String(o1.getLast()).compareToIgnoreCase(o2.getLast()));
         }
-        //
+        // PASO 3 : Imprimir o generar pdf
         if (list_workers.size() >= 1) {
             //
-            int pageWidth = 1200;
-            int pageHeigt = 2010;
+
             Date currentDate = new Date();
             java.text.DateFormat dateFormat;
             // Crear el documento
@@ -357,31 +350,30 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
             PdfDocument.Page myPage01 = pdfDocument.startPage(myPageInfo01);
             Canvas cansas01 = myPage01.getCanvas();
             //
-            Paint myPaint = new Paint();
-            //
-            Paint title = new Paint();
-            title.setTextSize(60);
-            title.setTextAlign(Paint.Align.CENTER);
-            title.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
-            title.setColor(Color.BLACK);
-            cansas01.drawText("UNIDAD DE TRABAJO", pageWidth / 2, 80, title);
-            cansas01.drawText(Common.unidadTrabajoSelected.getAliasUT(), pageWidth / 2, 150, title);
-            Paint fecha = new Paint();
-            fecha.setTextSize(25f);
-            fecha.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
-            fecha.setTextAlign(Paint.Align.RIGHT);
+            Paint mainPaint = new Paint();
+            // paint 1
+            Paint titlePaint = new Paint();
+            titlePaint.setTextSize(60);
+            titlePaint.setTextAlign(Paint.Align.CENTER);
+            titlePaint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
+            titlePaint.setColor(Color.BLACK);
+            cansas01.drawText("UNIDAD DE TRABAJO", pageWidth / 2, 80, titlePaint);
+            cansas01.drawText(Common.unidadTrabajoSelected.getAliasUT(), pageWidth / 2, 150, titlePaint);
+            // paint 2
+            Paint fechaPaint = new Paint();
+            fechaPaint.setTextSize(25f);
+            fechaPaint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
+            fechaPaint.setTextAlign(Paint.Align.RIGHT);
             dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-            cansas01.drawText("FECHA DE REPORTE ", pageWidth - 10, 60, fecha);
-            fecha.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL));
-            cansas01.drawText("" + dateFormat.format(currentDate), pageWidth - 80, 90, fecha);
-
+            cansas01.drawText("FECHA DE REPORTE ", pageWidth - 10, 60, fechaPaint);
+            fechaPaint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL));
+            cansas01.drawText("" + dateFormat.format(currentDate), pageWidth - 80, 90, fechaPaint);
             dateFormat = new SimpleDateFormat("HH:mm:ss");
-            fecha.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
-            cansas01.drawText("HORA ", pageWidth - 100, 120, fecha);
-            fecha.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL));
-            cansas01.drawText("" + dateFormat.format(currentDate), pageWidth - 90, 150, fecha);
-
-            //
+            fechaPaint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
+            cansas01.drawText("HORA ", pageWidth - 100, 120, fechaPaint);
+            fechaPaint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL));
+            cansas01.drawText("" + dateFormat.format(currentDate), pageWidth - 90, 150, fechaPaint);
+            // paint 3
             Paint info = new Paint();
             info.setTextSize(35f);
             info.setTextAlign(Paint.Align.LEFT);
@@ -393,44 +385,46 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
             } else {
                 cad_horario = "Salida";
             }
-
             cansas01.drawText("Horario  : " + cad_horario, 20, 220, info);
             cansas01.drawText("Responsable : " + Common.currentUser.getReg_name(), 20, 270, info);
             cansas01.drawText("Fecha consulta : " + seletedDate, 20, 320, info);
             // Encabezados
-            myPaint.setStyle(Paint.Style.STROKE);
-            myPaint.setStrokeWidth(2);
-            myPaint.setTextSize(23f);
-            cansas01.drawRect(20, 360, pageWidth - 20, 440, myPaint);
+            mainPaint.setStyle(Paint.Style.STROKE);
+            mainPaint.setStrokeWidth(2);
+            mainPaint.setTextSize(23f);
+            cansas01.drawRect(20, 360, pageWidth - 20, 440, mainPaint);
             //
-            myPaint.setTextAlign(Paint.Align.LEFT);
-            myPaint.setStyle(Paint.Style.FILL);
+            mainPaint.setTextAlign(Paint.Align.LEFT);
+            mainPaint.setStyle(Paint.Style.FILL);
             // se imprime los campos de documentos
-            Paint celda = new Paint();
-            celda.setStyle(Paint.Style.STROKE);
-            celda.setStrokeWidth(2);
-            celda.setTextSize(23f);
-            cansas01.drawText("Nro.", 50, 415, celda);
-            cansas01.drawText("DNI", 170, 415, celda);
-            cansas01.drawText("APELLIDOS Y NOMBRES ", 330, 415, celda);
-            cansas01.drawText("TEMPERATURA", 760, 415, celda);
-            cansas01.drawText("SO2.", 990, 415, celda);
-            cansas01.drawText("PULSO", 1090, 415, celda);
+            // paint 4
+            Paint celdaPaint = new Paint();
+            celdaPaint.setStyle(Paint.Style.STROKE);
+            celdaPaint.setStrokeWidth(2);
+            celdaPaint.setTextSize(25f);
+            cansas01.drawText("Nro.", 50, 415, celdaPaint);
+            cansas01.drawText("DNI", 170, 415, celdaPaint);
+            cansas01.drawText("APELLIDOS Y NOMBRES ", 330, 415, celdaPaint);
+            cansas01.drawText("TEMPERATURA", 760, 415, celdaPaint);
+            cansas01.drawText("SO2.", 990, 415, celdaPaint);
+            cansas01.drawText("PULSO", 1090, 415, celdaPaint);
             // se dibuja los recuerado o celdas de los campos
-            cansas01.drawLine(120, 380, 120, 430, celda);
-            cansas01.drawLine(280, 380, 280, 430, celda);
-            cansas01.drawLine(730, 380, 730, 430, celda);
-            cansas01.drawLine(960, 380, 960, 430, celda);
-            cansas01.drawLine(1070, 380, 1070, 430, celda);
+            cansas01.drawLine(120, 380, 120, 430, celdaPaint);
+            cansas01.drawLine(280, 380, 280, 430, celdaPaint);
+            cansas01.drawLine(730, 380, 730, 430, celdaPaint);
+            cansas01.drawLine(960, 380, 960, 430, celdaPaint);
+            cansas01.drawLine(1070, 380, 1070, 430, celdaPaint);
             // el aumento para cada fila para los empleados
             int yInit = 480;
             int ysum = 0;
             //
-            Paint temp = new Paint();
-            Paint so = new Paint();
-            so.setTextSize(25f);
-            Paint pulse = new Paint();
-            pulse.setTextSize(25f);
+            Paint tempPaint = new Paint();
+            Paint soPaint = new Paint();
+            Paint pulsePaint = new Paint();
+            //
+            tempPaint.setTextSize(25f);
+            soPaint.setTextSize(25f);
+            pulsePaint.setTextSize(25f);
             //
             if (nCountWorkers < 28) {
                 //-------------------------------------------------------------------------------
@@ -441,17 +435,17 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
                         String fullName = list_workers.get(i).getLast() + " , " + list_workers.get(i).getName();
                         //Saturacion  color
                         int valueSatura = Integer.parseInt(list_workers.get(i).getSo2());
-                        setColorSaturacion(valueSatura, so);
+                        setColorSaturacion(valueSatura, soPaint);
                         //Pulso color
                         int valuePulso = Integer.parseInt(list_workers.get(i).getPulse());
-                        setColorPulso(valuePulso, pulse);
+                        setColorPulso(valuePulso, pulsePaint);
                         //
-                        cansas01.drawText(i + 1 + ".", 60, yInit + ysum, myPaint);
-                        cansas01.drawText(list_workers.get(i).getDni(), 140, yInit + ysum, myPaint);
-                        cansas01.drawText(fullName.toUpperCase(), 300, yInit + ysum, myPaint);
-                        cansas01.drawText(list_workers.get(i).getTempurature(), 830, yInit + ysum, myPaint);
-                        cansas01.drawText(list_workers.get(i).getSo2(), 1000, yInit + ysum, so);
-                        cansas01.drawText(list_workers.get(i).getPulse(), 1105, yInit + ysum, pulse);
+                        cansas01.drawText(i + 1 + ".", 60, yInit + ysum, mainPaint);
+                        cansas01.drawText(list_workers.get(i).getDni(), 140, yInit + ysum, mainPaint);
+                        cansas01.drawText(fullName.toUpperCase(), 300, yInit + ysum, mainPaint);
+                        cansas01.drawText(list_workers.get(i).getTempurature(), 830, yInit + ysum, mainPaint);
+                        cansas01.drawText(list_workers.get(i).getSo2(), 1000, yInit + ysum, soPaint);
+                        cansas01.drawText(list_workers.get(i).getPulse(), 1105, yInit + ysum, pulsePaint);
                         // el aumento en fila
                         ysum = ysum + 50;
                     }
@@ -476,17 +470,17 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
                         String fullName = list_workers.get(i).getLast() + " , " + list_workers.get(i).getName();
                         //Saturacion  color
                         int valueSatura = Integer.parseInt(list_workers.get(i).getSo2());
-                        setColorSaturacion(valueSatura, so);
+                        setColorSaturacion(valueSatura, soPaint);
                         //Pulso color
                         int valuePulso = Integer.parseInt(list_workers.get(i).getPulse());
-                        setColorPulso(valuePulso, pulse);
+                        setColorPulso(valuePulso, pulsePaint);
                         //
-                        cansas01.drawText(i + 1 + ".", 60, yInit + ysum, myPaint);
-                        cansas01.drawText(list_workers.get(i).getDni(), 140, yInit + ysum, myPaint);
-                        cansas01.drawText(fullName.toUpperCase(), 300, yInit + ysum, myPaint);
-                        cansas01.drawText(list_workers.get(i).getTempurature(), 830, yInit + ysum, myPaint);
-                        cansas01.drawText(list_workers.get(i).getSo2(), 1000, yInit + ysum, so);
-                        cansas01.drawText(list_workers.get(i).getPulse(), 1105, yInit + ysum, pulse);
+                        cansas01.drawText(i + 1 + ".", 60, yInit + ysum, mainPaint);
+                        cansas01.drawText(list_workers.get(i).getDni(), 140, yInit + ysum, mainPaint);
+                        cansas01.drawText(fullName.toUpperCase(), 300, yInit + ysum, mainPaint);
+                        cansas01.drawText(list_workers.get(i).getTempurature(), 830, yInit + ysum, mainPaint);
+                        cansas01.drawText(list_workers.get(i).getSo2(), 1000, yInit + ysum, soPaint);
+                        cansas01.drawText(list_workers.get(i).getPulse(), 1105, yInit + ysum, pulsePaint);
                         // el aumento en fila
                         ysum = ysum + 50;
                     }
@@ -507,17 +501,17 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
                         String fullName = list_workers.get(i).getLast() + " , " + list_workers.get(i).getName();
                         //Saturacion  color
                         int valueSatura = Integer.parseInt(list_workers.get(i).getSo2());
-                        setColorSaturacion(valueSatura, so);
+                        setColorSaturacion(valueSatura, soPaint);
                         //Pulso color
                         int valuePulso = Integer.parseInt(list_workers.get(i).getPulse());
-                        setColorPulso(valuePulso, pulse);
+                        setColorPulso(valuePulso, pulsePaint);
                         //
-                        canvas02.drawText(i + ".", 60, yInit + ysum, myPaint);
-                        canvas02.drawText(list_workers.get(i).getDni(), 140, yInit + ysum, myPaint);
-                        canvas02.drawText(fullName.toUpperCase(), 300, yInit + ysum, myPaint);
-                        canvas02.drawText(list_workers.get(i).getTempurature(), 830, yInit + ysum, myPaint);
-                        canvas02.drawText(list_workers.get(i).getSo2(), 1000, yInit + ysum, so);
-                        canvas02.drawText(list_workers.get(i).getPulse(), 1105, yInit + ysum, pulse);
+                        canvas02.drawText(i + ".", 60, yInit + ysum, mainPaint);
+                        canvas02.drawText(list_workers.get(i).getDni(), 140, yInit + ysum, mainPaint);
+                        canvas02.drawText(fullName.toUpperCase(), 300, yInit + ysum, mainPaint);
+                        canvas02.drawText(list_workers.get(i).getTempurature(), 830, yInit + ysum, mainPaint);
+                        canvas02.drawText(list_workers.get(i).getSo2(), 1000, yInit + ysum, soPaint);
+                        canvas02.drawText(list_workers.get(i).getPulse(), 1105, yInit + ysum, pulsePaint);
                         // el aumento en fila
                         ysum = ysum + 50;
                     }
@@ -544,17 +538,17 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
                         String fullName = list_workers.get(i).getLast() + " , " + list_workers.get(i).getName();
                         //Saturacion  color
                         int valueSatura = Integer.parseInt(list_workers.get(i).getSo2());
-                        setColorSaturacion(valueSatura, so);
+                        setColorSaturacion(valueSatura, soPaint);
                         //Pulso color
                         int valuePulso = Integer.parseInt(list_workers.get(i).getPulse());
-                        setColorPulso(valuePulso, pulse);
+                        setColorPulso(valuePulso, pulsePaint);
                         //
-                        cansas01.drawText(i + 1 + ".", 60, yInit + ysum, myPaint);
-                        cansas01.drawText(list_workers.get(i).getDni(), 140, yInit + ysum, myPaint);
-                        cansas01.drawText(fullName.toUpperCase(), 300, yInit + ysum, myPaint);
-                        cansas01.drawText(list_workers.get(i).getTempurature(), 830, yInit + ysum, myPaint);
-                        cansas01.drawText(list_workers.get(i).getSo2(), 1000, yInit + ysum, so);
-                        cansas01.drawText(list_workers.get(i).getPulse(), 1105, yInit + ysum, pulse);
+                        cansas01.drawText(i + 1 + ".", 60, yInit + ysum, mainPaint);
+                        cansas01.drawText(list_workers.get(i).getDni(), 140, yInit + ysum, mainPaint);
+                        cansas01.drawText(fullName.toUpperCase(), 300, yInit + ysum, mainPaint);
+                        cansas01.drawText(list_workers.get(i).getTempurature(), 830, yInit + ysum, mainPaint);
+                        cansas01.drawText(list_workers.get(i).getSo2(), 1000, yInit + ysum, soPaint);
+                        cansas01.drawText(list_workers.get(i).getPulse(), 1105, yInit + ysum, pulsePaint);
                         // el aumento en fila
                         ysum = ysum + 50;
                     }
@@ -578,17 +572,17 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
                         String fullName = list_workers.get(i).getLast() + " , " + list_workers.get(i).getName();
                         //Saturacion  color
                         int valueSatura = Integer.parseInt(list_workers.get(i).getSo2());
-                        setColorSaturacion(valueSatura, so);
+                        setColorSaturacion(valueSatura, soPaint);
                         //Pulso color
                         int valuePulso = Integer.parseInt(list_workers.get(i).getPulse());
-                        setColorPulso(valuePulso, pulse);
+                        setColorPulso(valuePulso, pulsePaint);
                         //
-                        canvas02.drawText(i + ".", 60, yInit + ysum, myPaint);
-                        canvas02.drawText(list_workers.get(i).getDni(), 140, yInit + ysum, myPaint);
-                        canvas02.drawText(fullName.toUpperCase(), 300, yInit + ysum, myPaint);
-                        canvas02.drawText(list_workers.get(i).getTempurature(), 830, yInit + ysum, myPaint);
-                        canvas02.drawText(list_workers.get(i).getSo2(), 1000, yInit + ysum, so);
-                        canvas02.drawText(list_workers.get(i).getPulse(), 1105, yInit + ysum, pulse);
+                        canvas02.drawText(i + ".", 60, yInit + ysum, mainPaint);
+                        canvas02.drawText(list_workers.get(i).getDni(), 140, yInit + ysum, mainPaint);
+                        canvas02.drawText(fullName.toUpperCase(), 300, yInit + ysum, mainPaint);
+                        canvas02.drawText(list_workers.get(i).getTempurature(), 830, yInit + ysum, mainPaint);
+                        canvas02.drawText(list_workers.get(i).getSo2(), 1000, yInit + ysum, soPaint);
+                        canvas02.drawText(list_workers.get(i).getPulse(), 1105, yInit + ysum, pulsePaint);
                         // el aumento en fila
                         ysum = ysum + 50;
                     }
@@ -597,7 +591,7 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
                     // Pagina 03-03
                     // [66-90]
                     //----------------------------------------------->
-                    PdfDocument.PageInfo myPageInfo3 = new PdfDocument.PageInfo.Builder(1200, 2010, 3).create();
+                    PdfDocument.PageInfo myPageInfo3 = new PdfDocument.PageInfo.Builder(pageWidth, pageHeigt, 3).create();
                     PdfDocument.Page myPage3 = pdfDocument.startPage(myPageInfo3);
                     Canvas canvas03 = myPage3.getCanvas();
 
@@ -606,17 +600,17 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
                         String fullName = list_workers.get(i).getLast() + " , " + list_workers.get(i).getName();
                         //Saturacion  color
                         int valueSatura = Integer.parseInt(list_workers.get(i).getSo2());
-                        setColorSaturacion(valueSatura, so);
+                        setColorSaturacion(valueSatura, soPaint);
                         //Pulso color
                         int valuePulso = Integer.parseInt(list_workers.get(i).getPulse());
-                        setColorPulso(valuePulso, pulse);
+                        setColorPulso(valuePulso, pulsePaint);
                         //
-                        canvas03.drawText(i + ".", 60, yInit + ysum, myPaint);
-                        canvas03.drawText(list_workers.get(i).getDni(), 140, yInit + ysum, myPaint);
-                        canvas03.drawText(fullName.toUpperCase(), 300, yInit + ysum, myPaint);
-                        canvas03.drawText(list_workers.get(i).getTempurature(), 830, yInit + ysum, myPaint);
-                        canvas03.drawText(list_workers.get(i).getSo2(), 1000, yInit + ysum, so);
-                        canvas03.drawText(list_workers.get(i).getPulse(), 1105, yInit + ysum, pulse);
+                        canvas03.drawText(i + ".", 60, yInit + ysum, mainPaint);
+                        canvas03.drawText(list_workers.get(i).getDni(), 140, yInit + ysum, mainPaint);
+                        canvas03.drawText(fullName.toUpperCase(), 300, yInit + ysum, mainPaint);
+                        canvas03.drawText(list_workers.get(i).getTempurature(), 830, yInit + ysum, mainPaint);
+                        canvas03.drawText(list_workers.get(i).getSo2(), 1000, yInit + ysum, soPaint);
+                        canvas03.drawText(list_workers.get(i).getPulse(), 1105, yInit + ysum, pulsePaint);
                         // el aumento en fila
                         ysum = ysum + 50;
                     }
@@ -643,17 +637,17 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
                         String fullName = list_workers.get(i).getLast() + " , " + list_workers.get(i).getName();
                         //Saturacion  color
                         int valueSatura = Integer.parseInt(list_workers.get(i).getSo2());
-                        setColorSaturacion(valueSatura, so);
+                        setColorSaturacion(valueSatura, soPaint);
                         //Pulso color
                         int valuePulso = Integer.parseInt(list_workers.get(i).getPulse());
-                        setColorPulso(valuePulso, pulse);
+                        setColorPulso(valuePulso, pulsePaint);
                         //
-                        cansas01.drawText(i + 1 + ".", 60, yInit + ysum, myPaint);
-                        cansas01.drawText(list_workers.get(i).getDni(), 140, yInit + ysum, myPaint);
-                        cansas01.drawText(fullName.toUpperCase(), 300, yInit + ysum, myPaint);
-                        cansas01.drawText(list_workers.get(i).getTempurature(), 830, yInit + ysum, myPaint);
-                        cansas01.drawText(list_workers.get(i).getSo2(), 1000, yInit + ysum, so);
-                        cansas01.drawText(list_workers.get(i).getPulse(), 1105, yInit + ysum, pulse);
+                        cansas01.drawText(i + 1 + ".", 60, yInit + ysum, mainPaint);
+                        cansas01.drawText(list_workers.get(i).getDni(), 140, yInit + ysum, mainPaint);
+                        cansas01.drawText(fullName.toUpperCase(), 300, yInit + ysum, mainPaint);
+                        cansas01.drawText(list_workers.get(i).getTempurature(), 830, yInit + ysum, mainPaint);
+                        cansas01.drawText(list_workers.get(i).getSo2(), 1000, yInit + ysum, soPaint);
+                        cansas01.drawText(list_workers.get(i).getPulse(), 1105, yInit + ysum, pulsePaint);
                         // el aumento en fila
                         ysum = ysum + 50;
                     }
@@ -677,17 +671,17 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
                         String fullName = list_workers.get(i).getLast() + " , " + list_workers.get(i).getName();
                         //Saturacion  color
                         int valueSatura = Integer.parseInt(list_workers.get(i).getSo2());
-                        setColorSaturacion(valueSatura, so);
+                        setColorSaturacion(valueSatura, soPaint);
                         //Pulso color
                         int valuePulso = Integer.parseInt(list_workers.get(i).getPulse());
-                        setColorPulso(valuePulso, pulse);
+                        setColorPulso(valuePulso, pulsePaint);
                         //
-                        canvas02.drawText(i + ".", 60, yInit + ysum, myPaint);
-                        canvas02.drawText(list_workers.get(i).getDni(), 140, yInit + ysum, myPaint);
-                        canvas02.drawText(fullName.toUpperCase(), 300, yInit + ysum, myPaint);
-                        canvas02.drawText(list_workers.get(i).getTempurature(), 830, yInit + ysum, myPaint);
-                        canvas02.drawText(list_workers.get(i).getSo2(), 1000, yInit + ysum, so);
-                        canvas02.drawText(list_workers.get(i).getPulse(), 1105, yInit + ysum, pulse);
+                        canvas02.drawText(i + ".", 60, yInit + ysum, mainPaint);
+                        canvas02.drawText(list_workers.get(i).getDni(), 140, yInit + ysum, mainPaint);
+                        canvas02.drawText(fullName.toUpperCase(), 300, yInit + ysum, mainPaint);
+                        canvas02.drawText(list_workers.get(i).getTempurature(), 830, yInit + ysum, mainPaint);
+                        canvas02.drawText(list_workers.get(i).getSo2(), 1000, yInit + ysum, soPaint);
+                        canvas02.drawText(list_workers.get(i).getPulse(), 1105, yInit + ysum, pulsePaint);
                         // el aumento en fila
                         ysum = ysum + 50;
                     }
@@ -696,7 +690,7 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
                     // Pagina 03-04
                     // [66-90]
                     //----------------------------------------------->
-                    PdfDocument.PageInfo myPageInfo3 = new PdfDocument.PageInfo.Builder(1200, 2010, 3).create();
+                    PdfDocument.PageInfo myPageInfo3 = new PdfDocument.PageInfo.Builder(pageWidth, pageHeigt,  3).create();
                     PdfDocument.Page myPage3 = pdfDocument.startPage(myPageInfo3);
                     Canvas canvas03 = myPage3.getCanvas();
 
@@ -707,17 +701,17 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
                         String fullName = list_workers.get(i).getLast() + " , " + list_workers.get(i).getName();
                         //Saturacion  color
                         int valueSatura = Integer.parseInt(list_workers.get(i).getSo2());
-                        setColorSaturacion(valueSatura, so);
+                        setColorSaturacion(valueSatura, soPaint);
                         //Pulso color
                         int valuePulso = Integer.parseInt(list_workers.get(i).getPulse());
-                        setColorPulso(valuePulso, pulse);
+                        setColorPulso(valuePulso, pulsePaint);
                         //
-                        canvas03.drawText(i + ".", 60, yInit + ysum, myPaint);
-                        canvas03.drawText(list_workers.get(i).getDni(), 140, yInit + ysum, myPaint);
-                        canvas03.drawText(fullName.toUpperCase(), 300, yInit + ysum, myPaint);
-                        canvas03.drawText(list_workers.get(i).getTempurature(), 830, yInit + ysum, myPaint);
-                        canvas03.drawText(list_workers.get(i).getSo2(), 1000, yInit + ysum, so);
-                        canvas03.drawText(list_workers.get(i).getPulse(), 1105, yInit + ysum, pulse);
+                        canvas03.drawText(i + ".", 60, yInit + ysum, mainPaint);
+                        canvas03.drawText(list_workers.get(i).getDni(), 140, yInit + ysum, mainPaint);
+                        canvas03.drawText(fullName.toUpperCase(), 300, yInit + ysum, mainPaint);
+                        canvas03.drawText(list_workers.get(i).getTempurature(), 830, yInit + ysum, mainPaint);
+                        canvas03.drawText(list_workers.get(i).getSo2(), 1000, yInit + ysum, soPaint);
+                        canvas03.drawText(list_workers.get(i).getPulse(), 1105, yInit + ysum, pulsePaint);
                         // el aumento en fila
                         ysum = ysum + 50;
                     }
@@ -727,7 +721,7 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
                     // Pagina 04-04
                     // [99-133]
                     //----------------------------------------------->
-                    PdfDocument.PageInfo myPageInfo4 = new PdfDocument.PageInfo.Builder(1200, 2010, 3).create();
+                    PdfDocument.PageInfo myPageInfo4 = new PdfDocument.PageInfo.Builder(pageWidth, pageHeigt,  3).create();
                     PdfDocument.Page myPage4 = pdfDocument.startPage(myPageInfo4);
                     Canvas canvas04 = myPage4.getCanvas();
                     //
@@ -736,17 +730,17 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
                         String fullName = list_workers.get(i).getLast() + " , " + list_workers.get(i).getName();
                         //Saturacion  color
                         int valueSatura = Integer.parseInt(list_workers.get(i).getSo2());
-                        setColorSaturacion(valueSatura, so);
+                        setColorSaturacion(valueSatura, soPaint);
                         //Pulso color
                         int valuePulso = Integer.parseInt(list_workers.get(i).getPulse());
-                        setColorPulso(valuePulso, pulse);
+                        setColorPulso(valuePulso, pulsePaint);
                         //
-                        canvas04.drawText(i + ".", 60, yInit + ysum, myPaint);
-                        canvas04.drawText(list_workers.get(i).getDni(), 140, yInit + ysum, myPaint);
-                        canvas04.drawText(fullName.toUpperCase(), 300, yInit + ysum, myPaint);
-                        canvas04.drawText(list_workers.get(i).getTempurature(), 830, yInit + ysum, myPaint);
-                        canvas04.drawText(list_workers.get(i).getSo2(), 1000, yInit + ysum, so);
-                        canvas04.drawText(list_workers.get(i).getPulse(), 1105, yInit + ysum, pulse);
+                        canvas04.drawText(i + ".", 60, yInit + ysum, mainPaint);
+                        canvas04.drawText(list_workers.get(i).getDni(), 140, yInit + ysum, mainPaint);
+                        canvas04.drawText(fullName.toUpperCase(), 300, yInit + ysum, mainPaint);
+                        canvas04.drawText(list_workers.get(i).getTempurature(), 830, yInit + ysum, mainPaint);
+                        canvas04.drawText(list_workers.get(i).getSo2(), 1000, yInit + ysum, soPaint);
+                        canvas04.drawText(list_workers.get(i).getPulse(), 1105, yInit + ysum, pulsePaint);
                         // el aumento en fila
                         ysum = ysum + 50;
                     }
@@ -774,17 +768,17 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
                         String fullName = list_workers.get(i).getLast() + " , " + list_workers.get(i).getName();
                         //Saturacion  color
                         int valueSatura = Integer.parseInt(list_workers.get(i).getSo2());
-                        setColorSaturacion(valueSatura, so);
+                        setColorSaturacion(valueSatura, soPaint);
                         //Pulso color
                         int valuePulso = Integer.parseInt(list_workers.get(i).getPulse());
-                        setColorPulso(valuePulso, pulse);
+                        setColorPulso(valuePulso, pulsePaint);
                         //
-                        cansas01.drawText(i + 1 + ".", 60, yInit + ysum, myPaint);
-                        cansas01.drawText(list_workers.get(i).getDni(), 140, yInit + ysum, myPaint);
-                        cansas01.drawText(fullName.toUpperCase(), 300, yInit + ysum, myPaint);
-                        cansas01.drawText(list_workers.get(i).getTempurature(), 830, yInit + ysum, myPaint);
-                        cansas01.drawText(list_workers.get(i).getSo2(), 1000, yInit + ysum, so);
-                        cansas01.drawText(list_workers.get(i).getPulse(), 1105, yInit + ysum, pulse);
+                        cansas01.drawText(i + 1 + ".", 60, yInit + ysum, mainPaint);
+                        cansas01.drawText(list_workers.get(i).getDni(), 140, yInit + ysum, mainPaint);
+                        cansas01.drawText(fullName.toUpperCase(), 300, yInit + ysum, mainPaint);
+                        cansas01.drawText(list_workers.get(i).getTempurature(), 830, yInit + ysum, mainPaint);
+                        cansas01.drawText(list_workers.get(i).getSo2(), 1000, yInit + ysum, soPaint);
+                        cansas01.drawText(list_workers.get(i).getPulse(), 1105, yInit + ysum, pulsePaint);
                         // el aumento en fila
                         ysum = ysum + 50;
                     }
@@ -808,18 +802,18 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
                         String fullName = list_workers.get(i).getLast() + " , " + list_workers.get(i).getName();
                         //Saturacion  color
                         int valueSatura = Integer.parseInt(list_workers.get(i).getSo2());
-                        setColorSaturacion(valueSatura, so);
+                        setColorSaturacion(valueSatura, soPaint);
                         //Pulso color
                         int valuePulso = Integer.parseInt(list_workers.get(i).getPulse());
-                        setColorPulso(valuePulso, pulse);
+                        setColorPulso(valuePulso, pulsePaint);
 
                         //
-                        canvas02.drawText(i + ".", 60, yInit + ysum, myPaint);
-                        canvas02.drawText(list_workers.get(i).getDni(), 140, yInit + ysum, myPaint);
-                        canvas02.drawText(fullName.toUpperCase(), 300, yInit + ysum, myPaint);
-                        canvas02.drawText(list_workers.get(i).getTempurature(), 830, yInit + ysum, myPaint);
-                        canvas02.drawText(list_workers.get(i).getSo2(), 1000, yInit + ysum, so);
-                        canvas02.drawText(list_workers.get(i).getPulse(), 1105, yInit + ysum, pulse);
+                        canvas02.drawText(i + ".", 60, yInit + ysum, mainPaint);
+                        canvas02.drawText(list_workers.get(i).getDni(), 140, yInit + ysum, mainPaint);
+                        canvas02.drawText(fullName.toUpperCase(), 300, yInit + ysum, mainPaint);
+                        canvas02.drawText(list_workers.get(i).getTempurature(), 830, yInit + ysum, mainPaint);
+                        canvas02.drawText(list_workers.get(i).getSo2(), 1000, yInit + ysum, soPaint);
+                        canvas02.drawText(list_workers.get(i).getPulse(), 1105, yInit + ysum, pulsePaint);
                         // el aumento en fila
                         ysum = ysum + 50;
                     }
@@ -828,7 +822,7 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
                     // Pagina 03-04
                     // [64-90]
                     //----------------------------------------------->
-                    PdfDocument.PageInfo myPageInfo3 = new PdfDocument.PageInfo.Builder(1200, 2010, 3).create();
+                    PdfDocument.PageInfo myPageInfo3 = new PdfDocument.PageInfo.Builder(pageWidth, pageHeigt,  3).create();
                     PdfDocument.Page myPage3 = pdfDocument.startPage(myPageInfo3);
                     Canvas canvas03 = myPage3.getCanvas();
 
@@ -839,18 +833,18 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
                         String fullName = list_workers.get(i).getLast() + " , " + list_workers.get(i).getName();
                         //Saturacion  color
                         int valueSatura = Integer.parseInt(list_workers.get(i).getSo2());
-                        setColorSaturacion(valueSatura, so);
+                        setColorSaturacion(valueSatura, soPaint);
                         //Pulso color
                         int valuePulso = Integer.parseInt(list_workers.get(i).getPulse());
-                        setColorPulso(valuePulso, pulse);
+                        setColorPulso(valuePulso, pulsePaint);
 
                         //
-                        canvas03.drawText(i + ".", 60, yInit + ysum, myPaint);
-                        canvas03.drawText(list_workers.get(i).getDni(), 140, yInit + ysum, myPaint);
-                        canvas03.drawText(fullName.toUpperCase(), 300, yInit + ysum, myPaint);
-                        canvas03.drawText(list_workers.get(i).getTempurature(), 830, yInit + ysum, myPaint);
-                        canvas03.drawText(list_workers.get(i).getSo2(), 1000, yInit + ysum, so);
-                        canvas03.drawText(list_workers.get(i).getPulse(), 1105, yInit + ysum, pulse);
+                        canvas03.drawText(i + ".", 60, yInit + ysum, mainPaint);
+                        canvas03.drawText(list_workers.get(i).getDni(), 140, yInit + ysum, mainPaint);
+                        canvas03.drawText(fullName.toUpperCase(), 300, yInit + ysum, mainPaint);
+                        canvas03.drawText(list_workers.get(i).getTempurature(), 830, yInit + ysum, mainPaint);
+                        canvas03.drawText(list_workers.get(i).getSo2(), 1000, yInit + ysum, soPaint);
+                        canvas03.drawText(list_workers.get(i).getPulse(), 1105, yInit + ysum, pulsePaint);
                         // el aumento en fila
                         ysum = ysum + 50;
                     }
@@ -860,7 +854,7 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
                     // Pagina 04-04
                     // [99-133]
                     //----------------------------------------------->
-                    PdfDocument.PageInfo myPageInfo4 = new PdfDocument.PageInfo.Builder(1200, 2010, 3).create();
+                    PdfDocument.PageInfo myPageInfo4 = new PdfDocument.PageInfo.Builder(pageWidth, pageHeigt,  3).create();
                     PdfDocument.Page myPage4 = pdfDocument.startPage(myPageInfo4);
                     Canvas canvas04 = myPage4.getCanvas();
                     //
@@ -870,17 +864,17 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
                         String fullName = list_workers.get(i).getLast() + " , " + list_workers.get(i).getName();
                         //Saturacion  color
                         int valueSatura = Integer.parseInt(list_workers.get(i).getSo2());
-                        setColorSaturacion(valueSatura, so);
+                        setColorSaturacion(valueSatura, soPaint);
                         //Pulso color
                         int valuePulso = Integer.parseInt(list_workers.get(i).getPulse());
-                        setColorPulso(valuePulso, pulse);
+                        setColorPulso(valuePulso, pulsePaint);
                         //
-                        canvas04.drawText(i + ".", 60, yInit + ysum, myPaint);
-                        canvas04.drawText(list_workers.get(i).getDni(), 140, yInit + ysum, myPaint);
-                        canvas04.drawText(fullName.toUpperCase(), 300, yInit + ysum, myPaint);
-                        canvas04.drawText(list_workers.get(i).getTempurature(), 830, yInit + ysum, myPaint);
-                        canvas04.drawText(list_workers.get(i).getSo2(), 1000, yInit + ysum, so);
-                        canvas04.drawText(list_workers.get(i).getPulse(), 1105, yInit + ysum, pulse);
+                        canvas04.drawText(i + ".", 60, yInit + ysum, mainPaint);
+                        canvas04.drawText(list_workers.get(i).getDni(), 140, yInit + ysum, mainPaint);
+                        canvas04.drawText(fullName.toUpperCase(), 300, yInit + ysum, mainPaint);
+                        canvas04.drawText(list_workers.get(i).getTempurature(), 830, yInit + ysum, mainPaint);
+                        canvas04.drawText(list_workers.get(i).getSo2(), 1000, yInit + ysum, soPaint);
+                        canvas04.drawText(list_workers.get(i).getPulse(), 1105, yInit + ysum, pulsePaint);
                         // el aumento en fila
                         ysum = ysum + 50;
                     }
@@ -890,7 +884,7 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
                     // Pagina 05-05
                     // [134-150]
                     //----------------------------------------------->
-                    PdfDocument.PageInfo myPageInfo5 = new PdfDocument.PageInfo.Builder(1200, 2010, 3).create();
+                    PdfDocument.PageInfo myPageInfo5 = new PdfDocument.PageInfo.Builder(pageWidth, pageHeigt,  3).create();
                     PdfDocument.Page myPage5 = pdfDocument.startPage(myPageInfo5);
                     Canvas canvas05 = myPage5.getCanvas();
                     //
@@ -899,17 +893,17 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
                         String fullName = list_workers.get(i).getLast() + " , " + list_workers.get(i).getName();
                         //Saturacion  color
                         int valueSatura = Integer.parseInt(list_workers.get(i).getSo2());
-                        setColorSaturacion(valueSatura, so);
+                        setColorSaturacion(valueSatura, soPaint);
                         //Pulso color
                         int valuePulso = Integer.parseInt(list_workers.get(i).getPulse());
-                        setColorPulso(valuePulso, pulse);
+                        setColorPulso(valuePulso, pulsePaint);
                         //
-                        canvas05.drawText(i + ".", 60, yInit + ysum, myPaint);
-                        canvas05.drawText(list_workers.get(i).getDni(), 140, yInit + ysum, myPaint);
-                        canvas05.drawText(fullName.toUpperCase(), 300, yInit + ysum, myPaint);
-                        canvas05.drawText(list_workers.get(i).getTempurature(), 830, yInit + ysum, myPaint);
-                        canvas05.drawText(list_workers.get(i).getSo2(), 1000, yInit + ysum, so);
-                        canvas05.drawText(list_workers.get(i).getPulse(), 1105, yInit + ysum, pulse);
+                        canvas05.drawText(i + ".", 60, yInit + ysum, mainPaint);
+                        canvas05.drawText(list_workers.get(i).getDni(), 140, yInit + ysum, mainPaint);
+                        canvas05.drawText(fullName.toUpperCase(), 300, yInit + ysum, mainPaint);
+                        canvas05.drawText(list_workers.get(i).getTempurature(), 830, yInit + ysum, mainPaint);
+                        canvas05.drawText(list_workers.get(i).getSo2(), 1000, yInit + ysum, soPaint);
+                        canvas05.drawText(list_workers.get(i).getPulse(), 1105, yInit + ysum, pulsePaint);
                         // el aumento en fila
                         ysum = ysum + 50;
                     }
@@ -941,49 +935,25 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
 
     }
 
-
-    private void setColorSaturacion(int valueSatura, Paint so) {
-        if (valueSatura >= 95 && valueSatura <= 99) {
-            so.setColor(Color.rgb(17, 230, 165));
-        } else if (valueSatura >= 91 && valueSatura <= 94) {
-            so.setColor(Color.rgb(255, 235, 59));
-        } else if (valueSatura >= 86 && valueSatura <= 90) {
-            so.setColor(Color.rgb(255, 38, 38));
-        } else {
-            so.setColor(Color.rgb(255, 38, 38));
-        }
-    }
-
-    private void setColorPulso(int valuePulso, Paint pulse) {
-        if (valuePulso >= 86) {
-            pulse.setColor(Color.rgb(17, 230, 165));
-        } else if (valuePulso >= 70 && valuePulso <= 84) {
-            pulse.setColor(Color.rgb(255, 235, 59));
-        } else if (valuePulso >= 62 && valuePulso <= 68) {
-            pulse.setColor(Color.rgb(255, 38, 38));
-        } else {
-            pulse.setColor(Color.rgb(255, 38, 38));
-        }
-    }
-
-
+    //====
     private void reporterPorTrabajador(String nombre, String metodo, String dni) {
         //
-        Log.e(TAG, "---> reporterPorTrabajador()");
+        Log.e(TAG, "  reporterPorTrabajador  ");
         Log.e(TAG, "===> Nombre : " + nombre);
         Log.e(TAG, "===> DNI :  " + dni);
-        Log.e(TAG, "tamaño  listDate : " + listDate.size());
-        Log.e(TAG, "tamaño listTemperatura : " + listTemperatura.size());
-        Log.e(TAG, "tamaño listSaturacion : " + listSaturacion.size());
-        Log.e(TAG, "tamaño listPulso : " + listPulso.size());
-        Log.e(TAG, "tamaño listTest : " + listTest.size());
+        Log.e(TAG, "---> tamaño  listDate : " + listDate.size());
+        Log.e(TAG, "---> tamaño listTemperatura : " + listTemperatura.size());
+        Log.e(TAG, "---> tamaño listSaturacion : " + listSaturacion.size());
+        Log.e(TAG, "---> tamaño listPulso : " + listPulso.size());
+        Log.e(TAG, "---> tamaño listTest : " + listTest.size());
         //
-        int pageWidth = 1200;
+        final int pageWidth = 1200;
+        final int pageHeigt = 2010;
         Date currentDate = new Date();
         java.text.DateFormat dateFormat;
         //
         PdfDocument pdfDocument = new PdfDocument();
-        PdfDocument.PageInfo myPageInfo01 = new PdfDocument.PageInfo.Builder(1200, 2010, 1).create();
+        PdfDocument.PageInfo myPageInfo01 = new PdfDocument.PageInfo.Builder(pageWidth, pageHeigt,  1).create();
         PdfDocument.Page myPage01 = pdfDocument.startPage(myPageInfo01);
         Canvas cansas01 = myPage01.getCanvas();
         //
@@ -992,8 +962,8 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
         title.setTextAlign(Paint.Align.CENTER);
         title.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
         title.setColor(Color.BLACK);
-        cansas01.drawText("UNIDAD DE TRABAJO ", pageWidth / 2, 80, title);
-        cansas01.drawText(Common.unidadTrabajoSelected.getAliasUT(), pageWidth / 2, 160, title);
+        cansas01.drawText("UNIDAD DE TRABAJO ", (int) pageWidth / 2, 80, title);
+        cansas01.drawText(Common.unidadTrabajoSelected.getAliasUT(), (int) pageWidth / 2, 160, title);
 
         Paint fecha = new Paint();
         fecha.setTextSize(25f);
@@ -1196,6 +1166,7 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
 
     }
 
+    //====
     private void reporterPorTrabajadorSintomas(String nombre, String metodo, String dni) {
         //
         Log.e(TAG, "---> reporterPorTrabajador()");
@@ -1205,12 +1176,13 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
         Log.e(TAG, "tamaño  s1 : " + s1.size());
         Log.e(TAG, "tamaño  s7 : " + s7.size());
         //
-        int pageWidth = 1200;
+        final int pageWidth = 1200;
+        final int pageHeigt = 2010;
         Date currentDate = new Date();
         java.text.DateFormat dateFormat;
         //
         PdfDocument pdfDocument = new PdfDocument();
-        PdfDocument.PageInfo myPageInfo01 = new PdfDocument.PageInfo.Builder(1200, 2010, 1).create();
+        PdfDocument.PageInfo myPageInfo01 = new PdfDocument.PageInfo.Builder(pageWidth, pageHeigt,  1).create();
         PdfDocument.Page myPage01 = pdfDocument.startPage(myPageInfo01);
         Canvas cansas01 = myPage01.getCanvas();
         //
@@ -1347,7 +1319,6 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
         }
 
 
-
         try {
 
             //-------------------------------------------------------------------------------
@@ -1393,6 +1364,7 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
 
     }
 
+    //====
     private void getDataFromFirebase(String dni, String nombre, String metodo) {
         Log.e(TAG, "-----> funcion  : getDataFromFirebase");
         listDate = new ArrayList<String>();
@@ -1459,6 +1431,7 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
 
     }
 
+    //====
     private void getDataFromFirebaseSintomas(String dni, String nombre, String metodo) {
         Log.e(TAG, "-----> funcion  : getDataFromFirebase");
         listDate = new ArrayList<String>();
@@ -1500,7 +1473,6 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
                                         s7.add(metricasPersonal.getS7());
 
 
-
                                     }
                                 } catch (Exception e) {
                                     Log.e(TAG, " no tiene horario ");
@@ -1535,6 +1507,7 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
 
     }
 
+    //====
     private String timeStampToString(long time) {
         Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
         calendar.setTimeInMillis(time);
@@ -1542,6 +1515,7 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
         return date;
     }
 
+    //====
     private void sendEmail() {
         Log.e(TAG, "sendEmail()  2 ");
         File root = Environment.getExternalStorageDirectory();
@@ -1560,6 +1534,7 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    //====
     public void showPdfDialog(String metodo) {
 
 
@@ -1628,6 +1603,7 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
         dialog.show();
     }
 
+    //====
     public void showPopUpHistorialSintomas(String metodo) {
 
 
@@ -1703,49 +1679,33 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
         dialog.show();
     }
 
-
-    public void btn_chart(View view) {
-
-        Intent intent = new Intent(ReportDataWorkerActivity.this,VisualActivity.class);
-        startActivity(intent);
-
-
-
-
-
-    }
-}
-//
-// Prueba unitarias
-    /*
-  List<AllPersonalMetricas> list_temp = list_workers;
-            Log.e(TAG,"old  list ");
-                    for(AllPersonalMetricas tempOld:list_workers){
-                    Log.e("tempOld","-----------------------");
-                    Log.e("tempOld"," "+tempOld.getAllInfoWorker2());
-
-                    }
-                    //   Collections.sort(list_workers, (o1, o2) -> o1.getLast().compareToIgnoreCase(o2.getLast()));
-
-                    //
-                    Log.e(TAG," ");
-                    Log.e(TAG,"new list sorted");
-                    Log.e(TAG," ");
-                    for(AllPersonalMetricas tempNew:list_workers){
-                    Log.e("tempNew","-----------------------");
-                    Log.e("tempNew"," "+tempNew.getAllInfoWorker2());
-
-                    }
-                    // para los dos
-                    Log.e(TAG," ");
-                    Log.e(TAG,"Comparando las dos lista ");
-                    Log.e(TAG," ");
-                    int valorLista=list_workers.size();
-                    for(int j=0;j<valorLista; j++){
-        Log.e("list_workers"," "+list_workers.get(j).getAllInfoWorker2());
-        Log.e("list_temp"," "+list_temp.get(j).getAllInfoWorker2());
+    //====
+    private void setColorSaturacion(int valueSatura, Paint so) {
+        if (valueSatura >= 95 && valueSatura <= 99) {
+            so.setColor(Color.rgb(17, 230, 165));
+        } else if (valueSatura >= 91 && valueSatura <= 94) {
+            so.setColor(Color.rgb(255, 235, 59));
+        } else if (valueSatura >= 86 && valueSatura <= 90) {
+            so.setColor(Color.rgb(255, 38, 38));
+        } else {
+            so.setColor(Color.rgb(255, 38, 38));
         }
+    }
 
-     */
-// ser ordena por apellido
+    //====
+    private void setColorPulso(int valuePulso, Paint pulse) {
+        if (valuePulso >= 86) {
+            pulse.setColor(Color.rgb(17, 230, 165));
+        } else if (valuePulso >= 70 && valuePulso <= 84) {
+            pulse.setColor(Color.rgb(255, 235, 59));
+        } else if (valuePulso >= 62 && valuePulso <= 68) {
+            pulse.setColor(Color.rgb(255, 38, 38));
+        } else {
+            pulse.setColor(Color.rgb(255, 38, 38));
+        }
+    }
+
+
+}
+
 

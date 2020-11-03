@@ -133,7 +133,7 @@ public class VisualActivity extends AppCompatActivity {
                                 mDialog.dismiss();
                                 //  tempShowChart();
                             } else {
-                                visual_dni_layout.setError("El trabajador no exsite en la base de datos");
+                                visual_dni_layout.setError("El trabajador no existe en la base de datos");
                                 show_name_visual_dni.setText("");
                                 visual_linerlayout.setVisibility(View.INVISIBLE);
                                 mDialog.dismiss();
