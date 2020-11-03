@@ -9,6 +9,8 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -56,6 +58,10 @@ import java.util.TimeZone;
 
 public class ReportDataWorkerActivity extends AppCompatActivity {
 
+    Bitmap bmp;
+    Bitmap scaleBitmap;
+
+
     public static final String TAG = ReportDataWorkerActivity.class.getSimpleName();
     public static final String folderpdf = "/arsi21.pdf";
     //
@@ -100,6 +106,9 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
         ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, PackageManager.PERMISSION_GRANTED);
         //Firebaase
         database = FirebaseDatabase.getInstance();
+
+        bmp = BitmapFactory.decodeResource(getResources(),R.mipmap.ic_logo_arsi_01);
+        scaleBitmap = Bitmap.createScaledBitmap(bmp,160,160,false);
     }
 
 
@@ -293,7 +302,7 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
         Log.e(TAG, "---> tamaño de  listMetricasPersonal = " + listMetricasPersonal.size());
         Log.e(TAG, "---> tamaño de listPersonal = " + listPersonal.size());
         Log.e(TAG, "---> numero de CountWorkers = " + nCountWorkers);
-        // PASO 1 :
+        // PASO 1 : obtener lista de trabajadores con sus datos y metricas de signos vitales
         for (int i = 0; i < nCountWorkers; i++) {
             try {
 
@@ -334,14 +343,13 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
 
         }
 
-        // PASO 2 :  Ordenar alfabeticamente
+        // PASO 2 :  Ordenar alfabeticamente lista de trabajadores
         if (list_workers.size() >= 1) {
             Collections.sort(list_workers, (o1, o2) -> new String(o1.getLast()).compareToIgnoreCase(o2.getLast()));
         }
         // PASO 3 : Imprimir o generar pdf
         if (list_workers.size() >= 1) {
             //
-
             Date currentDate = new Date();
             java.text.DateFormat dateFormat;
             // Crear el documento
@@ -353,12 +361,15 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
             Paint mainPaint = new Paint();
             // paint 1
             Paint titlePaint = new Paint();
-            titlePaint.setTextSize(60);
+            titlePaint.setTextSize(50);
             titlePaint.setTextAlign(Paint.Align.CENTER);
             titlePaint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
             titlePaint.setColor(Color.BLACK);
             cansas01.drawText("UNIDAD DE TRABAJO", pageWidth / 2, 80, titlePaint);
             cansas01.drawText(Common.unidadTrabajoSelected.getAliasUT(), pageWidth / 2, 150, titlePaint);
+
+            cansas01.drawBitmap(scaleBitmap, 50, 20, titlePaint);
+
             // paint 2
             Paint fechaPaint = new Paint();
             fechaPaint.setTextSize(25f);
@@ -965,6 +976,8 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
         cansas01.drawText("UNIDAD DE TRABAJO ", (int) pageWidth / 2, 80, title);
         cansas01.drawText(Common.unidadTrabajoSelected.getAliasUT(), (int) pageWidth / 2, 160, title);
 
+        cansas01.drawBitmap(scaleBitmap, 50, 20, title);
+
         Paint fecha = new Paint();
         fecha.setTextSize(25f);
         fecha.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
@@ -1093,8 +1106,6 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
 
 
             try {
-
-
                 //
                 cansas01.drawText(i + 1 + " ", 80, ytext + ysum, myPaint);
                 cansas01.drawText(listTemperatura.get(i), 520, ytext + ysum, myPaint);
@@ -1209,6 +1220,11 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
         cansas01.drawText("HORA ", pageWidth - 100, 120, fecha);
         fecha.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL));
         cansas01.drawText("" + dateFormat.format(currentDate), pageWidth - 90, 150, fecha);
+
+
+
+        cansas01.drawBitmap(scaleBitmap, 50, 20, title);
+
 
         //
         Paint info = new Paint();

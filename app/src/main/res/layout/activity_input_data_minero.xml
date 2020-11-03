@@ -497,11 +497,16 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/input_sintomas_layout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="1dp"
+                android:layout_marginBottom="@dimen/mb_input"
+                android:hint="Comentarios"
+                app:counterEnabled="true"
+                app:counterMaxLength="80"
                 app:endIconMode="custom"
-                app:errorEnabled="true">
+                app:errorEnabled="true"
+                app:startIconDrawable="@drawable/ic_historial">
 
                 <EditText
                     android:id="@+id/input_sintomas"
