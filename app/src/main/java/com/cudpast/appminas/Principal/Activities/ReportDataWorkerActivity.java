@@ -107,8 +107,8 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
         //Firebaase
         database = FirebaseDatabase.getInstance();
 
-        bmp = BitmapFactory.decodeResource(getResources(),R.mipmap.ic_logo_arsi_01);
-        scaleBitmap = Bitmap.createScaledBitmap(bmp,160,160,false);
+        bmp = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_logo_arsi_01);
+        scaleBitmap = Bitmap.createScaledBitmap(bmp, 160, 160, false);
     }
 
 
@@ -367,7 +367,6 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
             titlePaint.setColor(Color.BLACK);
             cansas01.drawText("UNIDAD DE TRABAJO", pageWidth / 2, 80, titlePaint);
             cansas01.drawText(Common.unidadTrabajoSelected.getAliasUT(), pageWidth / 2, 150, titlePaint);
-
             cansas01.drawBitmap(scaleBitmap, 50, 20, titlePaint);
 
             // paint 2
@@ -399,7 +398,10 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
             cansas01.drawText("Horario  : " + cad_horario, 20, 220, info);
             cansas01.drawText("Responsable : " + Common.currentUser.getReg_name(), 20, 270, info);
             cansas01.drawText("Fecha consulta : " + seletedDate, 20, 320, info);
+            // pie de pagina
+            cansas01.drawText("Página 01", (pageWidth / 2 )- 40, pageHeigt - 20, info);
             // Encabezados
+
             mainPaint.setStyle(Paint.Style.STROKE);
             mainPaint.setStrokeWidth(2);
             mainPaint.setTextSize(23f);
@@ -496,6 +498,8 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
                         ysum = ysum + 50;
                     }
                     //
+                    // pie de pagina
+                    cansas01.drawText("Página 01", (pageWidth / 2 )- 40, pageHeigt - 20, info);
                     pdfDocument.finishPage(myPage01);
                     //----------------------------------------------->
                     // Page 02-02 :
@@ -526,6 +530,8 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
                         // el aumento en fila
                         ysum = ysum + 50;
                     }
+                    // pie de pagina
+                    cansas01.drawText("Página 02", (pageWidth / 2 )- 40, pageHeigt - 20, info);
                     pdfDocument.finishPage(myPage2);
                     //----------------------------------------------->
                     // creacion del pdf
@@ -701,7 +707,7 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
                     // Pagina 03-04
                     // [66-90]
                     //----------------------------------------------->
-                    PdfDocument.PageInfo myPageInfo3 = new PdfDocument.PageInfo.Builder(pageWidth, pageHeigt,  3).create();
+                    PdfDocument.PageInfo myPageInfo3 = new PdfDocument.PageInfo.Builder(pageWidth, pageHeigt, 3).create();
                     PdfDocument.Page myPage3 = pdfDocument.startPage(myPageInfo3);
                     Canvas canvas03 = myPage3.getCanvas();
 
@@ -732,7 +738,7 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
                     // Pagina 04-04
                     // [99-133]
                     //----------------------------------------------->
-                    PdfDocument.PageInfo myPageInfo4 = new PdfDocument.PageInfo.Builder(pageWidth, pageHeigt,  3).create();
+                    PdfDocument.PageInfo myPageInfo4 = new PdfDocument.PageInfo.Builder(pageWidth, pageHeigt, 3).create();
                     PdfDocument.Page myPage4 = pdfDocument.startPage(myPageInfo4);
                     Canvas canvas04 = myPage4.getCanvas();
                     //
@@ -833,7 +839,7 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
                     // Pagina 03-04
                     // [64-90]
                     //----------------------------------------------->
-                    PdfDocument.PageInfo myPageInfo3 = new PdfDocument.PageInfo.Builder(pageWidth, pageHeigt,  3).create();
+                    PdfDocument.PageInfo myPageInfo3 = new PdfDocument.PageInfo.Builder(pageWidth, pageHeigt, 3).create();
                     PdfDocument.Page myPage3 = pdfDocument.startPage(myPageInfo3);
                     Canvas canvas03 = myPage3.getCanvas();
 
@@ -865,7 +871,7 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
                     // Pagina 04-04
                     // [99-133]
                     //----------------------------------------------->
-                    PdfDocument.PageInfo myPageInfo4 = new PdfDocument.PageInfo.Builder(pageWidth, pageHeigt,  3).create();
+                    PdfDocument.PageInfo myPageInfo4 = new PdfDocument.PageInfo.Builder(pageWidth, pageHeigt, 3).create();
                     PdfDocument.Page myPage4 = pdfDocument.startPage(myPageInfo4);
                     Canvas canvas04 = myPage4.getCanvas();
                     //
@@ -895,7 +901,7 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
                     // Pagina 05-05
                     // [134-150]
                     //----------------------------------------------->
-                    PdfDocument.PageInfo myPageInfo5 = new PdfDocument.PageInfo.Builder(pageWidth, pageHeigt,  3).create();
+                    PdfDocument.PageInfo myPageInfo5 = new PdfDocument.PageInfo.Builder(pageWidth, pageHeigt, 3).create();
                     PdfDocument.Page myPage5 = pdfDocument.startPage(myPageInfo5);
                     Canvas canvas05 = myPage5.getCanvas();
                     //
@@ -964,7 +970,7 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
         java.text.DateFormat dateFormat;
         //
         PdfDocument pdfDocument = new PdfDocument();
-        PdfDocument.PageInfo myPageInfo01 = new PdfDocument.PageInfo.Builder(pageWidth, pageHeigt,  1).create();
+        PdfDocument.PageInfo myPageInfo01 = new PdfDocument.PageInfo.Builder(pageWidth, pageHeigt, 1).create();
         PdfDocument.Page myPage01 = pdfDocument.startPage(myPageInfo01);
         Canvas cansas01 = myPage01.getCanvas();
         //
@@ -1004,6 +1010,8 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
         cansas01.drawText("Trabajador  : " + nombre, 20, 270, info);
         cansas01.drawText("Responsable : " + Common.currentUser.getReg_name(), 20, 320, info);
 
+        // pie de pagina
+        cansas01.drawText("Página 01", (pageWidth / 2 )- 40, pageHeigt - 20, info);
         // Encabezados
         Paint myPaint = new Paint();
         myPaint.setStyle(Paint.Style.STROKE);
@@ -1193,7 +1201,7 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
         java.text.DateFormat dateFormat;
         //
         PdfDocument pdfDocument = new PdfDocument();
-        PdfDocument.PageInfo myPageInfo01 = new PdfDocument.PageInfo.Builder(pageWidth, pageHeigt,  1).create();
+        PdfDocument.PageInfo myPageInfo01 = new PdfDocument.PageInfo.Builder(pageWidth, pageHeigt, 1).create();
         PdfDocument.Page myPage01 = pdfDocument.startPage(myPageInfo01);
         Canvas cansas01 = myPage01.getCanvas();
         //
@@ -1222,7 +1230,6 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
         cansas01.drawText("" + dateFormat.format(currentDate), pageWidth - 90, 150, fecha);
 
 
-
         cansas01.drawBitmap(scaleBitmap, 50, 20, title);
 
 
@@ -1235,6 +1242,8 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
         cansas01.drawText("DNI  : " + dni, 20, 220, info);
         cansas01.drawText("Trabajador  : " + nombre, 20, 270, info);
         cansas01.drawText("Responsable : " + Common.currentUser.getReg_name(), 20, 320, info);
+        // pie de pagina
+        cansas01.drawText("Página 01", (pageWidth / 2 )- 40, pageHeigt - 20, info);
 
         // Encabezados
         Paint myPaint = new Paint();
