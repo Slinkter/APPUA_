@@ -41,7 +41,7 @@ public class LoginActivity extends AppCompatActivity implements CompoundButton.O
     private TextInputLayout log_email_layout, log_password_layout;
     private TextInputEditText log_email, log_password;
     private ProgressDialog mDialog;
-    private FirebaseDatabase database = FirebaseDatabase.getInstance();
+    private FirebaseDatabase database;
     public static final String TAG = LoginActivity.class.getSimpleName();
 
 
@@ -62,6 +62,8 @@ public class LoginActivity extends AppCompatActivity implements CompoundButton.O
         getSupportActionBar().hide();
         //
         mAuth = FirebaseAuth.getInstance();
+        database = FirebaseDatabase.getInstance();
+        //
         log_email_layout = findViewById(R.id.log_email_layout);
         log_password_layout = findViewById(R.id.log_password_layout);
         log_email = findViewById(R.id.log_email);
@@ -145,9 +147,8 @@ public class LoginActivity extends AppCompatActivity implements CompoundButton.O
     @Override
     protected void onStart() {
         super.onStart();
-        if (Common.currentUser != null){
-
-            updateUI(Common.currentUser );
+        if (Common.currentUser != null) {
+            updateUI(Common.currentUser);
         }
     }
 
@@ -176,18 +177,14 @@ public class LoginActivity extends AppCompatActivity implements CompoundButton.O
                                         @Override
                                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                             User mUser = dataSnapshot.getValue(User.class);
+                                            //
                                             if (mUser == null) {
-                                                Log.e(TAG, "usuario no registrador");
-                                                mDialog.dismiss();
+
                                                 updateUI(null);
                                             } else {
                                                 Common.currentUser = mUser;
                                                 updateUI(Common.currentUser);
-                                                Log.e(TAG, "user_uid " + mUser.getUid());
-                                                Log.e(TAG, "currentUser : " + Common.currentUser.getReg_name());
-                                                Intent intent_login = new Intent(LoginActivity.this, MainActivity.class);
-                                                startActivity(intent_login);
-                                                finish();
+
                                                 mDialog.dismiss();
                                             }
 
@@ -231,14 +228,17 @@ public class LoginActivity extends AppCompatActivity implements CompoundButton.O
     }
 
     private void updateUI(User user) {
+
+        if (mAuth.getCurrentUser().isEmailVerified()) {
+            Intent intent_login = new Intent(LoginActivity.this, MainActivity.class);
+            startActivity(intent_login);
+            finish();
+            mDialog.dismiss();
+            Toast.makeText(this, "Bievenid@ " + user.getReg_name(), Toast.LENGTH_SHORT).show();
+        }
         if (user == null) {
-            Toast.makeText(this, "Inicie session", Toast.LENGTH_SHORT).show();
-        } else {
-            if (mAuth.getCurrentUser().isEmailVerified()) {
-                Log.e(TAG, "correo verificado");
-            } else {
-              //  Toast.makeText(this, "correo no verificado", Toast.LENGTH_SHORT).show();
-            }
+            Toast.makeText(this, "usuario no registrador", Toast.LENGTH_SHORT).show();
+            mDialog.dismiss();
         }
     }
 

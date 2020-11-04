@@ -29,10 +29,10 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="20dp"
                 android:layout_gravity="center"
-                android:gravity="center"
+                android:layout_marginBottom="20dp"
                 android:fontFamily="@font/headland_one"
+                android:gravity="center"
                 android:text="unidades\narsi"
                 android:textAllCaps="true"
                 android:textColor="@color/colorPrimary"
@@ -105,8 +105,7 @@
                 android:layout_weight="1"
                 android:elevation="5dp"
                 android:fontFamily="@font/headland_one"
-                android:text="Ingresar"
-                android:textAllCaps="false" />
+                android:text="Ingresar" />
 
             <Button
                 android:id="@+id/btnRegister"
