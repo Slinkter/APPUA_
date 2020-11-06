@@ -80,7 +80,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Principal.MainActivity"
+            android:name=".Principal.UnidadesActivity"
             android:screenOrientation="portrait" />
 
         <provider

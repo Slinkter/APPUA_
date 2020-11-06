@@ -17,7 +17,7 @@ import com.cudpast.appminas.R;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity {
+public class UnidadesActivity extends AppCompatActivity {
 
 
     private Button btnContinuar;
@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_unidades);
         getSupportActionBar().hide();
 
         listaUnidadMinera = new ArrayList<>();
@@ -121,7 +121,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initUnidad() {
-        Intent intent = new Intent(MainActivity.this, AllActivity.class);
+        Intent intent = new Intent(UnidadesActivity.this, AllActivity.class);
         startActivity(intent);
     }
 }

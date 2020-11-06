@@ -19,7 +19,7 @@ import android.widget.Toast;
 
 import com.cudpast.appminas.Common.Common;
 import com.cudpast.appminas.Model.User;
-import com.cudpast.appminas.Principal.MainActivity;
+import com.cudpast.appminas.Principal.UnidadesActivity;
 import com.cudpast.appminas.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -27,7 +27,6 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -35,6 +34,11 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 public class LoginActivity extends AppCompatActivity implements CompoundButton.OnCheckedChangeListener, TextWatcher {
+
+    // todo : mejor el login
+    // todo : reporte de cope mina
+    // todo : quitar saturacion y pulso
+
 
     Button btnLogin, btnRegister;
     private FirebaseAuth mAuth;
@@ -177,10 +181,12 @@ public class LoginActivity extends AppCompatActivity implements CompoundButton.O
                                         @Override
                                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                             User mUser = dataSnapshot.getValue(User.class);
+                                            Log.e(TAG, "databaseError : 1");
                                             //
                                             if (mUser == null) {
 
                                                 updateUI(null);
+                                                Log.e(TAG, "databaseError : 2");
                                             } else {
                                                 Common.currentUser = mUser;
                                                 updateUI(Common.currentUser);
@@ -229,16 +235,21 @@ public class LoginActivity extends AppCompatActivity implements CompoundButton.O
 
     private void updateUI(User user) {
 
-        if (mAuth.getCurrentUser().isEmailVerified()) {
-            Intent intent_login = new Intent(LoginActivity.this, MainActivity.class);
+
+        if (user == null) {
+            Toast.makeText(this, "usuario no registrador", Toast.LENGTH_SHORT).show();
+            mDialog.dismiss();
+        }else{
+            Intent intent_login = new Intent(LoginActivity.this, UnidadesActivity.class);
             startActivity(intent_login);
             finish();
             mDialog.dismiss();
             Toast.makeText(this, "Bievenid@ " + user.getReg_name(), Toast.LENGTH_SHORT).show();
-        }
-        if (user == null) {
-            Toast.makeText(this, "usuario no registrador", Toast.LENGTH_SHORT).show();
-            mDialog.dismiss();
+            if (mAuth.getCurrentUser().isEmailVerified()) {
+                Log.e(TAG, "correo verificado ");
+            }else {
+                Log.e(TAG, "no verificado ");
+            }
         }
     }
 
