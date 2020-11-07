@@ -35,7 +35,8 @@ import com.google.firebase.database.ValueEventListener;
 
 public class LoginActivity extends AppCompatActivity implements CompoundButton.OnCheckedChangeListener, TextWatcher {
 
-    // todo : mejor el login
+    // todo : mejor el login (ya esta )
+    // todo : crear correo (ya esta )
     // todo : reporte de cope mina
     // todo : quitar saturacion y pulso
 

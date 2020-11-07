@@ -11,6 +11,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="center"
         android:orientation="vertical">
 
         <LinearLayout
@@ -116,7 +117,18 @@
                 android:layout_weight="1"
                 android:fontFamily="@font/headland_one"
                 android:text="Registrase" />
+
+
         </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp"
+            android:gravity="center"
+            android:text="versión 33" />
+
     </LinearLayout>
 
 </LinearLayout>

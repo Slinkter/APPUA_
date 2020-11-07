@@ -13,7 +13,7 @@ import com.cudpast.appminas.Common.Common;
 import com.cudpast.appminas.Principal.Activities.AddWorkerActivity;
 import com.cudpast.appminas.Principal.Activities.EditWorkerActivity;
 import com.cudpast.appminas.Principal.Activities.InputDataWorkerActivity;
-import com.cudpast.appminas.Principal.Activities.ReportDataWorkerActivity;
+import com.cudpast.appminas.Principal.Activities.ReportPdfctivity;
 import com.cudpast.appminas.R;
 
 public class AllActivity extends AppCompatActivity {
@@ -67,7 +67,7 @@ public class AllActivity extends AppCompatActivity {
 
 
     public void btnReportData(View view) {
-        Intent intent = new Intent(AllActivity.this, ReportDataWorkerActivity.class);
+        Intent intent = new Intent(AllActivity.this, ReportPdfctivity.class);
         startActivity(intent);
     }
 

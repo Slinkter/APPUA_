@@ -56,13 +56,13 @@ import java.util.List;
 import java.util.Objects;
 import java.util.TimeZone;
 
-public class ReportDataWorkerActivity extends AppCompatActivity {
+public class ReportPdfctivity extends AppCompatActivity {
 
     Bitmap bmp;
     Bitmap scaleBitmap;
 
 
-    public static final String TAG = ReportDataWorkerActivity.class.getSimpleName();
+    public static final String TAG = ReportPdfctivity.class.getSimpleName();
     public static final String folderpdf = "/arsi21.pdf";
     //
     private FirebaseDatabase database;
@@ -101,7 +101,7 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         getSupportActionBar().setTitle("Regresar");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        setContentView(R.layout.activity_report_data_worker);
+        setContentView(R.layout.activity_report_pdf);
         //Solicitar permisos
         ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, PackageManager.PERMISSION_GRANTED);
         //Firebaase
@@ -139,8 +139,14 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
     //===============================================================================
     // CardView 5
     public void btn_chart(View view) {
-        Intent intent = new Intent(ReportDataWorkerActivity.this, VisualActivity.class);
+        Intent intent = new Intent(ReportPdfctivity.this, VisualActivity.class);
         startActivity(intent);
+    }
+
+    //===============================================================================
+    // CardView 6
+    public void btn_mounth(View view) {
+        horarioPDFMount(true);
     }
 
     //===============================================================================
@@ -157,7 +163,7 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
         mdp.show(getSupportFragmentManager(), "DATE_PICKER");
         mdp.addOnPositiveButtonClickListener((MaterialPickerOnPositiveButtonClickListener<Long>) input_dateSelected -> {
             //
-            mDialog = new ProgressDialog(ReportDataWorkerActivity.this);
+            mDialog = new ProgressDialog(ReportPdfctivity.this);
             mDialog.setMessage("Descargando datos...");
             mDialog.show();
             // Init arrays
@@ -188,6 +194,152 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
                     });
         });
 
+    }
+
+    private void horarioPDFMount(final Boolean horario)  {
+        String metodo = "pdf";
+        //
+        builder = MaterialDatePicker.Builder.datePicker();
+        builder.setTitleText("Seleccionar Mes");
+        mdp = builder.build();
+        mdp.show(getSupportFragmentManager(), "DATE_PICKER");
+        mdp.addOnPositiveButtonClickListener((MaterialPickerOnPositiveButtonClickListener<Long>) input_dateSelected -> {
+            //
+            mDialog = new ProgressDialog(ReportPdfctivity.this);
+            mDialog.setMessage("Descargando datos...");
+            mDialog.show();
+            // Init arrays
+            //Horario
+            listaMetricasPersonalesEntrada = new ArrayList<>();
+            listaPersonal = new ArrayList<>();
+            // Transform date selected
+            //  seletedDate = timeStampToString(input_dateSelected);
+            String test = timeStampToString_mounth(input_dateSelected);
+            Log.e(TAG, test);
+            // Get Data From Firebase and init reference
+            ref_datos_paciente = database
+                    .getReference(Common.db_mina_personal_data)
+                    .child(Common.unidadTrabajoSelected.getNameUT());
+
+            ref_datos_paciente.keepSynced(true);
+            ref_datos_paciente.orderByKey();
+            ref_datos_paciente
+                    .addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            dateSelectedMount(dataSnapshot, metodo, horario, test);
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+                            Log.e(TAG, "[showSelectDate ] error : " + databaseError.getMessage());
+                            mDialog.dismiss();
+                        }
+                    });
+        });
+
+    }
+
+    private void dateSelectedMount(DataSnapshot lista_empleados, String metodo, Boolean horario, String test_date) {
+
+        // database
+        // --db_mina_personal_data
+        //    --unidadTrabajoSelect
+        //       --dni worker
+        //         -- date
+        ArrayList<String> listDNI = new ArrayList<>();
+        //all data
+        //===================================================
+        //-->PASO 1 : Obtener datos
+        for (DataSnapshot item_empleados : lista_empleados.getChildren()) {
+            //validad empleado
+            if (item_empleados != null) {
+                // -- Get key ( dni worker)
+                String dni = item_empleados.getKey();
+                Log.e(TAG, "========================" );
+                Log.e(TAG, "dni = "  + dni);
+                // -- Obtener la info por fechas de 1 personal
+                for (DataSnapshot item_date : item_empleados.getChildren()) {
+                    //validar la fecha
+                    if (item_date != null) {
+                        // Check Date , si coincide la fecha ,guardar data metrica y dni
+                        String registerDate = Objects.requireNonNull(item_date.getKey()).substring(0, 7).trim();
+
+                        Log.e(TAG, "registerDate = " + registerDate);
+                        Log.e(TAG, "test_date = " + test_date);
+                        boolean checkdate = test_date.equalsIgnoreCase(registerDate);
+                        //
+                        if (checkdate) {
+                            try {
+                                MetricasPersonal personal_info = item_date.getValue(MetricasPersonal.class);
+                                // se rellena info
+                                if (personal_info.getHorario() == null) {
+                                    personal_info.setHorario(false);
+                                }
+
+                                if (personal_info.getHorario() == horario) {
+                                    listaMetricasPersonalesEntrada.add(personal_info);
+                                    listDNI.add(dni);
+                                    Log.e(TAG, " ---> horario-turno = " + personal_info.getHorario());
+                                }
+                                // test
+                                personal_info.printInfo();
+                            } catch (Exception e) {
+                                Log.e(TAG, " error try - cath" + e.getMessage());
+                            }
+                        }
+                    } else {
+                        Log.e(TAG, "no hay item_date = null");
+                    }
+                }
+                Log.e(TAG, "[onDataChange] dni = " + dni);
+            } else {
+                Log.e(TAG, "no hay snaphot = " + item_empleados);
+            }
+        }
+        //===================================================
+        //-->PASO 2 :  Verificar
+        if (listDNI.size() == 0) {
+            mDialog.dismiss();
+            Log.e(TAG, " No hay datos para esta fecha");
+            Toast.makeText(this, "No hay datos para esta fecha", Toast.LENGTH_SHORT).show();
+        }
+        //===================================================
+        //-->PASO 3 :  Generar lista por horario
+        for (int i = 0; i < listDNI.size(); i++) {
+            //
+            String dni_personal = listDNI.get(i);
+            //Obtener info del personal (nombre,direccion,telefono)
+            DatabaseReference ref_mina = database
+                    .getReference(Common.db_mina_personal)
+                    .child(Common.unidadTrabajoSelected.getNameUT())
+                    .child(dni_personal);
+            //
+            ref_mina.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                    Personal personal = dataSnapshot.getValue(Personal.class);
+                    if (personal != null) {
+                        listaPersonal.add(personal);
+                    }
+                    //
+                    if (listaPersonal.size() == listDNI.size()) {
+                        // Generar report -------------------------------->
+                        reporte_por_dia(listaMetricasPersonalesEntrada, listaPersonal, seletedDate, metodo, horario);
+                    }
+                    Log.e(TAG, "[dateTurnSelected]-onDataChange  listaPersonal.size()  : " + listaPersonal.size());
+                    Log.e(TAG, "[dateTurnSelected]-onDataChange  listDNI.size()  : " + listDNI.size());
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                    Log.e(TAG, "[filtrarFecha]-onCancelled databaseError : " + databaseError.getMessage());
+                }
+            });
+
+        }
+        //===================================================
     }
 
     //====
@@ -399,7 +551,7 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
             cansas01.drawText("Responsable : " + Common.currentUser.getReg_name(), 20, 270, info);
             cansas01.drawText("Fecha consulta : " + seletedDate, 20, 320, info);
             // pie de pagina
-            cansas01.drawText("Página 01", (pageWidth / 2 )- 40, pageHeigt - 20, info);
+            cansas01.drawText("Página 01", (pageWidth / 2) - 40, pageHeigt - 20, info);
             // Encabezados
 
             mainPaint.setStyle(Paint.Style.STROKE);
@@ -499,7 +651,7 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
                     }
                     //
                     // pie de pagina
-                    cansas01.drawText("Página 01", (pageWidth / 2 )- 40, pageHeigt - 20, info);
+                    cansas01.drawText("Página 01", (pageWidth / 2) - 40, pageHeigt - 20, info);
                     pdfDocument.finishPage(myPage01);
                     //----------------------------------------------->
                     // Page 02-02 :
@@ -531,7 +683,7 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
                         ysum = ysum + 50;
                     }
                     // pie de pagina
-                    cansas01.drawText("Página 02", (pageWidth / 2 )- 40, pageHeigt - 20, info);
+                    cansas01.drawText("Página 02", (pageWidth / 2) - 40, pageHeigt - 20, info);
                     pdfDocument.finishPage(myPage2);
                     //----------------------------------------------->
                     // creacion del pdf
@@ -940,7 +1092,7 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
 
             if (metodo.equalsIgnoreCase("pdf")) {
                 Log.e(TAG, " metodo pdf ");
-                Intent intent = new Intent(ReportDataWorkerActivity.this, ShowPdfActivity2.class);
+                Intent intent = new Intent(ReportPdfctivity.this, ShowPdfActivity2.class);
                 startActivity(intent);
             } else {
                 Log.e(TAG, " metodo sendEmail ");
@@ -1011,7 +1163,7 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
         cansas01.drawText("Responsable : " + Common.currentUser.getReg_name(), 20, 320, info);
 
         // pie de pagina
-        cansas01.drawText("Página 01", (pageWidth / 2 )- 40, pageHeigt - 20, info);
+        cansas01.drawText("Página 01", (pageWidth / 2) - 40, pageHeigt - 20, info);
         // Encabezados
         Paint myPaint = new Paint();
         myPaint.setStyle(Paint.Style.STROKE);
@@ -1173,7 +1325,7 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
 
         if (metodo.equalsIgnoreCase("pdf")) {
             Log.e(TAG, " metodo pdf ");
-            Intent intent = new Intent(ReportDataWorkerActivity.this, ShowPdfActivity2.class);
+            Intent intent = new Intent(ReportPdfctivity.this, ShowPdfActivity2.class);
             startActivity(intent);
             mDialog.dismiss();
         } else if (metodo.equalsIgnoreCase("email")) {
@@ -1243,7 +1395,7 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
         cansas01.drawText("Trabajador  : " + nombre, 20, 270, info);
         cansas01.drawText("Responsable : " + Common.currentUser.getReg_name(), 20, 320, info);
         // pie de pagina
-        cansas01.drawText("Página 01", (pageWidth / 2 )- 40, pageHeigt - 20, info);
+        cansas01.drawText("Página 01", (pageWidth / 2) - 40, pageHeigt - 20, info);
 
         // Encabezados
         Paint myPaint = new Paint();
@@ -1377,7 +1529,7 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
 
         if (metodo.equalsIgnoreCase("pdf")) {
             Log.e(TAG, " metodo pdf ");
-            Intent intent = new Intent(ReportDataWorkerActivity.this, ShowPdfActivity2.class);
+            Intent intent = new Intent(ReportPdfctivity.this, ShowPdfActivity2.class);
             startActivity(intent);
             mDialog.dismiss();
         } else if (metodo.equalsIgnoreCase("email")) {
@@ -1441,7 +1593,7 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
                     reporterPorTrabajador(nombre, metodo, dni);
                 } catch (Exception e) {
                     Log.e(TAG, "ERROR --> getDataFromFirebase : " + e.getMessage());
-                    Toast.makeText(ReportDataWorkerActivity.this, "Error al Generar PDF ", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ReportPdfctivity.this, "Error al Generar PDF ", Toast.LENGTH_SHORT).show();
                     mDialog.dismiss();
                 }
             }
@@ -1517,7 +1669,7 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
                             reporterPorTrabajadorSintomas(nombre, metodo, dni);
                         } catch (Exception e) {
                             Log.e(TAG, "ERROR --> getDataFromFirebase : " + e.getMessage());
-                            Toast.makeText(ReportDataWorkerActivity.this, "Error al Generar PDF ", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(ReportPdfctivity.this, "Error al Generar PDF ", Toast.LENGTH_SHORT).show();
                             mDialog.dismiss();
                         }
                     }
@@ -1537,6 +1689,13 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
         Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
         calendar.setTimeInMillis(time);
         String date = DateFormat.format("yyyy-MM-dd", calendar).toString();
+        return date;
+    }
+
+    private String timeStampToString_mounth(long time) {
+        Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
+        calendar.setTimeInMillis(time);
+        String date = DateFormat.format("yyyy-MM", calendar).toString();
         return date;
     }
 
@@ -1563,7 +1722,7 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
     public void showPdfDialog(String metodo) {
 
 
-        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(ReportDataWorkerActivity.this);
+        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(ReportPdfctivity.this);
         LayoutInflater inflater = getLayoutInflater();
         View view = inflater.inflate(R.layout.pop_up_report_dni, null);
         builder.setView(view);
@@ -1632,7 +1791,7 @@ public class ReportDataWorkerActivity extends AppCompatActivity {
     public void showPopUpHistorialSintomas(String metodo) {
 
 
-        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(ReportDataWorkerActivity.this);
+        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(ReportPdfctivity.this);
         LayoutInflater inflater = getLayoutInflater();
         View view = inflater.inflate(R.layout.pop_up_report_dni, null);
         builder.setView(view);

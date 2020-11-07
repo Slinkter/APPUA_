@@ -26,16 +26,16 @@
 
         <activity
             android:name=".Principal.Activities.Support.ShowPdfActivity2"
-            android:parentActivityName=".Principal.Activities.ReportDataWorkerActivity"
+            android:parentActivityName=".Principal.Activities.ReportPdfctivity"
             android:screenOrientation="portrait" />
 
 
         <activity
             android:name=".Principal.Activities.Support.ShowPdfActivity"
-            android:parentActivityName=".Principal.Activities.ReportDataWorkerActivity"
+            android:parentActivityName=".Principal.Activities.ReportPdfctivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".Principal.Activities.ReportDataWorkerActivity"
+            android:name=".Principal.Activities.ReportPdfctivity"
             android:parentActivityName=".Principal.AllActivity"
             android:screenOrientation="portrait" />
         <activity

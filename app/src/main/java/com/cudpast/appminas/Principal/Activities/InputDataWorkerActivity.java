@@ -52,7 +52,7 @@ public class InputDataWorkerActivity extends AppCompatActivity {
 
 
     public static final String TAG = InputDataWorkerActivity.class.getSimpleName();
-    private FirebaseDatabase database ;
+    private FirebaseDatabase database;
 
     private Personal personal;
 
@@ -393,25 +393,25 @@ public class InputDataWorkerActivity extends AppCompatActivity {
 
     private boolean checkTemperatura() {
 
-        try {
-            if (input_temperatura.getText().toString().trim().isEmpty() && input_temperatura.getText().toString() != null) {
-                input_temperatura_layout.setError("falta ingresar temperatura del trabajador");
-                input_temperatura_layout.requestFocus();
-                Log.e("number", " int   " + Integer.parseInt(input_temperatura.getText().toString()));
-                return false;
-            } else {
-                input_temperatura_layout.setError(null);
-                Log.e("number", " int   " + Integer.parseInt(input_temperatura.getText().toString()));
-                if (input_temperatura.getText().toString() != null) {
-                    int value = Integer.parseInt(input_temperatura.getText().toString());
-                    if (value < 35 || value > 43) {
-                        input_temperatura_layout.setError("Solo rango [35 - 43]");
-                        input_temperatura_layout.requestFocus();
-                        Log.e("number", " int   " + Integer.parseInt(input_temperatura.getText().toString()));
-                        return false;
-                    }
+        if (input_temperatura.getText().toString().trim().isEmpty() && input_temperatura.getText().toString().trim() != null) {
+            input_temperatura_layout.setError("Debes ingresar Temperatura ");
+            input_temperatura_layout.requestFocus();
+            return false;
+        } else {
+            input_temperatura_layout.setError(null);
+            Log.e("number", " int   " + Integer.parseInt(input_temperatura.getText().toString()));
+            if (input_temperatura.getText().toString() != null) {
+                int value = Integer.parseInt(input_temperatura.getText().toString());
+                if (value < 35 || value > 43) {
+                    input_temperatura_layout.setError("Solo rango [35 - 43]");
+                    input_temperatura_layout.requestFocus();
+                    Log.e("number", " int   " + Integer.parseInt(input_temperatura.getText().toString()));
+                    return false;
                 }
             }
+        }
+
+        try {
 
 
         } catch (Exception e) {
@@ -423,12 +423,11 @@ public class InputDataWorkerActivity extends AppCompatActivity {
 
     private boolean checkSaturacion() {
         if (input_saturacion.getText().toString().trim().isEmpty() && input_saturacion.getText().toString().trim() != null) {
-            input_saturacion_layout.setError("falta ingresar SO2 del trabajador");
+            input_saturacion_layout.setError("Debes ingresar SO2 ");
             input_saturacion_layout.requestFocus();
             return false;
         } else {
             input_saturacion_layout.setError(null);
-            //
             if (input_saturacion.getText().toString().trim() != null) {
                 int value = Integer.parseInt(input_saturacion.getText().toString());
                 if (value < 85 || value > 100) {
@@ -442,8 +441,9 @@ public class InputDataWorkerActivity extends AppCompatActivity {
     }
 
     private boolean checkPulso() {
-        if (input_pulso.getText().toString().trim().isEmpty() && input_pulso.getText().toString() != null) {
-            input_pulso_layout.setError("falta ingresare el pulso del trabajador ");
+
+        if (input_pulso.getText().toString().trim().isEmpty() && input_pulso.getText().toString().trim() != null) {
+            input_pulso_layout.setError("Debes ingresar el pulso ");
             input_pulso_layout.requestFocus();
             return false;
         } else {
@@ -477,6 +477,7 @@ public class InputDataWorkerActivity extends AppCompatActivity {
             return false;
         }
 
+
         if (!checkTemperatura()) {
             return false;
         }
@@ -488,6 +489,7 @@ public class InputDataWorkerActivity extends AppCompatActivity {
         if (!checkPulso()) {
             return false;
         }
+
 
         if (!checkSintomas()) {
             return false;

@@ -279,14 +279,14 @@
             </androidx.cardview.widget.CardView>
 
             <androidx.cardview.widget.CardView
-                android:visibility="invisible"
+                android:visibility="visible"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="0dp"
                 android:layout_weight="1"
                 android:clickable="true"
                 android:foreground="?android:attr/selectableItemBackground"
-                android:onClick="btn_historialSintomas"
+                android:onClick="btn_mounth"
                 app:cardCornerRadius="@dimen/cardRadiusAll"
                 app:cardElevation="@dimen/card_elevation"
                 app:cardUseCompatPadding="true">
@@ -296,7 +296,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:gravity="center"
-                    android:onClick="btn_historialSintomas"
+                    android:onClick="btn_mounth"
                     android:orientation="vertical"
                     android:padding="20dp"
                     android:weightSum="5">
@@ -313,7 +313,7 @@
                         android:layout_margin="5dp"
                         android:fontFamily="@font/headland_one"
                         android:gravity="center"
-                        android:text="Historial\nSíntomas"
+                        android:text="Reporte\nMensual"
                         android:textSize="@dimen/text_size_h2"
                         android:textStyle="bold" />
 
