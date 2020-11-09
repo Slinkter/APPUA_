@@ -34,21 +34,18 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 public class LoginActivity extends AppCompatActivity implements CompoundButton.OnCheckedChangeListener, TextWatcher {
-
-    // todo : mejor el login (ya esta )
+    // todo : crear correo para uniades arsi (ya esta )
+    // todo : mejor el login
     // todo : crear correo (ya esta )
-    // todo : reporte de cope mina
-    // todo : quitar saturacion y pulso
+    // todo : reporte de cope mina (ya esta )
 
-
-    Button btnLogin, btnRegister;
+    private Button btnLogin, btnRegister;
     private FirebaseAuth mAuth;
     private TextInputLayout log_email_layout, log_password_layout;
     private TextInputEditText log_email, log_password;
     private ProgressDialog mDialog;
     private FirebaseDatabase database;
     public static final String TAG = LoginActivity.class.getSimpleName();
-
 
     //Check
     private CheckBox checkbox;
@@ -58,7 +55,6 @@ public class LoginActivity extends AppCompatActivity implements CompoundButton.O
     public static final String KEY_REMEMBER = "remeber";
     public static final String KEY_USERNAME = "username";
     public static final String KEY_PASSWORD = "password";
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,8 +69,7 @@ public class LoginActivity extends AppCompatActivity implements CompoundButton.O
         log_password_layout = findViewById(R.id.log_password_layout);
         log_email = findViewById(R.id.log_email);
         log_password = findViewById(R.id.log_password);
-
-
+        //
         btnLogin = findViewById(R.id.btnLogin);
         btnRegister = findViewById(R.id.btnRegister);
         //
@@ -94,6 +89,8 @@ public class LoginActivity extends AppCompatActivity implements CompoundButton.O
         //
 
         // CheckBox
+        checkbox_user();
+        
         checkbox = (CheckBox) findViewById(R.id.checkbox_rem);
         sharedPreferences = getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
@@ -111,6 +108,10 @@ public class LoginActivity extends AppCompatActivity implements CompoundButton.O
         checkbox.setOnCheckedChangeListener(this);
 
     }
+
+    private void checkbox_user() {
+    }
+
 
     //CheckBox
     @Override
@@ -240,7 +241,7 @@ public class LoginActivity extends AppCompatActivity implements CompoundButton.O
         if (user == null) {
             Toast.makeText(this, "usuario no registrador", Toast.LENGTH_SHORT).show();
             mDialog.dismiss();
-        }else{
+        } else {
             Intent intent_login = new Intent(LoginActivity.this, UnidadesActivity.class);
             startActivity(intent_login);
             finish();
@@ -248,7 +249,7 @@ public class LoginActivity extends AppCompatActivity implements CompoundButton.O
             Toast.makeText(this, "Bievenid@ " + user.getReg_name(), Toast.LENGTH_SHORT).show();
             if (mAuth.getCurrentUser().isEmailVerified()) {
                 Log.e(TAG, "correo verificado ");
-            }else {
+            } else {
                 Log.e(TAG, "no verificado ");
             }
         }
