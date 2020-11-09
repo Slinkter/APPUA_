@@ -11,9 +11,9 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="25dp"
+        android:layout_marginLeft="10dp"
         android:layout_marginTop="45dp"
-        android:layout_marginRight="25dp"
+        android:layout_marginRight="10dp"
         android:layout_marginBottom="21dp"
         android:gravity="center"
         android:orientation="vertical">
@@ -25,15 +25,17 @@
             android:orientation="vertical">
 
 
-
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/visual_dni_layout"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
                 android:layout_marginBottom="@dimen/mb_input"
                 android:hint="DNI"
                 app:counterEnabled="true"
+
                 app:counterMaxLength="8"
                 app:endIconMode="custom"
                 app:errorEnabled="true"
@@ -43,6 +45,7 @@
                     android:id="@+id/visual_dni"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:fontFamily="@font/headland_one"
                     android:inputType="number"
                     android:maxLength="8" />
 
@@ -60,6 +63,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
                 android:layout_marginBottom="20dp"
                 android:gravity="center"
                 android:orientation="horizontal">
@@ -70,17 +75,20 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_margin="5dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
                     android:layout_weight="1"
+                    android:fontFamily="@font/headland_one"
                     android:text="Buscar" />
 
                 <Button
-                    android:visibility="gone"
                     android:id="@+id/btnGenerarChart"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:enabled="false"
-                    android:text="Generar" />
+                    android:text="Generar"
+                    android:visibility="gone" />
 
             </LinearLayout>
 
@@ -113,7 +121,8 @@
                         android:layout_gravity="center_horizontal"
                         android:layout_marginTop="10dp"
                         android:layout_marginBottom="10dp"
-                        android:text="Temperatura/Días" />
+                        android:fontFamily="@font/headland_one"
+                        android:text="Temperatura" />
 
                     <lecho.lib.hellocharts.view.LineChartView
                         android:id="@+id/chart1"
@@ -127,6 +136,7 @@
                         android:layout_gravity="center_horizontal"
                         android:layout_marginTop="5dp"
                         android:layout_marginBottom="10dp"
+                        android:fontFamily="@font/headland_one"
                         android:text="Promedio : " />
 
                 </LinearLayout>
@@ -154,7 +164,8 @@
                         android:layout_gravity="center_horizontal"
                         android:layout_marginTop="10dp"
                         android:layout_marginBottom="10dp"
-                        android:text="SO2/Días" />
+                        android:fontFamily="@font/headland_one"
+                        android:text="Saturacón de oxígeno" />
 
                     <lecho.lib.hellocharts.view.LineChartView
                         android:id="@+id/chart2"
@@ -169,6 +180,7 @@
                         android:layout_gravity="center_horizontal"
                         android:layout_marginTop="5dp"
                         android:layout_marginBottom="10dp"
+                        android:fontFamily="@font/headland_one"
                         android:text="Promedio: " />
 
 
@@ -197,7 +209,8 @@
                         android:layout_gravity="center_horizontal"
                         android:layout_marginTop="10dp"
                         android:layout_marginBottom="10dp"
-                        android:text="Pulso/Días" />
+                        android:fontFamily="@font/headland_one"
+                        android:text="Pulso" />
 
 
                     <lecho.lib.hellocharts.view.LineChartView
@@ -213,6 +226,7 @@
                         android:layout_gravity="center_horizontal"
                         android:layout_marginTop="5dp"
                         android:layout_marginBottom="10dp"
+                        android:fontFamily="@font/headland_one"
                         android:text="Promedio pulso : " />
 
                 </LinearLayout>

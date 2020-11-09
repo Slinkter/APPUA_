@@ -160,10 +160,11 @@ public class VisualActivity extends AppCompatActivity {
 
         Query query = FirebaseDatabase
                 .getInstance()
-                .getReference(Common.db_mina_personal_data).child(Common.unidadTrabajoSelected.getNameUT())
+                .getReference(Common.db_mina_personal_data)
+                .child(Common.unidadTrabajoSelected.getNameUT())
                 .child(dni)
                 .orderByKey()
-                .limitToLast(15);
+                .limitToLast(20);
 
 
         query
@@ -228,7 +229,7 @@ public class VisualActivity extends AppCompatActivity {
 
             String cad = String.valueOf(promedio);
 
-            meanTempe.setText("Promedio temperatura : " + cad.substring(0, 5));
+            meanTempe.setText("Promedio : " + cad.substring(0, 5));
             meanTempe.setTextColor(Color.parseColor("#FF2626"));
 
 
@@ -255,7 +256,7 @@ public class VisualActivity extends AppCompatActivity {
             Axis axis = new Axis();
             axis.setValues(axisValues);
             axis.setTextSize(16);
-            axis.setName("dias");
+            //   axis.setName("dias");
             axis.setTextColor(Color.parseColor("#03A9F4"));
             data.setAxisXBottom(axis);
 

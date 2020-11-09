@@ -75,7 +75,6 @@ public class UnidadesActivity extends AppCompatActivity {
             listaUnidadMinera.add(listaUT.get(i).getAliasUT().toString());
         }
 
-
         spinner_unidadMinera = (Spinner) findViewById(R.id.spinner_unidadMinera);
         ArrayAdapter<CharSequence> adapter_spinner_um = new ArrayAdapter(this, R.layout.spinner_adapter_unidad_minera, listaUnidadMinera);
         spinner_unidadMinera.setAdapter(adapter_spinner_um);
@@ -103,10 +102,7 @@ public class UnidadesActivity extends AppCompatActivity {
 
             }
 
-
-
         });
-
 
         btnContinuar = findViewById(R.id.btnContinuar);
         btnContinuar.setVisibility(View.INVISIBLE);

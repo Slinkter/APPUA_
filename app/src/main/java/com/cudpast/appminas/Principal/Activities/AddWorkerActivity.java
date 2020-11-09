@@ -143,9 +143,7 @@ public class AddWorkerActivity extends AppCompatActivity {
 
     private void goToMainActivity() {
         Intent intent = new Intent(AddWorkerActivity.this, AllActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
-        finish();
     }
 
     //Validacion

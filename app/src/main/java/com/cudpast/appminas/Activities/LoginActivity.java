@@ -242,7 +242,6 @@ public class LoginActivity extends AppCompatActivity implements CompoundButton.O
         } else {
             Intent intent_login = new Intent(LoginActivity.this, UnidadesActivity.class);
             startActivity(intent_login);
-            finish();
             mDialog.dismiss();
             Toast.makeText(this, "Bievenid@\n" + user.getReg_name(), Toast.LENGTH_SHORT).show();
             if (mAuth.getCurrentUser().isEmailVerified()) {

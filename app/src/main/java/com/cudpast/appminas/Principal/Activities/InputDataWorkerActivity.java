@@ -135,7 +135,7 @@ public class InputDataWorkerActivity extends AppCompatActivity {
         btn_input_back.setOnClickListener(v -> {
             Intent intent = new Intent(InputDataWorkerActivity.this, AllActivity.class);
             startActivity(intent);
-            finish();
+
         });
 
         // Capturando los valores de checkbox ...
@@ -328,9 +328,7 @@ public class InputDataWorkerActivity extends AppCompatActivity {
 
     private void gotoMAin() {
         Intent intent = new Intent(InputDataWorkerActivity.this, AllActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
-        finish();
     }
 
     private void consultarDniPersonal(String dni_personal) {

@@ -89,13 +89,9 @@ public class EditWorkerActivity extends AppCompatActivity {
         btn_exit_back.setOnClickListener(v -> {
             Intent intent = new Intent(EditWorkerActivity.this, AllActivity.class);
             startActivity(intent);
-            finish();
         });
 
-
         disable();
-
-
     }
 
     private void able() {
@@ -113,7 +109,6 @@ public class EditWorkerActivity extends AppCompatActivity {
         update_personal_address_layout.setEnabled(false);
         update_personal_phone1_layout.setEnabled(false);
     }
-
 
 
     @Override
@@ -187,7 +182,7 @@ public class EditWorkerActivity extends AppCompatActivity {
                             btn_exit_back.setOnClickListener(v -> {
                                 Intent intent = new Intent(EditWorkerActivity.this, AllActivity.class);
                                 startActivity(intent);
-                                finish();
+
                             });
 
 
@@ -277,9 +272,9 @@ public class EditWorkerActivity extends AppCompatActivity {
                     Log.e(TAG, "EXITO");
                     Log.e(TAG, "getKey = " + dataSnapshot.getKey());
                     Log.e(TAG, "getValue = " + dataSnapshot.getValue());
-                    Intent intent = new Intent(EditWorkerActivity.this,AllActivity.class);
+                    Intent intent = new Intent(EditWorkerActivity.this, AllActivity.class);
                     startActivity(intent);
-                    finish();
+
                     Toast.makeText(view.getContext(), "Se ha actualizado los datos del trabajador ", Toast.LENGTH_SHORT).show();
 
 
@@ -302,39 +297,5 @@ public class EditWorkerActivity extends AppCompatActivity {
         dialog.show();
     }
 
-
-
-     /*
-        btn_futuro_eliminacion_de_trabajador_yes.setOnClickListener(v -> {
-
-            DatabaseReference ref_db_mina_personal = database.getReference(Common.db_mina_personal);
-            DatabaseReference ref_mina = ref_db_mina_personal.child(Common.unidadTrabajoSelected.getNameUT());
-
-            DatabaseReference ref_db_mina_personal_data = database.getReference(Common.db_mina_personal_data);
-            final DatabaseReference ref_mina_data = ref_db_mina_personal_data.child(Common.unidadTrabajoSelected.getNameUT());
-
-            ref_mina.child(dni).removeValue().addOnSuccessListener(aVoid -> ref_mina_data.child(dni).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
-                @Override
-                public void onSuccess(Void aVoid) {
-                    Toast.makeText(EditWorkerActivity.this, "Trabajador Eliminado ", Toast.LENGTH_SHORT).show();
-                    dialog.dismiss();
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    Toast.makeText(EditWorkerActivity.this, "Trabajador no  Eliminado", Toast.LENGTH_SHORT).show();
-                    dialog.dismiss();
-                }
-            })).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    Toast.makeText(EditWorkerActivity.this, "Trabjador no  Eliminado", Toast.LENGTH_SHORT).show();
-                    dialog.dismiss();
-                }
-            });
-
-
-        });
-        */
 
 }
