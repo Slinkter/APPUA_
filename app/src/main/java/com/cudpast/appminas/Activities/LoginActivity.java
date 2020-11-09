@@ -86,11 +86,14 @@ public class LoginActivity extends AppCompatActivity implements CompoundButton.O
                 initRegistro();
             }
         });
-        //
 
         // CheckBox
         checkbox_user();
-        
+
+
+    }
+
+    private void checkbox_user() {
         checkbox = (CheckBox) findViewById(R.id.checkbox_rem);
         sharedPreferences = getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
@@ -100,16 +103,14 @@ public class LoginActivity extends AppCompatActivity implements CompoundButton.O
         } else {
             checkbox.setChecked(false);
         }
-        // editText text changed
+        //
         log_email.setText(sharedPreferences.getString(KEY_USERNAME, ""));
         log_password.setText(sharedPreferences.getString(KEY_PASSWORD, ""));
+
         log_email.addTextChangedListener(this);
         log_password.addTextChangedListener(this);
+
         checkbox.setOnCheckedChangeListener(this);
-
-    }
-
-    private void checkbox_user() {
     }
 
 
@@ -119,7 +120,7 @@ public class LoginActivity extends AppCompatActivity implements CompoundButton.O
         checkChange();
     }
 
-
+    //CheckBox
     private void checkChange() {
         if (checkbox.isChecked()) {
             editor.putBoolean(KEY_REMEMBER, true);
@@ -174,7 +175,7 @@ public class LoginActivity extends AppCompatActivity implements CompoundButton.O
                     .addOnSuccessListener(new OnSuccessListener<AuthResult>() {
                         @Override
                         public void onSuccess(AuthResult authResult) {
-
+                            //--->
                             String user_uid = authResult.getUser().getUid();
                             DatabaseReference ref_db_user = database.getReference(Common.db_user);
                             ref_db_user
@@ -182,29 +183,26 @@ public class LoginActivity extends AppCompatActivity implements CompoundButton.O
                                     .addValueEventListener(new ValueEventListener() {
                                         @Override
                                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                            // Obtener datos del usuario y settear
                                             User mUser = dataSnapshot.getValue(User.class);
-                                            Log.e(TAG, "databaseError : 1");
                                             //
                                             if (mUser == null) {
-
                                                 updateUI(null);
-                                                Log.e(TAG, "databaseError : 2");
                                             } else {
                                                 Common.currentUser = mUser;
                                                 updateUI(Common.currentUser);
-
-                                                mDialog.dismiss();
                                             }
-
+                                            mDialog.dismiss();
                                         }
 
                                         @Override
                                         public void onCancelled(@NonNull DatabaseError databaseError) {
-                                            Log.e(TAG, "databaseError : " + databaseError.getMessage());
                                             updateUI(null);
                                             mDialog.dismiss();
+                                            Log.e(TAG, "databaseError : " + databaseError.getMessage());
                                         }
                                     });
+                            //<---
                         }
                     })
                     .addOnFailureListener(new OnFailureListener() {
@@ -246,7 +244,7 @@ public class LoginActivity extends AppCompatActivity implements CompoundButton.O
             startActivity(intent_login);
             finish();
             mDialog.dismiss();
-            Toast.makeText(this, "Bievenid@ " + user.getReg_name(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Bievenid@\n" + user.getReg_name(), Toast.LENGTH_SHORT).show();
             if (mAuth.getCurrentUser().isEmailVerified()) {
                 Log.e(TAG, "correo verificado ");
             } else {
@@ -258,7 +256,8 @@ public class LoginActivity extends AppCompatActivity implements CompoundButton.O
     //Validacion
     private boolean checkEmail() {
         if (log_email.getText().toString().trim().isEmpty()) {
-            log_email_layout.setError("Ingrese su correo");
+            log_email_layout.setError("Debes ingresar tu correo");
+            log_email_layout.requestFocus();
             return false;
         } else {
             log_email_layout.setError(null);
@@ -268,10 +267,12 @@ public class LoginActivity extends AppCompatActivity implements CompoundButton.O
 
     private boolean checkPassword() {
         if (log_password.getText().toString().trim().isEmpty()) {
-            log_password_layout.setError("Ingrese su contraseña");
+            log_password_layout.setError("Debes ingresar tu contraseña");
+            log_password_layout.requestFocus();
             return false;
         } else {
             log_password_layout.setError(null);
+
         }
         return true;
     }
