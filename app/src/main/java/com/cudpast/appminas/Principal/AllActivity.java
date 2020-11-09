@@ -15,10 +15,14 @@ import com.cudpast.appminas.Principal.Activities.EditWorkerActivity;
 import com.cudpast.appminas.Principal.Activities.InputDataWorkerActivity;
 import com.cudpast.appminas.Principal.Activities.ReportPdfctivity;
 import com.cudpast.appminas.R;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class AllActivity extends AppCompatActivity {
 
     private TextView tv_selectedunidadminera, tv_name_current_user;
+
+    private FirebaseAuth firebaseAuth;
+
 
     // todo : notificacion para los usuario para actualicen versiones
 
@@ -28,18 +32,28 @@ public class AllActivity extends AppCompatActivity {
         getSupportActionBar().hide();
         setContentView(R.layout.activity_all);
 
+
         tv_selectedunidadminera = findViewById(R.id.tv_selectedunidadminera);
-        tv_selectedunidadminera.setText(Common.unidadTrabajoSelected.getAliasUT());
         tv_name_current_user = findViewById(R.id.tv_name_current_user);
-        tv_name_current_user.setText(Common.currentUser.getReg_name());
+
+
+        if (Common.currentUser == null) {
+            Intent intent = new Intent(AllActivity.this, LoginActivity.class);
+            startActivity(intent);
+            finish();
+        } else {
+            tv_selectedunidadminera.setText(Common.unidadTrabajoSelected.getAliasUT());
+            tv_name_current_user.setText(Common.currentUser.getReg_name());
+        }
+
     }
 
     @Override
     protected void onStart() {
         super.onStart();
 
-        if  (Common.currentUser == null){
-            Intent intent = new Intent( AllActivity.this ,LoginActivity.class);
+        if (Common.currentUser == null) {
+            Intent intent = new Intent(AllActivity.this, LoginActivity.class);
             startActivity(intent);
             finish();
         }
@@ -47,6 +61,7 @@ public class AllActivity extends AppCompatActivity {
         tv_selectedunidadminera.setText(Common.unidadTrabajoSelected.getAliasUT());
         tv_name_current_user.setText(Common.currentUser.getReg_name());
     }
+
 
     public void btnAddWorker(View view) {
         Intent intent = new Intent(AllActivity.this, AddWorkerActivity.class);

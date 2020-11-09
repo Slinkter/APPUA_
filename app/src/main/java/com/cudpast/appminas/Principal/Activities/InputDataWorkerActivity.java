@@ -392,26 +392,23 @@ public class InputDataWorkerActivity extends AppCompatActivity {
     }
 
     private boolean checkTemperatura() {
-
-        if (input_temperatura.getText().toString().trim().isEmpty() && input_temperatura.getText().toString().trim() != null) {
-            input_temperatura_layout.setError("Debes ingresar Temperatura ");
-            input_temperatura_layout.requestFocus();
-            return false;
-        } else {
-            input_temperatura_layout.setError(null);
-            Log.e("number", " int   " + Integer.parseInt(input_temperatura.getText().toString()));
-            if (input_temperatura.getText().toString() != null) {
-                int value = Integer.parseInt(input_temperatura.getText().toString());
-                if (value < 35 || value > 43) {
-                    input_temperatura_layout.setError("Solo rango [35 - 43]");
-                    input_temperatura_layout.requestFocus();
-                    Log.e("number", " int   " + Integer.parseInt(input_temperatura.getText().toString()));
-                    return false;
+        try {
+            if (input_temperatura.getText().toString().trim().isEmpty() && input_temperatura.getText().toString().trim() != null) {
+                input_temperatura_layout.setError("Debes ingresar Temperatura ");
+                input_temperatura_layout.requestFocus();
+                return false;
+            } else {
+                input_temperatura_layout.setError(null);
+                if (input_temperatura.getText().toString() != null) {
+                    int value = Integer.parseInt(input_temperatura.getText().toString());
+                    if (value < 35 || value > 43) {
+                        input_temperatura_layout.setError("Solo rango [35 - 43]");
+                        input_temperatura_layout.requestFocus();
+                        Log.e("number", " int   " + Integer.parseInt(input_temperatura.getText().toString()));
+                        return false;
+                    }
                 }
             }
-        }
-
-        try {
 
 
         } catch (Exception e) {
@@ -422,51 +419,71 @@ public class InputDataWorkerActivity extends AppCompatActivity {
     }
 
     private boolean checkSaturacion() {
-        if (input_saturacion.getText().toString().trim().isEmpty() && input_saturacion.getText().toString().trim() != null) {
-            input_saturacion_layout.setError("Debes ingresar SO2 ");
-            input_saturacion_layout.requestFocus();
-            return false;
-        } else {
-            input_saturacion_layout.setError(null);
-            if (input_saturacion.getText().toString().trim() != null) {
-                int value = Integer.parseInt(input_saturacion.getText().toString());
-                if (value < 85 || value > 100) {
-                    input_saturacion_layout.setError("solo rango [85-100]");
-                    input_saturacion_layout.requestFocus();
-                    return false;
+
+        try {
+            if (input_saturacion.getText().toString().trim().isEmpty() && input_saturacion.getText().toString().trim() != null) {
+                input_saturacion_layout.setError("Debes ingresar SO2 ");
+                input_saturacion_layout.requestFocus();
+                return false;
+            } else {
+                input_saturacion_layout.setError(null);
+                if (input_saturacion.getText().toString().trim() != null) {
+                    int value = Integer.parseInt(input_saturacion.getText().toString());
+                    if (value < 85 || value > 100) {
+                        input_saturacion_layout.setError("solo rango [85-100]");
+                        input_saturacion_layout.requestFocus();
+                        return false;
+                    }
                 }
             }
+        } catch (Exception e) {
+            Log.e(TAG, "error - checkTemperatura : " + e.getMessage());
         }
+
+
         return true;
     }
 
     private boolean checkPulso() {
 
-        if (input_pulso.getText().toString().trim().isEmpty() && input_pulso.getText().toString().trim() != null) {
-            input_pulso_layout.setError("Debes ingresar el pulso ");
-            input_pulso_layout.requestFocus();
-            return false;
-        } else {
-            input_pulso_layout.setError(null);
-            if (input_pulso.getText().toString().trim() != null) {
-                int value = Integer.parseInt(input_pulso.getText().toString());
-                if (value < 50 || value > 115) {
-                    input_pulso_layout.setError("Solo rango [50-115]");
-                    input_pulso_layout.requestFocus();
-                    return false;
+        try {
+            if (input_pulso.getText().toString().trim().isEmpty() && input_pulso.getText().toString().trim() != null) {
+                input_pulso_layout.setError("Debes ingresar el pulso ");
+                input_pulso_layout.requestFocus();
+                return false;
+            } else {
+                input_pulso_layout.setError(null);
+                if (input_pulso.getText().toString().trim() != null) {
+                    int value = Integer.parseInt(input_pulso.getText().toString());
+                    if (value < 50 || value > 115) {
+                        input_pulso_layout.setError("Solo rango [50-115]");
+                        input_pulso_layout.requestFocus();
+                        return false;
+                    }
                 }
             }
+        } catch (Exception e) {
+            Log.e(TAG, "error - checkTemperatura : " + e.getMessage());
         }
+
+
         return true;
     }
 
     private boolean checkSintomas() {
-        if (input_sintomas.getText().toString().trim().isEmpty()) {
-            input_sintomas_layout.setError("falta ingresar los sistomas del paciente");
-            return false;
-        } else {
-            input_sintomas_layout.setError(null);
+
+        try {
+            if (input_sintomas.getText().toString().trim().isEmpty()) {
+                input_sintomas_layout.setError("falta ingresar los sistomas del paciente");
+                return false;
+            } else {
+                input_sintomas_layout.setError(null);
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "error - checkTemperatura : " + e.getMessage());
         }
+
+
         return true;
     }
 

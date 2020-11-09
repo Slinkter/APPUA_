@@ -118,7 +118,6 @@
                 android:fontFamily="@font/headland_one"
                 android:text="Registrase" />
 
-
         </LinearLayout>
 
         <TextView
@@ -127,7 +126,7 @@
             android:layout_gravity="center"
             android:layout_marginTop="20dp"
             android:gravity="center"
-            android:text="versión 33" />
+            android:text="v1.33" />
 
     </LinearLayout>
 
