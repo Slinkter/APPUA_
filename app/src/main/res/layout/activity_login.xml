@@ -126,7 +126,7 @@
             android:layout_gravity="center"
             android:layout_marginTop="20dp"
             android:gravity="center"
-            android:text="v1.34" />
+            android:text="v 1.35" />
 
     </LinearLayout>
 
