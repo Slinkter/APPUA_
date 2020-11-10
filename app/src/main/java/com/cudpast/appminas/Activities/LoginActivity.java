@@ -3,26 +3,32 @@ package com.cudpast.appminas.Activities;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cudpast.appminas.Common.Common;
 import com.cudpast.appminas.Model.User;
 import com.cudpast.appminas.Principal.UnidadesActivity;
 import com.cudpast.appminas.R;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.AuthResult;
@@ -38,6 +44,7 @@ public class LoginActivity extends AppCompatActivity implements CompoundButton.O
     // todo : mejor el login
     // todo : crear correo (ya esta )
     // todo : reporte de cope mina (ya esta )
+    // todo : recorda contraseña
 
     private Button btnLogin, btnRegister;
     private FirebaseAuth mAuth;
@@ -286,6 +293,53 @@ public class LoginActivity extends AppCompatActivity implements CompoundButton.O
             return false;
         }
         return true;
+    }
+
+    public void btn_recovery_password(View view) {
+        displayRecoveryPassowrd();
+    }
+
+    // *********************************************************
+    //. Recovery Username & Password
+
+    private void displayRecoveryPassowrd() {
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(LoginActivity.this);
+        alertDialog.setTitle("Recuperar Contraseña");
+        alertDialog.setMessage("Escriba su correo");
+
+        LayoutInflater inflater = LayoutInflater.from(LoginActivity.this);
+        View forgot_pwd_layout = inflater.inflate(R.layout.layout_forgot_pwd, null);
+
+        TextInputEditText editEmail = forgot_pwd_layout.findViewById(R.id.edtEmailForgot);
+        alertDialog.setView(forgot_pwd_layout);
+
+        alertDialog
+                .setPositiveButton("ENVIAR", (dialogInterface, i) ->
+                        mAuth
+                                .sendPasswordResetEmail(editEmail.getText().toString().trim())
+                                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        if (task.isSuccessful()) {
+                                            Toast.makeText(LoginActivity.this, "Gracias , revise su correo", Toast.LENGTH_SHORT).show();
+                                            Log.e(TAG, "isSuccessful");
+                                        } else {
+
+                                            Toast.makeText(LoginActivity.this, "Error , intenta nuevamente ", Toast.LENGTH_SHORT).show();
+                                            Log.e(TAG, "FAIL");
+                                        }
+                                        dialogInterface.dismiss();
+                                    }
+                                })
+                                .addOnFailureListener(e -> {
+                                    dialogInterface.dismiss();
+                                    Log.e(TAG, e.getMessage());
+                                    Toast.makeText(LoginActivity.this, "Su correo no esta registrado", Toast.LENGTH_SHORT).show();
+
+                                }));
+
+
+        alertDialog.show();
     }
     //End Validacion
 
