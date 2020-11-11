@@ -89,12 +89,9 @@ public class VisualActivity extends AppCompatActivity {
         Log.e(TAG, Common.unidadTrabajoSelected.getNameUT());
 
 
-        btn_visual_dni.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String dni = visual_dni.getText().toString();
-                consultarDatosPaciente(dni);
-            }
+        btn_visual_dni.setOnClickListener(v -> {
+            String dni = visual_dni.getText().toString();
+            consultarDatosPaciente(dni);
         });
     }
 
