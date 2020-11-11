@@ -76,23 +76,11 @@ public class LoginActivity extends AppCompatActivity implements CompoundButton.O
         btnLogin = findViewById(R.id.btnLogin);
         btnRegister = findViewById(R.id.btnRegister);
         //
-        btnLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                initLogin();
-            }
-        });
+        btnLogin.setOnClickListener(v -> initLogin());
         //
-        btnRegister.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                initRegistro();
-            }
-        });
-
+        btnRegister.setOnClickListener(v -> initRegistro());
         // CheckBox
         checkbox_user();
-
 
     }
 

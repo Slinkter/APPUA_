@@ -121,24 +121,23 @@
         </LinearLayout>
 
 
-
-
-
         <TextView
-            android:onClick="btn_recovery_password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="20dp"
             android:gravity="center"
+            android:onClick="btn_recovery_password"
             android:text="recordad contraseña" />
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:textSize="10dp"
+            android:layout_marginTop="10dp"
             android:gravity="center"
-            android:text="v 1.35" />
+            android:text="v 1.36"
+            android:textSize="9dp" />
 
     </LinearLayout>
 

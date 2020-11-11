@@ -86,6 +86,8 @@ public class VisualActivity extends AppCompatActivity {
         meanOxig = findViewById(R.id.meanOxig);
         meanPulse = findViewById(R.id.meanPulse);
 
+        Log.e(TAG, Common.unidadTrabajoSelected.getNameUT());
+
 
         btn_visual_dni.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -229,7 +231,18 @@ public class VisualActivity extends AppCompatActivity {
 
             String cad = String.valueOf(promedio);
 
-            meanTempe.setText("Promedio : " + cad.substring(0, 5));
+
+            Log.e(TAG, "cad.length()" + cad.length());
+
+            int tamañaoCad = cad.length();
+            if (tamañaoCad == 4) {
+                meanTempe.setText("Promedio : " + cad.substring(0, 4));
+            } else {
+                meanTempe.setText("Promedio : " + cad.substring(0, 5));
+            }
+
+
+            //   meanTempe.setText("Promedio : " + cad.substring(0, 5));
             meanTempe.setTextColor(Color.parseColor("#FF2626"));
 
 
