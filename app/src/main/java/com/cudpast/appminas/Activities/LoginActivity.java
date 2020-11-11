@@ -40,11 +40,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 public class LoginActivity extends AppCompatActivity implements CompoundButton.OnCheckedChangeListener, TextWatcher {
-    // todo : crear correo para uniades arsi (ya esta )
-    // todo : mejor el login
-    // todo : crear correo (ya esta )
-    // todo : reporte de cope mina (ya esta )
-    // todo : recorda contraseña
+
 
     private Button btnLogin, btnRegister;
     private FirebaseAuth mAuth;
@@ -179,56 +175,49 @@ public class LoginActivity extends AppCompatActivity implements CompoundButton.O
             //
             mAuth
                     .signInWithEmailAndPassword(email, password)
-                    .addOnSuccessListener(new OnSuccessListener<AuthResult>() {
-                        @Override
-                        public void onSuccess(AuthResult authResult) {
-                            //--->
-                            String user_uid = authResult.getUser().getUid();
-                            DatabaseReference ref_db_user = database.getReference(Common.db_user);
-                            ref_db_user
-                                    .child(user_uid)
-                                    .addValueEventListener(new ValueEventListener() {
-                                        @Override
-                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                            // Obtener datos del usuario y settear
-                                            User mUser = dataSnapshot.getValue(User.class);
-                                            //
-                                            if (mUser == null) {
-                                                updateUI(null);
-                                            } else {
-                                                Common.currentUser = mUser;
-                                                updateUI(Common.currentUser);
-                                            }
-                                            mDialog.dismiss();
-                                        }
-
-                                        @Override
-                                        public void onCancelled(@NonNull DatabaseError databaseError) {
+                    .addOnSuccessListener(authResult -> {
+                        //--->
+                        String user_uid = authResult.getUser().getUid();
+                        DatabaseReference ref_db_user = database.getReference(Common.db_user);
+                        ref_db_user
+                                .child(user_uid)
+                                .addValueEventListener(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                        // Obtener datos del usuario y settear
+                                        User mUser = dataSnapshot.getValue(User.class);
+                                        //
+                                        if (mUser == null) {
                                             updateUI(null);
-                                            mDialog.dismiss();
-                                            Log.e(TAG, "databaseError : " + databaseError.getMessage());
+                                        } else {
+                                            Common.currentUser = mUser;
+                                            updateUI(Common.currentUser);
                                         }
-                                    });
-                            //<---
-                        }
+                                        mDialog.dismiss();
+                                    }
+
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                                        updateUI(null);
+                                        mDialog.dismiss();
+                                        Log.e(TAG, "databaseError : " + databaseError.getMessage());
+                                    }
+                                });
+                        //<---
                     })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-
-                            if (e.getMessage().equalsIgnoreCase("The email address is badly formatted")) {
-                                Toast.makeText(LoginActivity.this, "Formato invalido", Toast.LENGTH_SHORT).show();
-                                mDialog.dismiss();
-                            } else if (e.getMessage().equalsIgnoreCase("There is no user record corresponding to this identifier. The user may have been deleted.")) {
-                                Toast.makeText(LoginActivity.this, "usuario no registrador", Toast.LENGTH_SHORT).show();
-                                mDialog.dismiss();
-                            } else {
-                                Toast.makeText(LoginActivity.this, "Usuario no existe", Toast.LENGTH_SHORT).show();
-                                mDialog.dismiss();
-                            }
-
-
+                    .addOnFailureListener(e -> {
+                        //--->
+                        if (e.getMessage().equalsIgnoreCase("The email address is badly formatted")) {
+                            Toast.makeText(LoginActivity.this, "Formato invalido", Toast.LENGTH_SHORT).show();
+                            mDialog.dismiss();
+                        } else if (e.getMessage().equalsIgnoreCase("There is no user record corresponding to this identifier. The user may have been deleted.")) {
+                            Toast.makeText(LoginActivity.this, "usuario no registrador", Toast.LENGTH_SHORT).show();
+                            mDialog.dismiss();
+                        } else {
+                            Toast.makeText(LoginActivity.this, "Usuario no existe", Toast.LENGTH_SHORT).show();
+                            mDialog.dismiss();
                         }
+                        //<---
                     });
         }
     }
@@ -241,7 +230,6 @@ public class LoginActivity extends AppCompatActivity implements CompoundButton.O
     }
 
     private void updateUI(User user) {
-
 
         if (user == null) {
             Toast.makeText(this, "usuario no registrador", Toast.LENGTH_SHORT).show();
@@ -317,19 +305,15 @@ public class LoginActivity extends AppCompatActivity implements CompoundButton.O
                 .setPositiveButton("ENVIAR", (dialogInterface, i) ->
                         mAuth
                                 .sendPasswordResetEmail(editEmail.getText().toString().trim())
-                                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<Void> task) {
-                                        if (task.isSuccessful()) {
-                                            Toast.makeText(LoginActivity.this, "Gracias , revise su correo", Toast.LENGTH_SHORT).show();
-                                            Log.e(TAG, "isSuccessful");
-                                        } else {
-
-                                            Toast.makeText(LoginActivity.this, "Error , intenta nuevamente ", Toast.LENGTH_SHORT).show();
-                                            Log.e(TAG, "FAIL");
-                                        }
-                                        dialogInterface.dismiss();
+                                .addOnCompleteListener(task -> {
+                                    if (task.isSuccessful()) {
+                                        Toast.makeText(LoginActivity.this, "Gracias , revise su correo", Toast.LENGTH_SHORT).show();
+                                        Log.e(TAG, "isSuccessful");
+                                    } else {
+                                        Toast.makeText(LoginActivity.this, "Error , intenta nuevamente ", Toast.LENGTH_SHORT).show();
+                                        Log.e(TAG, "FAIL");
                                     }
+                                    dialogInterface.dismiss();
                                 })
                                 .addOnFailureListener(e -> {
                                     dialogInterface.dismiss();
@@ -341,7 +325,5 @@ public class LoginActivity extends AppCompatActivity implements CompoundButton.O
 
         alertDialog.show();
     }
-    //End Validacion
-
 
 }
