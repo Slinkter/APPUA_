@@ -172,7 +172,7 @@ public class LoginActivity extends AppCompatActivity implements CompoundButton.O
                                 .addValueEventListener(new ValueEventListener() {
                                     @Override
                                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                        // Obtener datos del usuario y settear
+                                        // --> Obtener datos del usuario y settear
                                         User mUser = dataSnapshot.getValue(User.class);
                                         //
                                         if (mUser == null) {
@@ -202,7 +202,7 @@ public class LoginActivity extends AppCompatActivity implements CompoundButton.O
                             Toast.makeText(LoginActivity.this, "usuario no registrador", Toast.LENGTH_SHORT).show();
                             mDialog.dismiss();
                         } else {
-                            Toast.makeText(LoginActivity.this, "Usuario no existe", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(LoginActivity.this, "Usuario no existe ", Toast.LENGTH_SHORT).show();
                             mDialog.dismiss();
                         }
                         //<---
