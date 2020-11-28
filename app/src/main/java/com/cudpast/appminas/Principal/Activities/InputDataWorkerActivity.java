@@ -228,8 +228,12 @@ public class InputDataWorkerActivity extends AppCompatActivity {
 
     private void notEnable() {
         input_temperatura_layout.setEnabled(false);
+
+
         input_saturacion_layout.setEnabled(false);
         input_pulso_layout.setEnabled(false);
+
+
         input_sintomas_layout.setEnabled(false);
         show_consulta_nombre_layout.setEnabled(false);
         show_consulta_edad_layout.setEnabled(false);
@@ -252,8 +256,18 @@ public class InputDataWorkerActivity extends AppCompatActivity {
 
     private void checkEnable() {
         input_temperatura_layout.setEnabled(true);
-        input_saturacion_layout.setEnabled(true);
-        input_pulso_layout.setEnabled(true);
+
+        if (Common.unidadTrabajoSelected.getAliasUT().equals("of.Lima")) {
+            Toast.makeText(this, "consulting arsi ", Toast.LENGTH_SHORT).show();
+
+            input_saturacion_layout.setEnabled(false);
+            input_pulso_layout.setEnabled(false);
+        } else {
+            input_saturacion_layout.setEnabled(true);
+            input_pulso_layout.setEnabled(true);
+        }
+
+
         input_sintomas_layout.setEnabled(true);
 
         input_entrada.setEnabled(true);
@@ -419,21 +433,27 @@ public class InputDataWorkerActivity extends AppCompatActivity {
     private boolean checkSaturacion() {
 
         try {
-            if (input_saturacion.getText().toString().trim().isEmpty() && input_saturacion.getText().toString().trim() != null) {
-                input_saturacion_layout.setError("Debes ingresar SO2 ");
-                input_saturacion_layout.requestFocus();
-                return false;
-            } else {
-                input_saturacion_layout.setError(null);
-                if (input_saturacion.getText().toString().trim() != null) {
-                    int value = Integer.parseInt(input_saturacion.getText().toString());
-                    if (value < 85 || value > 100) {
-                        input_saturacion_layout.setError("solo rango [85-100]");
-                        input_saturacion_layout.requestFocus();
-                        return false;
+
+            if (Common.unidadTrabajoSelected.getAliasUT().equals("of.Lima")){
+                input_saturacion.setText("0");
+            }else{
+                if (input_saturacion.getText().toString().trim().isEmpty() && input_saturacion.getText().toString().trim() != null) {
+                    input_saturacion_layout.setError("Debes ingresar SO2 ");
+                    input_saturacion_layout.requestFocus();
+                    return false;
+                } else {
+                    input_saturacion_layout.setError(null);
+                    if (input_saturacion.getText().toString().trim() != null) {
+                        int value = Integer.parseInt(input_saturacion.getText().toString());
+                        if (value < 85 || value > 100) {
+                            input_saturacion_layout.setError("solo rango [85-100]");
+                            input_saturacion_layout.requestFocus();
+                            return false;
+                        }
                     }
                 }
             }
+
         } catch (Exception e) {
             Log.e(TAG, "error - checkTemperatura : " + e.getMessage());
         }
@@ -445,21 +465,31 @@ public class InputDataWorkerActivity extends AppCompatActivity {
     private boolean checkPulso() {
 
         try {
-            if (input_pulso.getText().toString().trim().isEmpty() && input_pulso.getText().toString().trim() != null) {
-                input_pulso_layout.setError("Debes ingresar el pulso ");
-                input_pulso_layout.requestFocus();
-                return false;
-            } else {
-                input_pulso_layout.setError(null);
-                if (input_pulso.getText().toString().trim() != null) {
-                    int value = Integer.parseInt(input_pulso.getText().toString());
-                    if (value < 50 || value > 115) {
-                        input_pulso_layout.setError("Solo rango [50-115]");
-                        input_pulso_layout.requestFocus();
-                        return false;
+
+            if (Common.unidadTrabajoSelected.getAliasUT().equals("of.Lima")){
+                input_pulso.setText("0");
+            }else {
+                if (input_pulso.getText().toString().trim().isEmpty() && input_pulso.getText().toString().trim() != null) {
+                    input_pulso_layout.setError("Debes ingresar el pulso ");
+                    input_pulso_layout.requestFocus();
+                    return false;
+                } else {
+                    input_pulso_layout.setError(null);
+                    if (input_pulso.getText().toString().trim() != null) {
+                        int value = Integer.parseInt(input_pulso.getText().toString());
+                        if (value < 50 || value > 115) {
+                            input_pulso_layout.setError("Solo rango [50-115]");
+                            input_pulso_layout.requestFocus();
+                            return false;
+                        }
                     }
                 }
             }
+
+
+
+
+
         } catch (Exception e) {
             Log.e(TAG, "error - checkTemperatura : " + e.getMessage());
         }
