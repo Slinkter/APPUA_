@@ -3,12 +3,17 @@ package com.cudpast.appminas.Principal.Activities;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cudpast.appminas.Common.Common;
@@ -21,8 +26,11 @@ import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class AddWorkerActivity extends AppCompatActivity {
 
@@ -55,7 +63,6 @@ public class AddWorkerActivity extends AppCompatActivity {
 
     FirebaseAuth mAuth;
     FirebaseDatabase mDatabase;
-    ProgressDialog mDialog;
 
 
     @Override
@@ -100,7 +107,8 @@ public class AddWorkerActivity extends AppCompatActivity {
     private void createNewPersonal(final View v) {
 
         if (submitForm()) {
-            //
+            // Interfaz - UI
+            ProgressDialog mDialog;
             mDialog = new ProgressDialog(AddWorkerActivity.this);
             mDialog.setMessage(" Registrando trabajador ");
             mDialog.show();
@@ -127,9 +135,9 @@ public class AddWorkerActivity extends AppCompatActivity {
                     .child(user.getDni())
                     .setValue(user)
                     .addOnSuccessListener(aVoid -> {
-                        Toast.makeText(AddWorkerActivity.this, "El trabajador ha sido registrado ", Toast.LENGTH_SHORT).show();
+                        //  Toast.makeText(AddWorkerActivity.this, "El trabajador ha sido registrado ", Toast.LENGTH_SHORT).show();
                         goToMainActivity();
-                        mDialog.dismiss();
+                     //   mDialog.dismiss();
 
                     })
                     .addOnFailureListener(e -> {
@@ -142,9 +150,52 @@ public class AddWorkerActivity extends AppCompatActivity {
     }
 
     private void goToMainActivity() {
-        Intent intent = new Intent(AddWorkerActivity.this, AllActivity.class);
-        startActivity(intent);
+
+
+        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(AddWorkerActivity.this);
+        LayoutInflater inflater = getLayoutInflater();
+        View view = inflater.inflate(R.layout.pop_up_msj, null);
+        builder.setView(view);
+        builder.setCancelable(false);
+        view.setKeepScreenOn(true);
+        final AlertDialog dialog = builder.create();
+
+
+        Button btn_pop_up_msj = view.findViewById(R.id.btn_pop_up_msj);
+        TextView pop_up_msj = view.findViewById(R.id.pop_up_msj);
+        pop_up_msj.setText("Trabajador registrado");
+        btn_pop_up_msj.setOnClickListener(v -> {
+            Intent intent = new Intent(AddWorkerActivity.this, AllActivity.class);
+            startActivity(intent);
+            dialog.dismiss();
+        });
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.show();
+
+
     }
+
+
+    public void showPopUpHistorialSintomas(String metodo) {
+
+
+        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(AddWorkerActivity.this);
+        LayoutInflater inflater = getLayoutInflater();
+        View view = inflater.inflate(R.layout.pop_up_report_dni, null);
+        builder.setView(view);
+        builder.setCancelable(false);
+        view.setKeepScreenOn(true);
+        final AlertDialog dialog = builder.create();
+
+
+        Button btn_report_dni_close = view.findViewById(R.id.btn_report_dni_close);
+
+
+        btn_report_dni_close.setOnClickListener(v -> dialog.dismiss());
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.show();
+    }
+
 
     //Validacion
     private boolean checkDNI() {
