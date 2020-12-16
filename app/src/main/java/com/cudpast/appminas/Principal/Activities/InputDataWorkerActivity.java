@@ -4,15 +4,23 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.cudpast.appminas.Activities.LoginActivity;
+import com.cudpast.appminas.Activities.SplashActivity;
 import com.cudpast.appminas.Common.Common;
 import com.cudpast.appminas.Model.MetricasPersonal;
 import com.cudpast.appminas.Model.Personal;
@@ -31,6 +39,8 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class InputDataWorkerActivity extends AppCompatActivity {
 
@@ -55,6 +65,12 @@ public class InputDataWorkerActivity extends AppCompatActivity {
     private FirebaseDatabase database;
 
     private Personal personal;
+
+
+
+    private static final long SPLASH_SCREEN_DELAY = 3000;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -287,6 +303,8 @@ public class InputDataWorkerActivity extends AppCompatActivity {
 
 
     private void savePersonalData() {
+
+
         DatabaseReference ref_db_mina_personal_data = database.getReference(Common.db_mina_personal_data);
         // fecha
         final String date_atention = getCurrentTimeStamp();
@@ -319,19 +337,27 @@ public class InputDataWorkerActivity extends AppCompatActivity {
         metricasPersonal.setHorario(horario);
 
 
+        ProgressDialog mDialog;
+        mDialog = new ProgressDialog(InputDataWorkerActivity.this);
+        mDialog.setMessage(" Registrando datos del trabajador  " + personal.getName());
+        mDialog.show();
+
+
         ref_db_mina_personal_data
                 .child(Common.unidadTrabajoSelected.getNameUT())
                 .child(personal.getDni())
                 .child(date_atention)
                 .setValue(metricasPersonal)
                 .addOnSuccessListener(aVoid -> {
-                    Toast.makeText(InputDataWorkerActivity.this, "Excelente , datos registrados !!!!", Toast.LENGTH_SHORT).show();
-                    gotoMAin();
+                    //  Toast.makeText(InputDataWorkerActivity.this, "Registro de síntomas completado ", Toast.LENGTH_LONG).show();
+                    gotoMAin(personal, metricasPersonal);
                     Log.e(TAG, "datos registrado");
+                    mDialog.dismiss();
                 })
                 .addOnFailureListener(e -> {
                     Toast.makeText(InputDataWorkerActivity.this, "Error al ingresar los datos", Toast.LENGTH_SHORT).show();
                     Log.e(TAG, "datos no registrado");
+                    mDialog.dismiss();
 
                 });
 
@@ -340,9 +366,58 @@ public class InputDataWorkerActivity extends AppCompatActivity {
 
     }
 
-    private void gotoMAin() {
-        Intent intent = new Intent(InputDataWorkerActivity.this, AllActivity.class);
-        startActivity(intent);
+    private void gotoMAin(Personal personal, MetricasPersonal metricasPersonal) {
+        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(InputDataWorkerActivity.this);
+        LayoutInflater inflater = getLayoutInflater();
+        View view = inflater.inflate(R.layout.pop_up_msj_sintomas, null);
+        builder.setView(view);
+        builder.setCancelable(false);
+        view.setKeepScreenOn(true);
+        final AlertDialog dialog = builder.create();
+
+        Button btn_pop_up_msj = view.findViewById(R.id.btn_pop_up_msj_sintomas);
+
+        TextView name = view.findViewById(R.id.pop_up_msj_nombre);
+        name.setText(personal.getName() + personal.getLast());
+
+        TextView temp = view.findViewById(R.id.pop_up_msj_temperatura);
+        temp.setText(metricasPersonal.getTempurature());
+
+        TextView so = view.findViewById(R.id.pop_up_msj_so);
+        so.setText(metricasPersonal.getSo2());
+
+        TextView pulse = view.findViewById(R.id.pop_up_msj_pulso);
+        pulse.setText(metricasPersonal.getPulse());
+
+
+        TimerTask timerTask = new TimerTask() {
+            @Override
+            public void run() {
+
+                Intent intent = new Intent(InputDataWorkerActivity.this, AllActivity.class);
+                startActivity(intent);
+                dialog.dismiss();
+
+
+
+
+                btn_pop_up_msj.setOnClickListener(v -> {
+
+                });
+
+            }
+        };
+
+        Timer timer = new Timer();
+        timer.schedule(timerTask, SPLASH_SCREEN_DELAY);
+
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.show();
+
+
+
+
+
     }
 
     private void consultarDniPersonal(String dni_personal) {
@@ -368,7 +443,7 @@ public class InputDataWorkerActivity extends AppCompatActivity {
                         checkEnable();
                         input_dni_layout.setError(null);
                     } catch (Exception e) {
-
+                        Log.e(TAG, "ERROR " + e.getMessage());
                     }
 
 
@@ -434,9 +509,9 @@ public class InputDataWorkerActivity extends AppCompatActivity {
 
         try {
 
-            if (Common.unidadTrabajoSelected.getAliasUT().equals("of.Lima")){
+            if (Common.unidadTrabajoSelected.getAliasUT().equals("of.Lima")) {
                 input_saturacion.setText("0");
-            }else{
+            } else {
                 if (input_saturacion.getText().toString().trim().isEmpty() && input_saturacion.getText().toString().trim() != null) {
                     input_saturacion_layout.setError("Debes ingresar SO2 ");
                     input_saturacion_layout.requestFocus();
@@ -466,9 +541,9 @@ public class InputDataWorkerActivity extends AppCompatActivity {
 
         try {
 
-            if (Common.unidadTrabajoSelected.getAliasUT().equals("of.Lima")){
+            if (Common.unidadTrabajoSelected.getAliasUT().equals("of.Lima")) {
                 input_pulso.setText("0");
-            }else {
+            } else {
                 if (input_pulso.getText().toString().trim().isEmpty() && input_pulso.getText().toString().trim() != null) {
                     input_pulso_layout.setError("Debes ingresar el pulso ");
                     input_pulso_layout.requestFocus();
@@ -485,9 +560,6 @@ public class InputDataWorkerActivity extends AppCompatActivity {
                     }
                 }
             }
-
-
-
 
 
         } catch (Exception e) {
