@@ -81,7 +81,7 @@
                 android:gravity="start"
                 android:text="1.Datos del Trabajador "
                 android:textColor="@color/colorPrimary"
-                android:textSize="20sp"
+                android:textSize="@dimen/text_size_h2"
                 android:textStyle="bold" />
 
 
@@ -101,7 +101,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/headland_one"
-                    android:inputType="text" />
+                    android:inputType="text"
+                    android:textSize="@dimen/text_size_h3" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -121,7 +122,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/headland_one"
-                    android:inputType="text" />
+                    android:inputType="text"
+                    android:textSize="@dimen/text_size_h3" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -145,11 +147,11 @@
                 android:gravity="start"
                 android:text="2.Control de horario"
                 android:textColor="@color/colorPrimary"
-                android:textSize="20sp"
+                android:textSize="@dimen/text_size_h2"
+
                 android:textStyle="bold" />
 
             <TextView
-                android:visibility="gone"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start"
@@ -158,7 +160,8 @@
                 android:text="*Obligaroio"
                 android:textColor="@color/colorAccent"
                 android:textSize="12sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:visibility="gone" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -211,11 +214,11 @@
                 android:gravity="start"
                 android:text="3.Métricas "
                 android:textColor="@color/colorPrimary"
-                android:textSize="20sp"
+                android:textSize="@dimen/text_size_h2"
+
                 android:textStyle="bold" />
 
             <TextView
-                android:visibility="gone"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start"
@@ -224,7 +227,8 @@
                 android:text="*Obligaroio"
                 android:textColor="@color/colorAccent"
                 android:textSize="12sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:visibility="gone" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/input_temperatura_layout"
@@ -233,6 +237,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/mb_input"
                 android:hint="Temperatura  [35.0 - 43.0]"
+                android:textSize="@dimen/text_size_h3"
                 app:endIconMode="custom"
                 app:errorEnabled="true"
                 app:startIconDrawable="@drawable/ic_tempe">
@@ -255,6 +260,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/mb_input"
                 android:hint="Sat. de oxigeno [85-100]"
+                android:textSize="@dimen/text_size_h3"
                 app:endIconMode="custom"
                 app:errorEnabled="true"
                 app:startIconDrawable="@drawable/ic_age">
@@ -277,6 +283,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/mb_input"
                 android:hint="Pulso [50-115] "
+                android:textSize="@dimen/text_size_h3"
                 app:endIconMode="custom"
                 app:errorEnabled="true"
                 app:startIconDrawable="@drawable/ic_pulso">
@@ -310,11 +317,10 @@
                 android:gravity="start"
                 android:text="4.Exámen"
                 android:textColor="@color/colorPrimary"
-                android:textSize="20sp"
+                android:textSize="@dimen/text_size_h2"
                 android:textStyle="bold" />
 
             <TextView
-                android:visibility="gone"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start"
@@ -323,7 +329,8 @@
                 android:text="*Obligaroio"
                 android:textColor="@color/colorAccent"
                 android:textSize="12sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:visibility="gone" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -375,11 +382,10 @@
                 android:gravity="start"
                 android:text="5.Síntomas "
                 android:textColor="@color/colorPrimary"
-                android:textSize="20sp"
+                android:textSize="@dimen/text_size_h2"
                 android:textStyle="bold" />
 
             <TextView
-                android:visibility="gone"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start"
@@ -389,7 +395,8 @@
                 android:text="*Opcional "
                 android:textColor="@color/colorAccent"
                 android:textSize="12sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:visibility="gone" />
 
             <LinearLayout
                 android:id="@+id/input_new_sintomas_layout"
@@ -483,11 +490,10 @@
                 android:gravity="start"
                 android:text="6.Otros"
                 android:textColor="@color/colorPrimary"
-                android:textSize="20sp"
+                android:textSize="@dimen/text_size_h2"
                 android:textStyle="bold" />
 
             <TextView
-                android:visibility="gone"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start"
@@ -497,7 +503,8 @@
                 android:text="*Obligatorio "
                 android:textColor="@color/colorAccent"
                 android:textSize="12sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:visibility="gone" />
 
 
             <com.google.android.material.textfield.TextInputLayout
@@ -507,6 +514,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/mb_input"
                 android:hint="Comentarios"
+                android:textSize="@dimen/text_size_h3"
                 app:counterEnabled="true"
                 app:counterMaxLength="80"
                 app:endIconMode="custom"

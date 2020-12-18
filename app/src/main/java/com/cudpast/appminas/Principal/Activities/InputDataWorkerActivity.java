@@ -60,15 +60,12 @@ public class InputDataWorkerActivity extends AppCompatActivity {
     private CheckBox s1, s2, s3, s4, s5, s6, s7;
     private Boolean sa1, sa2, sa3, sa4, sa5, sa6, sa7;
 
-
     public static final String TAG = InputDataWorkerActivity.class.getSimpleName();
     private FirebaseDatabase database;
 
     private Personal personal;
 
-
-
-    private static final long SPLASH_SCREEN_DELAY = 3000;
+    private static final long SPLASH_SCREEN_DELAY = 1800;
 
 
 
