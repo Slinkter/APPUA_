@@ -172,6 +172,7 @@ public class ReportPdfctivity extends AppCompatActivity {
             listaPersonal = new ArrayList<>();
             // Transform date selected
             seletedDate = timeStampToString(input_dateSelected);
+            Common.pdf_date_mail = seletedDate;
             // Get Data From Firebase and init reference
             ref_datos_paciente = database
                     .getReference(Common.db_mina_personal_data)

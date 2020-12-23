@@ -13,6 +13,8 @@ public class Common {
     public static String unidadMineraSelected;
     public static UnidadTrabajo unidadTrabajoSelected;
 
+    public static  String pdf_date_mail ;
+
 
 
 

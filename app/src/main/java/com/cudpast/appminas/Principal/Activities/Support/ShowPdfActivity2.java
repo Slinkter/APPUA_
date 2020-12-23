@@ -73,17 +73,16 @@ public class ShowPdfActivity2 extends AppCompatActivity {
         Log.e(TAG, "sendEmail()  2 ");
         File root = Environment.getExternalStorageDirectory();
         String filelocation = root.getAbsolutePath() + folderpdf;
+        String message = "Documento Generado por " + Common.currentUser.getReg_name() + "\n Saludos";
+        String currentusermail = Common.currentUser.getReg_email();
+        //
         Intent intent = new Intent(Intent.ACTION_SENDTO);
         intent.setType("text/plain");
-        String message = "Documento Generado por " + Common.currentUser.getReg_name();
-        intent.putExtra(Intent.EXTRA_SUBJECT, "Unidades ARSI : " + Common.unidadTrabajoSelected.getAliasUT() + "\n Saludos");
+        intent.putExtra(Intent.EXTRA_SUBJECT, "Unidades  : " + Common.unidadTrabajoSelected.getAliasUT() + "\nFecha : " + Common.pdf_date_mail);
         intent.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://" + filelocation));
         intent.putExtra(Intent.EXTRA_TEXT, message);
-        String currentusermail = Common.currentUser.getReg_email();
-        Log.e(TAG, "currentusermail  : " + currentusermail);
         intent.setData(Uri.parse("mailto:" + currentusermail));
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        Log.e(TAG, "sendEmail 2  -->  filelocation " + filelocation);
         startActivity(intent);
     }
 }
