@@ -58,11 +58,13 @@ import java.util.TimeZone;
 
 public class ReportPdfctivity extends AppCompatActivity {
 
+
+    public static final String TAG = ReportPdfctivity.class.getSimpleName();
+
     Bitmap bmp;
     Bitmap scaleBitmap;
 
 
-    public static final String TAG = ReportPdfctivity.class.getSimpleName();
     public static final String folderpdf = "/arsi21.pdf";
     //
     private FirebaseDatabase database;
@@ -123,39 +125,42 @@ public class ReportPdfctivity extends AppCompatActivity {
 
     }
 
-
     //===============================================================================
-    // CardView 1
+    //
+    // CardView
+    //
+    //===============================================================================
+    //
     public void btn_entrada_pdf(View view) {
         horarioPDF(true);
     }
 
-    //===============================================================================
+
     // CardView 2
     public void btn_salida_pdf(View view) {
         horarioPDF(false);
     }
 
-    //===============================================================================
+
     // CardView 3
     public void btn_workerd(View view) {
         showPdfDialog("pdf");
     }
 
-    //===============================================================================
+
     // CardView 4
     public void btn_historialSintomas(View view) {
         showPopUpHistorialSintomas("pdf");
     }
 
-    //===============================================================================
+
     // CardView 5
     public void btn_chart(View view) {
         Intent intent = new Intent(ReportPdfctivity.this, VisualActivity.class);
         startActivity(intent);
     }
 
-    //===============================================================================
+
     // CardView 6
     public void btn_mounth(View view) {
         horarioPDFMount(true);

@@ -185,6 +185,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:clickable="true"
+                    android:onClick="btn_chart"
                     android:foreground="?android:attr/selectableItemBackground"
                     app:cardCornerRadius="@dimen/cardRadiusAll"
                     app:cardElevation="@dimen/card_elevation"
@@ -195,7 +196,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:gravity="center"
-
+                        android:onClick="btn_chart"
                         android:orientation="vertical"
                         android:padding="15dp"
                         android:weightSum="5">
@@ -416,12 +417,11 @@
 
             </LinearLayout>
 
-
             <!-- 5 -->
             <LinearLayout
+                android:layout_marginBottom="100dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="50dp"
                 android:clipToPadding="false"
                 android:gravity="center"
                 android:orientation="vertical">
@@ -442,7 +442,6 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
                     android:fontFamily="@font/headland_one"
-
                     android:gravity="center"
                     android:text="UNIDAD DE TRABAJO"
                     android:textColor="@color/colorPrimaryDark"
