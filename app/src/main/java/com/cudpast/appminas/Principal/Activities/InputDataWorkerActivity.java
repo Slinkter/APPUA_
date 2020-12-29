@@ -271,7 +271,7 @@ public class InputDataWorkerActivity extends AppCompatActivity {
         input_temperatura_layout.setEnabled(true);
 
         if (Common.unidadTrabajoSelected.getAliasUT().equals("of.Lima")) {
-            Toast.makeText(this, "consulting arsi ", Toast.LENGTH_SHORT).show();
+
 
             input_saturacion_layout.setEnabled(false);
             input_pulso_layout.setEnabled(false);
