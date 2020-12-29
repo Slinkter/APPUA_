@@ -3,7 +3,7 @@
     <dimen name="mb_input">4dp</dimen>
     <dimen name="cardRadiusAll">15dp</dimen>
 
-    <dimen name="card_elevation">8dp</dimen>
+    <dimen name="card_elevation">10dp</dimen>
     <dimen name="mt_card_all">15dp</dimen>
     <dimen name="mb_card_all">15dp</dimen>
 

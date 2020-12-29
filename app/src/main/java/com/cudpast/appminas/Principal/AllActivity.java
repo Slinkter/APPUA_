@@ -28,8 +28,8 @@ public class AllActivity extends AppCompatActivity {
         getSupportActionBar().hide();
         setContentView(R.layout.activity_all);
 
-     //   tv_selectedunidadminera = findViewById(R.id.tv_selectedunidadminera);
-    //    tv_name_current_user = findViewById(R.id.tv_name_current_user);
+        tv_selectedunidadminera = findViewById(R.id.tv_selectedunidadminera);
+        tv_name_current_user = findViewById(R.id.tv_name_current_user);
 
 
         checkoutSessionUser();
@@ -43,8 +43,8 @@ public class AllActivity extends AppCompatActivity {
             startActivity(intent);
             finish();
         } else {
-         //   tv_selectedunidadminera.setText(Common.unidadTrabajoSelected.getAliasUT());
-        //    tv_name_current_user.setText(Common.currentUser.getReg_name());
+            tv_selectedunidadminera.setText(Common.unidadTrabajoSelected.getAliasUT());
+            tv_name_current_user.setText(Common.currentUser.getReg_name());
         }
     }
 
@@ -78,7 +78,6 @@ public class AllActivity extends AppCompatActivity {
         Intent intent = new Intent(AllActivity.this, ReportPdfctivity.class);
         startActivity(intent);
     }
-
 
 
 }
