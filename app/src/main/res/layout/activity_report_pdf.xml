@@ -67,7 +67,7 @@
                         android:layout_width="75dp"
                         android:layout_height="95dp"
                         android:baselineAligned="false"
-                        android:src="@drawable/ic_cad1" />
+                        android:src="@drawable/ic_schedule" />
 
                     <TextView
                         android:layout_width="match_parent"
@@ -164,7 +164,7 @@
                         android:layout_width="75dp"
                         android:layout_height="95dp"
                         android:baselineAligned="false"
-                        android:src="@drawable/ic_historial" />
+                        android:src="@drawable/ic_registrosintomas2" />
 
                     <TextView
                         android:layout_width="match_parent"
@@ -207,7 +207,7 @@
                         android:layout_width="75dp"
                         android:layout_height="95dp"
                         android:baselineAligned="false"
-                        android:src="@drawable/ic_sintomasa" />
+                        android:src="@drawable/ic_hisorialsintomas" />
 
                     <TextView
                         android:layout_width="match_parent"
@@ -261,7 +261,7 @@
                         android:layout_width="75dp"
                         android:layout_height="95dp"
                         android:baselineAligned="false"
-                        android:src="@drawable/ic_show_chart" />
+                        android:src="@drawable/ic_chart" />
 
                     <TextView
                         android:layout_width="match_parent"

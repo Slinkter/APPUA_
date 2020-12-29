@@ -86,7 +86,11 @@ public class VisualActivity extends AppCompatActivity {
         meanOxig = findViewById(R.id.meanOxig);
         meanPulse = findViewById(R.id.meanPulse);
 
-        Log.e(TAG, Common.unidadTrabajoSelected.getNameUT());
+        if (Common.unidadTrabajoSelected.getNameUT() != null) {
+
+        } else {
+
+        }
 
 
         btn_visual_dni.setOnClickListener(v -> {
@@ -109,7 +113,7 @@ public class VisualActivity extends AppCompatActivity {
             // Se verifica que existe el personal
             DatabaseReference ref_mina = database
                     .getReference(Common.db_mina_personal)
-                    .child(Common.unidadTrabajoSelected.getNameUT())
+                    .child(Common.unidadTrabajoSelected.getNameUT()) // da null
                     .child(dni);
 
 
@@ -290,7 +294,8 @@ public class VisualActivity extends AppCompatActivity {
     }
 
     private void oxigShowChart() {
-
+        Log.e(TAG, "----------------------------------> ");
+        Log.e(TAG, "oxigShowChart ");
         if (listDate != null && listSaturacion != null) {
 
             List<String> list = new ArrayList<>();
@@ -307,7 +312,7 @@ public class VisualActivity extends AppCompatActivity {
                     yAxisData[i] = (int) (Double.parseDouble(listSaturacion.get(i).toString()));
                     // -> Log
                     Log.e(TAG, " " + (int) (Double.parseDouble(listSaturacion.get(i).toString())));
-                    Log.e(TAG, "suma = " + suma);
+                    Log.e(TAG, "suma - oxigeno = " + suma);
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -318,7 +323,21 @@ public class VisualActivity extends AppCompatActivity {
 
             String cad = String.valueOf(promedio);
 
-            meanOxig.setText("Promedio : " + cad.substring(0, 4));
+
+            int tamañaoCad = cad.length();
+            if (tamañaoCad == 3) {
+                meanOxig.setText("Promedio :  no hay datos");
+            } else if (tamañaoCad == 4) {
+                meanOxig.setText("Promedio : " + cad.substring(0, 4));
+            } else {
+                meanOxig.setText("Promedio : " + cad.substring(0, 5));
+            }
+
+            if (promedio < 1) {
+                meanOxig.setText("Promedio :  no hay datos");
+            }
+
+
             meanOxig.setTextColor(Color.parseColor("#9C27B0"));
 
 
@@ -369,6 +388,8 @@ public class VisualActivity extends AppCompatActivity {
     }
 
     private void pulseShowChart() {
+        Log.e(TAG, "----------------------------------> ");
+        Log.e(TAG, "pulseShowChart ");
 
         if (listDate != null && listPulso != null) {
 
@@ -386,7 +407,7 @@ public class VisualActivity extends AppCompatActivity {
                     yAxisData[i] = (int) (Double.parseDouble(listPulso.get(i).toString()));
                     // -> Log
                     Log.e(TAG, " " + (int) (Double.parseDouble(listPulso.get(i).toString())));
-                    Log.e(TAG, "suma = " + suma);
+                    Log.e(TAG, "suma-pulso = " + suma);
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -397,7 +418,23 @@ public class VisualActivity extends AppCompatActivity {
 
             String cad = String.valueOf(promedio);
 
-            meanPulse.setText("Promedio : " + cad.substring(0, 4));
+            int tamañaoCad = cad.length();
+            if (tamañaoCad == 3) {
+
+                //   meanPulse.setText("Promedio : " + cad.substring(0, 3));
+                meanPulse.setText("Promedio :  no hay datos ");
+            } else if (tamañaoCad == 4) {
+
+                meanPulse.setText("Promedio : " + cad.substring(0, 4));
+            } else {
+
+                meanPulse.setText("Promedio : " + cad.substring(0, 5));
+            }
+
+            if (promedio < 1) {
+                meanPulse.setText("Promedio :  no hay datos");
+            }
+
             meanPulse.setTextColor(Color.parseColor("#11E6A5"));
 
 

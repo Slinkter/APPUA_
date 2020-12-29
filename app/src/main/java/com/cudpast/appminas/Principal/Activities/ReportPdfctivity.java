@@ -109,6 +109,18 @@ public class ReportPdfctivity extends AppCompatActivity {
 
         bmp = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_logo_arsi_01);
         scaleBitmap = Bitmap.createScaledBitmap(bmp, 160, 160, false);
+
+        try {
+            Log.e(TAG, "----------------------> 112312312312312" + Common.unidadTrabajoSelected.getNameUT());
+        }catch (Exception e){
+            Log.e(TAG, " ERROR ----------------------> 112312312312312" + Common.unidadTrabajoSelected.getNameUT());
+        }finally {
+
+        }
+
+
+
+
     }
 
 
@@ -197,7 +209,7 @@ public class ReportPdfctivity extends AppCompatActivity {
 
     }
 
-    private void horarioPDFMount(final Boolean horario)  {
+    private void horarioPDFMount(final Boolean horario) {
         String metodo = "pdf";
         //
         builder = MaterialDatePicker.Builder.datePicker();
@@ -257,8 +269,8 @@ public class ReportPdfctivity extends AppCompatActivity {
             if (item_empleados != null) {
                 // -- Get key ( dni worker)
                 String dni = item_empleados.getKey();
-                Log.e(TAG, "========================" );
-                Log.e(TAG, "dni = "  + dni);
+                Log.e(TAG, "========================");
+                Log.e(TAG, "dni = " + dni);
                 // -- Obtener la info por fechas de 1 personal
                 for (DataSnapshot item_date : item_empleados.getChildren()) {
                     //validar la fecha
